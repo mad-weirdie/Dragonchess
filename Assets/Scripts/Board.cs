@@ -60,9 +60,10 @@ namespace Dragonchess
             else
                 pos = LowerBoard[r, c].cubeObject.transform.position;
 
-            pos.y += 1.0f;
+            pos.y += 1.0f/square_scale;
             Quaternion q = new Quaternion(0, 0, 0, 1);
             GameObject obj = GameObject.Instantiate(piece, pos, q);
+            obj.transform.localScale = new Vector3(1/square_scale, 1/board_width, 1/square_scale);
             obj.GetComponent<Renderer>().material = mat;
         }
 
@@ -99,8 +100,8 @@ namespace Dragonchess
                         string name = Letters[c] + (r + 1).ToString();
                         GameObject cube = CurrentBoard.transform.Find(name).gameObject;
                         
-                        cube.transform.localScale = new Vector3(square_scale, board_width, square_scale);
-                        cube.transform.position = new Vector3(c * square_scale, base_height + layer_spacing * b, r * square_scale);
+                        //cube.transform.localScale = new Vector3(square_scale, board_width, square_scale);
+                        //cube.transform.position = new Vector3(c * square_scale, base_height + layer_spacing * b, r * square_scale);
 
                         Layer currentLayer;
                         // Set material colors based on which layer we're instantiating
@@ -223,9 +224,6 @@ namespace Dragonchess
             AddPieceAt(Elemental, white_pieces_mat, 0, 5, Layer.Lower);
             AddPieceAt(Elemental, black_pieces_mat, 7, 5, Layer.Lower);
         }
-
-
-
         // Update is called once per frame
         void Update()
         {
