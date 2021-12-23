@@ -13,12 +13,12 @@ namespace Dragonchess
 
         public Material UW_material;
         public Material UB_material;
-
         public Material MW_material;
         public Material MB_material;
-
         public Material LW_material;
         public Material LB_material;
+        public Material black_pieces_mat;
+        public Material white_pieces_mat;
 
         public float square_scale;
         public float board_width;
@@ -34,6 +34,16 @@ namespace Dragonchess
         Square[,] UpperBoard = new Square[height, width];
         Square[,] MiddleBoard = new Square[height, width];
         Square[,] LowerBoard = new Square[height, width];
+
+        void AddPieceAt(GameObject piece, Material mat, int r, int c)
+        {
+            // White sylphs
+            Vector3 pos = UpperBoard[r, c].cubeObject.transform.position;
+            pos.y += 1.0f;
+            Quaternion q = new Quaternion(0, 0, 0, 1);
+            GameObject obj = GameObject.Instantiate(piece, pos, q);
+            obj.GetComponent<Renderer>().material = mat;
+        }
 
         void Start()
         {
@@ -97,10 +107,8 @@ namespace Dragonchess
             // Instantiate Sylph GameObjects
             for (int c = 0; c < Board.width; c+=2)
             {
-                Vector3 pos = UpperBoard[1, c].cubeObject.transform.position;
-                pos.y += 1.0f;
-                Quaternion q = new Quaternion(0, 0, 0, 1);
-                GameObject sylph = GameObject.Instantiate(Sylph, pos, q);
+                AddPieceAt(Sylph, white_pieces_mat, 1, c);
+                AddPieceAt(Sylph, black_pieces_mat, 6, c);
             }
         }
 

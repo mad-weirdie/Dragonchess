@@ -200,6 +200,8 @@ MonoBehaviour:
   MB_material: {fileID: 2100000, guid: d94d2787abe30ed4095e5712c79512bd, type: 2}
   LW_material: {fileID: 2100000, guid: 4ab08147704f3634aac65ab8b2d6f13c, type: 2}
   LB_material: {fileID: 2100000, guid: 6e12877ba7149c94d8e3852f0d2868e4, type: 2}
+  black_pieces_mat: {fileID: 2100000, guid: 618d3f5c0e77f214c99d7f14f70f7016, type: 2}
+  white_pieces_mat: {fileID: 2100000, guid: cb83d7348458ff14db4d9b9a78342d7c, type: 2}
   square_scale: 2
   board_width: 2
   base_height: 1
