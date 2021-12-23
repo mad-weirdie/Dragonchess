@@ -194,6 +194,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Sylph: {fileID: 5150302628352122941, guid: 7b593f4b56cd28948a1591637755e935, type: 3}
+  Griffon: {fileID: 5150302628352122941, guid: fd0cd5b1b2b2c584aa38fc311974950e, type: 3}
+  Dragon: {fileID: 5150302628352122941, guid: 46a6bf469af8185448f034b60c1f2515, type: 3}
   UW_material: {fileID: 2100000, guid: 4805cf8debafb19429fd8480adb707f9, type: 2}
   UB_material: {fileID: 2100000, guid: 4b9dcde172d3b6047a249e6f791db5b4, type: 2}
   MW_material: {fileID: 2100000, guid: bae7065e98722fc44a13a9a301057767, type: 2}

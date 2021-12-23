@@ -7,6 +7,8 @@ namespace Dragonchess
     public class Board : MonoBehaviour
     {
         public GameObject Sylph;
+        public GameObject Griffon;
+        public GameObject Dragon;
 
         public static int width = 12;
         public static int height = 8;
@@ -37,7 +39,6 @@ namespace Dragonchess
 
         void AddPieceAt(GameObject piece, Material mat, int r, int c)
         {
-            // White sylphs
             Vector3 pos = UpperBoard[r, c].cubeObject.transform.position;
             pos.y += 1.0f;
             Quaternion q = new Quaternion(0, 0, 0, 1);
@@ -110,6 +111,17 @@ namespace Dragonchess
                 AddPieceAt(Sylph, white_pieces_mat, 1, c);
                 AddPieceAt(Sylph, black_pieces_mat, 6, c);
             }
+
+            // Griffons
+            AddPieceAt(Griffon, white_pieces_mat, 0, 2);
+            AddPieceAt(Griffon, white_pieces_mat, 0, 9);
+            AddPieceAt(Griffon, black_pieces_mat, 7, 2);
+            AddPieceAt(Griffon, black_pieces_mat, 7, 9);
+
+            // Dragons
+            AddPieceAt(Dragon, white_pieces_mat, 0, 5);
+            AddPieceAt(Dragon, black_pieces_mat, 7, 5);
+
         }
 
         // Update is called once per frame
