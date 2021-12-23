@@ -6,12 +6,13 @@ namespace Dragonchess
 {
     public class Square
     {
-        Color m_color;
+        GameObject cubeGameObject;
 
         int m_row;
         int m_col;
         Layer m_layer;
 
+        Color m_color;
         bool occupied;
         Piece m_piece;
 
@@ -82,6 +83,18 @@ namespace Dragonchess
             get
             {
                 return m_layer;
+            }
+        }
+
+        public GameObject cubeObject
+        {
+            get
+            {
+                return cubeGameObject;
+            }
+            set
+            {
+                cubeGameObject = value;
             }
         }
 

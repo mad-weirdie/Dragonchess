@@ -29,9 +29,9 @@ namespace Dragonchess
         public GameObject MiddleBoardGameObject;
         public GameObject LowerBoardGameObject;
 
-        Square[][] UpperBoard;
-        Square[][] MiddleBoard;
-        Square[][] LowerBoard;
+        Square[,] UpperBoard = new Square[height, width];
+        Square[,] MiddleBoard = new Square[height, width];
+        Square[,] LowerBoard = new Square[height, width];
 
         void Start()
         {
@@ -51,35 +51,43 @@ namespace Dragonchess
                 {
                     for (int c = 0; c < Board.width; c++)
                     {
+                        // Maintains nice names for the squares, ie "A3", "E9", etc.
                         string name = Letters[c] + (r + 1).ToString();
-
                         GameObject cube = CurrentBoard.transform.Find(name).gameObject;
                         
                         cube.transform.localScale = new Vector3(square_scale, board_width, square_scale);
                         cube.transform.position = new Vector3(c * square_scale, base_height + layer_spacing * b, r * square_scale);
 
+                        Layer currentLayer;
                         // Set material colors based on which layer we're instantiating
                         if (b == 0)
                         {
+                            currentLayer = Layer.Lower;
                             if ((r + c) % 2 == 0)
                                 cube.GetComponent<Renderer>().material = LB_material;
                             else
                                 cube.GetComponent<Renderer>().material = LW_material;
                         }
-                        if (b == 1)
+                        else if (b == 1)
                         {
+                            currentLayer = Layer.Middle;
                             if ((r + c) % 2 == 0)
                                 cube.GetComponent<Renderer>().material = MB_material;
                             else
                                 cube.GetComponent<Renderer>().material = MW_material;
                         }
-                        if (b == 2)
+                        else
                         {
+                            currentLayer = Layer.Upper;
                             if ((r + c) % 2 == 0)
                                 cube.GetComponent<Renderer>().material = UB_material;
                             else
                                 cube.GetComponent<Renderer>().material = UW_material;
                         }
+
+                        // Attach GameObject to the squares matrix
+                        UpperBoard[r, c] = new Square(r, c, currentLayer);
+                        UpperBoard[r, c].cubeObject = cube;
                     }
                 }
             }
