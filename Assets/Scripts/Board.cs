@@ -18,6 +18,9 @@ namespace Dragonchess
         public GameObject Mage;
         public GameObject King;
         public GameObject Paladin;
+        public GameObject Dwarf;
+        public GameObject Basilisk;
+        public GameObject Elemental;
 
         public static int width = 12;
         public static int height = 8;
@@ -153,6 +156,7 @@ namespace Dragonchess
             AddPieceAt(Dragon, white_pieces_mat, 0, 5, Layer.Upper);
             AddPieceAt(Dragon, black_pieces_mat, 7, 5, Layer.Upper);
 
+
             // ------------ INSTANTIATE MIDDLE BOARD ------------
             // Warriors
             for (int c = 0; c < Board.width; c++)
@@ -200,7 +204,27 @@ namespace Dragonchess
             // Paladins
             AddPieceAt(Paladin, white_pieces_mat, 0, 7, Layer.Middle);
             AddPieceAt(Paladin, black_pieces_mat, 7, 7, Layer.Middle);
+
+            // ------------ INSTANTIATE LOWER BOARD ------------
+            // Dwarves
+            for (int c = 1; c < Board.width; c+=2)
+            {
+                AddPieceAt(Dwarf, white_pieces_mat, 1, c, Layer.Lower);
+                AddPieceAt(Dwarf, black_pieces_mat, 6, c, Layer.Lower);
+            }
+
+            // Basilisks
+            AddPieceAt(Basilisk, white_pieces_mat, 0, 0, Layer.Lower);
+            AddPieceAt(Basilisk, black_pieces_mat, 7, 0, Layer.Lower);
+            AddPieceAt(Basilisk, white_pieces_mat, 0, 11, Layer.Lower);
+            AddPieceAt(Basilisk, black_pieces_mat, 7, 11, Layer.Lower);
+
+            // Elementals
+            AddPieceAt(Elemental, white_pieces_mat, 0, 5, Layer.Lower);
+            AddPieceAt(Elemental, black_pieces_mat, 7, 5, Layer.Lower);
         }
+
+
 
         // Update is called once per frame
         void Update()
