@@ -9,6 +9,15 @@ namespace Dragonchess
         public GameObject Sylph;
         public GameObject Griffon;
         public GameObject Dragon;
+        public GameObject Warrior;
+        public GameObject Oliphant;
+        public GameObject Unicorn;
+        public GameObject Hero;
+        public GameObject Thief;
+        public GameObject Cleric;
+        public GameObject Mage;
+        public GameObject King;
+        public GameObject Paladin;
 
         public static int width = 12;
         public static int height = 8;
@@ -37,9 +46,17 @@ namespace Dragonchess
         Square[,] MiddleBoard = new Square[height, width];
         Square[,] LowerBoard = new Square[height, width];
 
-        void AddPieceAt(GameObject piece, Material mat, int r, int c)
+        void AddPieceAt(GameObject piece, Material mat, int r, int c, Layer l)
         {
-            Vector3 pos = UpperBoard[r, c].cubeObject.transform.position;
+
+            Vector3 pos;
+            if (l == Layer.Upper)
+                pos = UpperBoard[r, c].cubeObject.transform.position;
+            else if (l == Layer.Middle)
+                pos = MiddleBoard[r, c].cubeObject.transform.position;
+            else
+                pos = LowerBoard[r, c].cubeObject.transform.position;
+
             pos.y += 1.0f;
             Quaternion q = new Quaternion(0, 0, 0, 1);
             GameObject obj = GameObject.Instantiate(piece, pos, q);
@@ -52,12 +69,23 @@ namespace Dragonchess
             {
                 // Parent GameObject where all the squares of a board are stored
                 GameObject CurrentBoard;
+                Square[,] CurrentSquares;
                 if (b == 0)
+                {
                     CurrentBoard = LowerBoardGameObject;
+                    CurrentSquares = LowerBoard;
+                }
                 else if (b == 1)
+                { 
+
                     CurrentBoard = MiddleBoardGameObject;
+                    CurrentSquares = MiddleBoard;
+                }
                 else
+                { 
                     CurrentBoard = UpperBoardGameObject;
+                    CurrentSquares = UpperBoard;
+                }
 
                 // Allows for easier, scriptable editing of the boards, should one so desire
                 for (int r = 0; r < Board.height; r++)
@@ -98,30 +126,80 @@ namespace Dragonchess
                                 cube.GetComponent<Renderer>().material = UW_material;
                         }
 
+                        
                         // Attach GameObject to the squares matrix
-                        UpperBoard[r, c] = new Square(r, c, currentLayer);
-                        UpperBoard[r, c].cubeObject = cube;
+                        CurrentSquares[r, c] = new Square(r, c, currentLayer);
+                        CurrentSquares[r, c].cubeObject = cube;
                     }
                 }
             }
 
-            // Instantiate Sylph GameObjects
+
+            // ------------ INSTANTIATE UPPER BOARD ------------
+            // Sylphs
             for (int c = 0; c < Board.width; c+=2)
             {
-                AddPieceAt(Sylph, white_pieces_mat, 1, c);
-                AddPieceAt(Sylph, black_pieces_mat, 6, c);
+                AddPieceAt(Sylph, white_pieces_mat, 1, c, Layer.Upper);
+                AddPieceAt(Sylph, black_pieces_mat, 6, c, Layer.Upper);
             }
 
             // Griffons
-            AddPieceAt(Griffon, white_pieces_mat, 0, 2);
-            AddPieceAt(Griffon, white_pieces_mat, 0, 9);
-            AddPieceAt(Griffon, black_pieces_mat, 7, 2);
-            AddPieceAt(Griffon, black_pieces_mat, 7, 9);
+            AddPieceAt(Griffon, white_pieces_mat, 0, 2, Layer.Upper);
+            AddPieceAt(Griffon, white_pieces_mat, 0, 9, Layer.Upper);
+            AddPieceAt(Griffon, black_pieces_mat, 7, 2, Layer.Upper);
+            AddPieceAt(Griffon, black_pieces_mat, 7, 9, Layer.Upper);
 
             // Dragons
-            AddPieceAt(Dragon, white_pieces_mat, 0, 5);
-            AddPieceAt(Dragon, black_pieces_mat, 7, 5);
+            AddPieceAt(Dragon, white_pieces_mat, 0, 5, Layer.Upper);
+            AddPieceAt(Dragon, black_pieces_mat, 7, 5, Layer.Upper);
 
+            // ------------ INSTANTIATE MIDDLE BOARD ------------
+            // Warriors
+            for (int c = 0; c < Board.width; c++)
+            {
+                AddPieceAt(Warrior, white_pieces_mat, 1, c, Layer.Middle);
+                AddPieceAt(Warrior, black_pieces_mat, 6, c, Layer.Middle);
+            }
+
+            // Oliphants
+            AddPieceAt(Oliphant, white_pieces_mat, 0, 0, Layer.Middle);
+            AddPieceAt(Oliphant, black_pieces_mat, 7, 0, Layer.Middle);
+            AddPieceAt(Oliphant, white_pieces_mat, 0, 11, Layer.Middle);
+            AddPieceAt(Oliphant, black_pieces_mat, 7, 11, Layer.Middle);
+
+            // Unicorns
+            AddPieceAt(Unicorn, white_pieces_mat, 0, 1, Layer.Middle);
+            AddPieceAt(Unicorn, black_pieces_mat, 7, 1, Layer.Middle);
+            AddPieceAt(Unicorn, white_pieces_mat, 0, 10, Layer.Middle);
+            AddPieceAt(Unicorn, black_pieces_mat, 7, 10, Layer.Middle);
+
+            // Heroes
+            AddPieceAt(Hero, white_pieces_mat, 0, 2, Layer.Middle);
+            AddPieceAt(Hero, black_pieces_mat, 7, 2, Layer.Middle);
+            AddPieceAt(Hero, white_pieces_mat, 0, 9, Layer.Middle);
+            AddPieceAt(Hero, black_pieces_mat, 7, 9, Layer.Middle);
+
+            // Thieves
+            AddPieceAt(Thief, white_pieces_mat, 0, 3, Layer.Middle);
+            AddPieceAt(Thief, black_pieces_mat, 7, 3, Layer.Middle);
+            AddPieceAt(Thief, white_pieces_mat, 0, 8, Layer.Middle);
+            AddPieceAt(Thief, black_pieces_mat, 7, 8, Layer.Middle);
+
+            // Clerics
+            AddPieceAt(Cleric, white_pieces_mat, 0, 4, Layer.Middle);
+            AddPieceAt(Cleric, black_pieces_mat, 7, 4, Layer.Middle);
+
+            // Mages
+            AddPieceAt(Mage, white_pieces_mat, 0, 5, Layer.Middle);
+            AddPieceAt(Mage, black_pieces_mat, 7, 5, Layer.Middle);
+
+            // Kings
+            AddPieceAt(King, white_pieces_mat, 0, 6, Layer.Middle);
+            AddPieceAt(King, black_pieces_mat, 7, 6, Layer.Middle);
+
+            // Paladins
+            AddPieceAt(Paladin, white_pieces_mat, 0, 7, Layer.Middle);
+            AddPieceAt(Paladin, black_pieces_mat, 7, 7, Layer.Middle);
         }
 
         // Update is called once per frame

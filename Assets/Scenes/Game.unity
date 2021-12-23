@@ -196,6 +196,15 @@ MonoBehaviour:
   Sylph: {fileID: 5150302628352122941, guid: 7b593f4b56cd28948a1591637755e935, type: 3}
   Griffon: {fileID: 5150302628352122941, guid: fd0cd5b1b2b2c584aa38fc311974950e, type: 3}
   Dragon: {fileID: 5150302628352122941, guid: 46a6bf469af8185448f034b60c1f2515, type: 3}
+  Warrior: {fileID: 5150302628352122941, guid: 80cffb207a2cc764691c63a12b1a6a33, type: 3}
+  Oliphant: {fileID: 5150302628352122941, guid: 180513b514431d34e9338f2df8d83b5d, type: 3}
+  Unicorn: {fileID: 5150302628352122941, guid: 9c79953767f205d43a43f705b335e234, type: 3}
+  Hero: {fileID: 5806972766582656371, guid: 79b3514927e9ecf40802977bddfd45dd, type: 3}
+  Thief: {fileID: 9220590188164863280, guid: 027bddcfaf2c537419a40e1ab359819e, type: 3}
+  Cleric: {fileID: 3114343201326126343, guid: d59351636a5f18644bc60571b532866e, type: 3}
+  Mage: {fileID: 996366669915993123, guid: 49ac4caa7ccdaae43b0294746cdd70f5, type: 3}
+  King: {fileID: 8478019693841842053, guid: 4e8984e3e76f6c94eb9ecadf3c0ee340, type: 3}
+  Paladin: {fileID: 1193449262632464594, guid: f9dee7d3fad242a4b83c9ffdf6cde384, type: 3}
   UW_material: {fileID: 2100000, guid: 4805cf8debafb19429fd8480adb707f9, type: 2}
   UB_material: {fileID: 2100000, guid: 4b9dcde172d3b6047a249e6f791db5b4, type: 2}
   MW_material: {fileID: 2100000, guid: bae7065e98722fc44a13a9a301057767, type: 2}
@@ -207,7 +216,7 @@ MonoBehaviour:
   square_scale: 2
   board_width: 2
   base_height: 1
-  layer_spacing: 4
+  layer_spacing: 5
   UpperBoardGameObject: {fileID: 365506464}
   MiddleBoardGameObject: {fileID: 1470454615}
   LowerBoardGameObject: {fileID: 1819146618}
