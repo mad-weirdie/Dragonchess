@@ -37,6 +37,7 @@ namespace Dragonchess
         {
             for (int b = 0; b < 3; b++)
             {
+                // Parent GameObject where all the squares of a board are stored
                 GameObject CurrentBoard;
                 if (b == 0)
                     CurrentBoard = LowerBoardGameObject;
@@ -45,6 +46,7 @@ namespace Dragonchess
                 else
                     CurrentBoard = UpperBoardGameObject;
 
+                // Allows for easier, scriptable editing of the boards, should one so desire
                 for (int r = 0; r < Board.height; r++)
                 {
                     for (int c = 0; c < Board.width; c++)
@@ -56,6 +58,7 @@ namespace Dragonchess
                         cube.transform.localScale = new Vector3(square_scale, board_width, square_scale);
                         cube.transform.position = new Vector3(c * square_scale, base_height + layer_spacing * b, r * square_scale);
 
+                        // Set material colors based on which layer we're instantiating
                         if (b == 0)
                         {
                             if ((r + c) % 2 == 0)
