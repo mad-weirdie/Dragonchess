@@ -6,6 +6,8 @@ namespace Dragonchess
 {
     public class Board : MonoBehaviour
     {
+        public GameObject Sylph;
+
         public static int width = 12;
         public static int height = 8;
 
@@ -90,6 +92,15 @@ namespace Dragonchess
                         UpperBoard[r, c].cubeObject = cube;
                     }
                 }
+            }
+
+            // Instantiate Sylph GameObjects
+            for (int c = 0; c < Board.width; c+=2)
+            {
+                Vector3 pos = UpperBoard[1, c].cubeObject.transform.position;
+                pos.y += 1.0f;
+                Quaternion q = new Quaternion(0, 0, 0, 1);
+                GameObject sylph = GameObject.Instantiate(Sylph, pos, q);
             }
         }
 
