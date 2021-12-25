@@ -7,13 +7,15 @@ namespace Dragonchess
     public class Square
     {
         GameObject cubeGameObject;
+        public Material properMaterial;
 
         int m_row;
         int m_col;
+        Board m_board;
         Layer m_layer;
 
-        Color m_color;
-        bool occupied;
+       // Color m_color;
+        bool m_occupied;
         Piece m_piece;
 
         // Default constructor
@@ -21,45 +23,43 @@ namespace Dragonchess
         {
             m_row = 0;
             m_col = 0;
-            m_layer = Layer.Middle;
-            m_color = Color.Black;
+           // m_color = Color.Black;
             occupied = false;
         }
 
         // Constructor for square at (r, c)
         // Automatically calculates square color
-        public Square(int r, int c, Layer l)
+        public Square(int r, int c, Board b)
         {
             m_row = r;
             m_col = c;
-            m_layer = l;
-
+            m_board = b;
             occupied = false;
+
+            if (b.m_layer == 6)
+                m_layer = Layer.Upper;
+            else if (b.m_layer == 7)
+                m_layer = Layer.Middle;
+            else
+                m_layer = Layer.Upper;
+            
+            /*
             if ((r + c) % 2 == 0)
                 m_color = Color.Black;
             else
                 m_color = Color.White;
+            */
+            
         }
 
-        public Color color
+        public bool IsOccupied()
         {
-            get
-            {
-                return m_color;
-            }
+            return this.m_occupied;
         }
 
-        public Piece piece
+        public bool IsEmpty()
         {
-            get
-            {
-                return m_piece;
-            }
-
-            set
-            {
-                m_piece = value;
-            }
+            return !this.IsOccupied();
         }
 
         public int col
@@ -68,6 +68,10 @@ namespace Dragonchess
             {
                 return m_col;
             }
+            set
+            {
+                m_col = value;
+            }
         }
 
         public int row
@@ -75,6 +79,10 @@ namespace Dragonchess
             get
             {
                 return m_row;
+            }
+            set
+            {
+                m_row = value;
             }
         }
 
@@ -85,6 +93,25 @@ namespace Dragonchess
                 return m_layer;
             }
         }
+
+        static public bool IsValidSquare(int row, int col)
+        {
+            if (col < 0 || col >= Board.width)
+                return false;
+            if (row < 0 || row >= Board.height)
+                return false;
+
+            /*
+            if (m_type == MoveType.Capture && !m_end.IsOccupied())
+                return false;
+            */
+
+            return true;
+        }
+
+        public Color color { get; set; }
+
+        public Piece piece { get; set; }
 
         public GameObject cubeObject
         {
@@ -98,16 +125,7 @@ namespace Dragonchess
             }
         }
 
-
-        public bool IsOccupied()
-        {
-            return this.occupied;
-        }
-
-        public bool IsEmpty()
-        {
-            return !this.IsOccupied();
-        }
+        public bool occupied { get; set; }
 
     }
 

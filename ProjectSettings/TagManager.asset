@@ -3,20 +3,26 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Basilisk
+  - Cleric
+  - Dragon
+  - Dwarf
+  - Elemental
+  - Griffon
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Piece
   - Water
   - UI
   - Upper Board
   - Middle Board
   - Lower Board
-  - 
-  - 
-  - 
+  - Upper Pieces
+  - Middle Pieces
+  - Lower Pieces
   - 
   - 
   - 

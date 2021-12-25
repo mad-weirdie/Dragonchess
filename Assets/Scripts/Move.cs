@@ -19,25 +19,46 @@ namespace Dragonchess
             m_type = type;
         }
 
+        public Square start
+        {
+            get
+            {
+                return m_start;
+            }
+        }
+
+        public Square end
+        {
+            get
+            {
+                return m_end;
+            }
+        }
+
+        public MoveType type
+        {
+            get
+            {
+                return m_type;
+            }
+        }
+
         public bool IsValidMove ()
         {
-            if (m_start.col < 0 || m_start.col >= Board.height)
+
+            if (m_start.col < 0 || m_start.col >= Board.width)
                 return false;
-            if (m_start.row < 0 || m_start.row >= Board.width)
+            if (m_start.row < 0 || m_start.row >= Board.height)
                 return false;
-            if (m_end.col < 0 || m_end.col >= Board.height)
+            if (m_end.col < 0 || m_end.col >= Board.width)
                 return false;
-            if (m_end.row < 0 || m_end.row >= Board.width)
+            if (m_end.row < 0 || m_end.row >= Board.height)
                 return false;
 
-            // You can't capture your own piece...
-            if (m_start.color == m_end.color)
-            {
+            /*
+            if (m_type == MoveType.Capture && !m_end.IsOccupied())
                 return false;
-            }
-
-            if (m_type == MoveType.Capture && m_end.IsOccupied() && (m_start.color != m_end.color))
-                return false;
+            */
 
             return true;
         }
