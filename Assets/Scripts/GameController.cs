@@ -162,6 +162,7 @@ namespace Dragonchess
 
                 piece = piecePrefabs[piece_type];
                 CurrentBoard.AddPieceAt(piece, m, c, row, col);
+                CurrentBoard.squares[row, col].occupied = true;
                 //print("row: " + script.location.row);
             }
         }
@@ -181,33 +182,49 @@ namespace Dragonchess
             RaycastHit hit;
             int layer;
 
+            // Check where we clicked
             if (Physics.Raycast(ray, out hit))
             {
+                // Locate GameObject of whatever we clicked on (piece or square)
                 GameObject hitGameObject = hit.transform.gameObject;
-                if (selectedPiece != null)
+                if (selectedPiece != null)  // read: "if we had something selected before this"
                 {
+                    // Get the attached script of the piece GameObject
                     piece = selectedPiece.GetComponent<Piece>();
                     square = piece.location;
                     layer = hitGameObject.layer;
 
                     if (layer == 6 || layer == 7 || layer == 8)
                     {
+                        // Check to see if what we clicked was any of the highlighted squares
                         foreach ((Square s, Move.MoveType m) in hightlightedSquares)
                         {
                             if (s.cubeObject == hitGameObject && m != Move.MoveType.Swoop)
                             {
+                                if (m == Move.MoveType.Capture)
+                                {
+                                    sObj = piece.location.cubeObject;
+                                    sObj.GetComponent<Renderer>().material = square.properMaterial;
+                                    piece.Capture(s.piece);
+                                }
+
                                 Vector3 pos = s.cubeObject.transform.position;
                                 pos.y += 1.0f / Board.square_scale;
                                 piece.pieceGameObject.transform.position = pos;
                                 sObj = piece.location.cubeObject;
                                 sObj.GetComponent<Renderer>().material = square.properMaterial;
-                                piece.location = s;
 
+                                // Link piece and square to each other
+                                piece.location.occupied = false;
+                                piece.location = s;
+                                s.piece = piece;
+
+                                // Set proper rendering layer (for the overhead cameras)
                                 piece.pieceGameObject.layer = s.board.m_layer + 3;
                                 foreach (Transform child in piece.transform)
                                     child.gameObject.layer = s.board.m_layer + 3;
 
-                                // Warrior Piece Promotion!
+                                // Check for warrior piece promotion
                                 if (piece.type == PieceType.Warrior)
                                 {
                                     if (piece.color == Color.White)
@@ -218,7 +235,8 @@ namespace Dragonchess
                                             GameObject newHero = piecePrefabs[6];
                                             MiddleBoard.AddPieceAt(newHero, white_pieces_mat, Color.White, 7, s.col);
                                             piece.pieceGameObject = newHero;
-                                        }
+                                            piece.type = PieceType.Hero;
+    }
                                     }
                                     else
                                     {
@@ -228,15 +246,19 @@ namespace Dragonchess
                                             GameObject newHero = piecePrefabs[6];
                                             MiddleBoard.AddPieceAt(newHero, black_pieces_mat, Color.Black, 0, s.col);
                                             piece.pieceGameObject = newHero;
+                                            piece.type = PieceType.Hero;
                                         }
                                     }
                                 }
                             }
                         }
                     }
+                    // As the piece leaves, reset the color of the square underneath it
+                    // to its original material color
                     sObj = piece.location.cubeObject;
                     sObj.GetComponent<Renderer>().material = square.properMaterial;
 
+                    // Now that the piece has left, un-highlight all of the move option squares
                     foreach ((Square s, Move.MoveType m) in hightlightedSquares)
                     {
                         s.cubeObject.GetComponent<Renderer>().material = s.properMaterial;
@@ -244,10 +266,11 @@ namespace Dragonchess
                     hightlightedSquares.Clear();
                 }
 
+                // We've taken care of if there was something selected before.
+                // Now nothing should be selected, and we check if we clicked on a piece
                 layer = hitGameObject.layer;
                 if (layer == 9 || layer == 10 || layer == 11)
                 {
-
                     selectedPiece = hitGameObject;
                     piece = selectedPiece.GetComponent<Piece>();
                     sObj = piece.location.cubeObject;
@@ -256,11 +279,14 @@ namespace Dragonchess
                     // Generate list of possible moves
                     ArrayList possibleMoves = piece.GetMoves();
 
+                    // Highlight all the possible moves generated for that piece, with
+                    // different colors for the different move types (reg, capture, etc.)
                     foreach (Move move in possibleMoves)
                     {
                         Square endSquare = move.end;
                         GameObject squareObj = endSquare.cubeObject;
                         hightlightedSquares.Add((endSquare, move.type));
+
                         if (move.type == Move.MoveType.Regular)
                             squareObj.GetComponent<Renderer>().material = highlight_2;
                         else if (move.type == Move.MoveType.Capture)
@@ -272,6 +298,5 @@ namespace Dragonchess
 
             }
         }
-
     }
 }

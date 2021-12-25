@@ -14,7 +14,7 @@ namespace Dragonchess
         Board m_board;
         Layer m_layer;
 
-       // Color m_color;
+        Color m_color;
         bool m_occupied;
         Piece m_piece;
 
@@ -23,8 +23,8 @@ namespace Dragonchess
         {
             m_row = 0;
             m_col = 0;
-           // m_color = Color.Black;
-            occupied = false;
+            m_color = Color.Black;
+            m_occupied = false;
         }
 
         // Constructor for square at (r, c)
@@ -34,7 +34,7 @@ namespace Dragonchess
             m_row = r;
             m_col = c;
             m_board = b;
-            occupied = false;
+            m_occupied = false;
 
             if (b.m_layer == 6)
                 m_layer = Layer.Upper;
@@ -43,23 +43,20 @@ namespace Dragonchess
             else
                 m_layer = Layer.Lower;
             
-            /*
             if ((r + c) % 2 == 0)
                 m_color = Color.Black;
             else
                 m_color = Color.White;
-            */
-            
         }
 
         public bool IsOccupied()
         {
-            return this.m_occupied;
+            return m_occupied;
         }
 
         public bool IsEmpty()
         {
-            return !this.IsOccupied();
+            return !IsOccupied();
         }
 
         public Board board
@@ -117,9 +114,29 @@ namespace Dragonchess
             return true;
         }
 
-        public Color color { get; set; }
+        public Color color
+        {
+            get
+            {
+                return m_color;
+            }
+            set
+            {
+                m_color = value;
+            }
+        }
 
-        public Piece piece { get; set; }
+        public Piece piece
+        {
+            get
+            {
+                return m_piece;
+            }
+            set
+            {
+                m_piece = value;
+            }
+        }
 
         public GameObject cubeObject
         {
@@ -133,7 +150,17 @@ namespace Dragonchess
             }
         }
 
-        public bool occupied { get; set; }
+        public bool occupied
+        {
+            get
+            {
+                return m_occupied;
+            }
+            set
+            {
+                m_occupied = value;
+            }
+        }
 
     }
 

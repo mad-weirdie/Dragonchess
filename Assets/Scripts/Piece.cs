@@ -37,6 +37,16 @@ namespace Dragonchess
         // GetMoves to be overridden by child classes
         virtual public ArrayList GetMoves() { return null; }
 
+        public bool Capture(Piece enemy)
+        {
+            enemy.location.piece = this;
+            this.location.occupied = false;
+            this.location = enemy.location;
+            Destroy(enemy.pieceGameObject);
+            Destroy(enemy);
+            return true;
+        }
+
         public Square location
         {
             get
@@ -70,6 +80,10 @@ namespace Dragonchess
             get
             {
                 return m_type;
+            }
+            set
+            {
+                m_type = value;
             }
         }
 

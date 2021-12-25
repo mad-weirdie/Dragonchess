@@ -26,29 +26,32 @@ namespace Dragonchess
             // Level 2 moves
             if (layer == Layer.Middle)
             {
+                MonoBehaviour.print("Layer is middle");
                 // Middle-board diagonal moves (1 or 2 diags)
                 // diag forward-right
+                MonoBehaviour.print("forward-right");
                 Move.moveAttempt(moves, current_square, dir, 1, 1, 2, regular);
-                Move.moveAttempt(moves, current_square, dir, 2, 2, 2, capture);
-                Move.moveAttempt(moves, current_square, dir, 1, 1, 2, regular);
+                Move.moveAttempt(moves, current_square, dir, 2, 2, 2, regular);
+                Move.moveAttempt(moves, current_square, dir, 1, 1, 2, capture);
                 Move.moveAttempt(moves, current_square, dir, 2, 2, 2, capture);
 
+                MonoBehaviour.print("forward-left");
                 // diag forward-left
                 Move.moveAttempt(moves, current_square, dir, 1, -1, 2, regular);
-                Move.moveAttempt(moves, current_square, dir, 2, -2, 2, capture);
-                Move.moveAttempt(moves, current_square, dir, 1, -1, 2, regular);
+                Move.moveAttempt(moves, current_square, dir, 2, -2, 2, regular);
+                Move.moveAttempt(moves, current_square, dir, 1, -1, 2, capture);
                 Move.moveAttempt(moves, current_square, dir, 2, -2, 2, capture);
 
                 // diag backward-right 
                 Move.moveAttempt(moves, current_square, dir, -1, 1, 2, regular);
-                Move.moveAttempt(moves, current_square, dir, -2, 2, 2, capture);
-                Move.moveAttempt(moves, current_square, dir, -1, 1, 2, regular);
+                Move.moveAttempt(moves, current_square, dir, -2, 2, 2, regular);
+                Move.moveAttempt(moves, current_square, dir, -1, 1, 2, capture);
                 Move.moveAttempt(moves, current_square, dir, -2, 2, 2, capture);
 
                 // diag backward-left
                 Move.moveAttempt(moves, current_square, dir, -1, -1, 2, regular);
-                Move.moveAttempt(moves, current_square, dir, -2, -2, 2, capture);
-                Move.moveAttempt(moves, current_square, dir, -1, -1, 2, regular);
+                Move.moveAttempt(moves, current_square, dir, -2, -2, 2, regular);
+                Move.moveAttempt(moves, current_square, dir, -1, -1, 2, capture);
                 Move.moveAttempt(moves, current_square, dir, -2, -2, 2, capture);
 
                 // Inter-board triagonal moves

@@ -19,34 +19,15 @@ namespace Dragonchess
             m_type = type;
         }
 
-        public Square start
-        {
-            get
-            {
-                return m_start;
-            }
-        }
+        public Square start { get { return m_start; } }
 
-        public Square end
-        {
-            get
-            {
-                return m_end;
-            }
-        }
+        public Square end { get { return m_end; } }
 
-        public MoveType type
-        {
-            get
-            {
-                return m_type;
-            }
-        }
+        public MoveType type { get { return m_type; } }
 
         public static void moveAttempt(ArrayList moves, Square current,
         int dir, int rowShift, int colShift, int board, MoveType type)
         {
-            MonoBehaviour.print("current board before move: board #" + (current.layer));
             Board newBoard;
             Square endSquare;
             rowShift = rowShift * dir;
@@ -74,20 +55,40 @@ namespace Dragonchess
 
         public bool IsValidMove ()
         {
-            if (m_start.col < 0 || m_start.col >= Board.width)
-                return false;
-            if (m_start.row < 0 || m_start.row >= Board.height)
-                return false;
+            // First, check that the move goal isn't out of bounds
             if (m_end.col < 0 || m_end.col >= Board.width)
                 return false;
             if (m_end.row < 0 || m_end.row >= Board.height)
                 return false;
 
+            // If movetype = Regular(move-only), check the square is free
+            if (m_type == MoveType.Regular)
+            {
+                MonoBehaviour.print("checking regular");
+                if (end.IsOccupied())
+                    return false;
+            }
+
+            // If movetype = Capture, check the square is occupied by another
+            // piece of the opposing team's color
+            if (m_type == MoveType.Capture)
+            {
+                if (end.IsEmpty())
+                {
+                    return false;
+                }
+                else
+                {
+                    if (start.piece.color == end.piece.color)
+                        return false;
+                }
+            }
+
             /*
             if (m_type == MoveType.Capture && !m_end.IsOccupied())
                 return false;
             */
-
+            MonoBehaviour.print("Adding move of type: " + m_type);
             return true;
         }
     }
