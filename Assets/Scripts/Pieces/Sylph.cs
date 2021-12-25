@@ -45,7 +45,6 @@ namespace Dragonchess
 
                 // Capture: one down
                 Move.moveAttempt(moves, current_square, dir, 0, 0, 2, capture);
-
             }
             else if (layer == Layer.Middle)
             {
