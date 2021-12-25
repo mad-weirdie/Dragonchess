@@ -28,6 +28,7 @@ namespace Dragonchess
             {
                 int row_diff = r - current_square.row;
                 Move.moveAttempt(moves, current_square, dir, row_diff, 0, 2, regular);
+                Move.moveAttempt(moves, current_square, dir, row_diff, 0, 2, capture);
             }
 
             // Backward moves
@@ -35,6 +36,7 @@ namespace Dragonchess
             {
                 int row_diff = r - current_square.row;
                 Move.moveAttempt(moves, current_square, dir, row_diff, 0, 2, regular);
+                Move.moveAttempt(moves, current_square, dir, row_diff, 0, 2, capture);
             }
 
             // Right moves
@@ -42,6 +44,7 @@ namespace Dragonchess
             {
                 int col_diff = c - current_square.col;
                 Move.moveAttempt(moves, current_square, dir, 0, col_diff, 2, regular);
+                Move.moveAttempt(moves, current_square, dir, 0, col_diff, 2, capture);
             }
 
             // Left moves
@@ -49,6 +52,7 @@ namespace Dragonchess
             {
                 int col_diff = c - current_square.col;
                 Move.moveAttempt(moves, current_square, dir, 0, col_diff, 2, regular);
+                Move.moveAttempt(moves, current_square, dir, 0, col_diff, 2, capture);
             }
 
             return moves;

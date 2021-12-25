@@ -28,19 +28,31 @@ namespace Dragonchess
             {
                 // Regular King moves
                 Move.moveAttempt(moves, current_square, dir, 1, 0, 2, regular);
-                Move.moveAttempt(moves, current_square, dir, 1, 1, 2, regular);
+                Move.moveAttempt(moves, current_square, dir, 1, 1, 2, capture);
                 Move.moveAttempt(moves, current_square, dir, 0, 1, 2, regular);
-                Move.moveAttempt(moves, current_square, dir, -1, 1, 2, regular);
+                Move.moveAttempt(moves, current_square, dir, -1, 1, 2, capture);
                 Move.moveAttempt(moves, current_square, dir, -1, 0, 2, regular);
-                Move.moveAttempt(moves, current_square, dir, -1, -1, 2, regular);
+                Move.moveAttempt(moves, current_square, dir, -1, -1, 2, capture);
                 Move.moveAttempt(moves, current_square, dir, 0, -1, 2, regular);
-                Move.moveAttempt(moves, current_square, dir, 1, -1, 2, regular);
+                Move.moveAttempt(moves, current_square, dir, 1, -1, 2, capture);
+
+                Move.moveAttempt(moves, current_square, dir, 1, 0, 2, regular);
+                Move.moveAttempt(moves, current_square, dir, 1, 1, 2, capture);
+                Move.moveAttempt(moves, current_square, dir, 0, 1, 2, regular);
+                Move.moveAttempt(moves, current_square, dir, -1, 1, 2, capture);
+                Move.moveAttempt(moves, current_square, dir, -1, 0, 2, regular);
+                Move.moveAttempt(moves, current_square, dir, -1, -1, 2, capture);
+                Move.moveAttempt(moves, current_square, dir, 0, -1, 2, regular);
+                Move.moveAttempt(moves, current_square, dir, 1, -1, 2, capture);
 
                 // Straight down
                 Move.moveAttempt(moves, current_square, dir, 0, 0, 1, regular);
+                Move.moveAttempt(moves, current_square, dir, 0, 0, 1, capture);
                 // Straight up
                 Move.moveAttempt(moves, current_square, dir, 0, 0, 3, regular);
+                Move.moveAttempt(moves, current_square, dir, 0, 0, 3, capture);
             }
+
             else
             {
                 Move.moveAttempt(moves, current_square, dir, 0, 0, 2, regular);

@@ -29,6 +29,9 @@ namespace Dragonchess
                 Move.moveAttempt(moves, current_square, dir, 0, 0, 2, regular);
                 Move.moveAttempt(moves, current_square, dir, 0, 0, 1, regular);
 
+                Move.moveAttempt(moves, current_square, dir, 0, 0, 2, capture);
+                Move.moveAttempt(moves, current_square, dir, 0, 0, 1, capture);
+
                 // Plus-shaped moves
                 Move.moveAttempt(moves, current_square, dir, 1, 0, 3, regular);
                 Move.moveAttempt(moves, current_square, dir, -1, 0, 3, regular);
@@ -36,11 +39,12 @@ namespace Dragonchess
                 Move.moveAttempt(moves, current_square, dir, 0, -1, 3, regular);
             }
             else if (layer == Layer.Lower)
-
             {
                 // Move to either layer straight above
                 Move.moveAttempt(moves, current_square, dir, 0, 0, 2, regular);
                 Move.moveAttempt(moves, current_square, dir, 0, 0, 3, regular);
+                Move.moveAttempt(moves, current_square, dir, 0, 0, 2, capture);
+                Move.moveAttempt(moves, current_square, dir, 0, 0, 3, capture);
 
                 // Plus-shaped moves
                 Move.moveAttempt(moves, current_square, dir, 1, 0, 1, regular);
@@ -54,6 +58,8 @@ namespace Dragonchess
                 // Straight up or down
                 Move.moveAttempt(moves, current_square, dir, 0, 0, 1, regular);
                 Move.moveAttempt(moves, current_square, dir, 0, 0, 3, regular);
+                Move.moveAttempt(moves, current_square, dir, 0, 0, 1, capture);
+                Move.moveAttempt(moves, current_square, dir, 0, 0, 3, capture);
 
                 // Diagonal movements -----------------------------------------
                 // Forward-right diags
@@ -112,24 +118,28 @@ namespace Dragonchess
                 {
                     int row_diff = r - current_square.row;
                     Move.moveAttempt(moves, current_square, dir, row_diff, 0, 2, regular);
+                    Move.moveAttempt(moves, current_square, dir, row_diff, 0, 2, capture);
                 }
                 // Backward moves
                 for (r = current_square.row; r >= 0; r--)
                 {
                     int row_diff = r - current_square.row;
                     Move.moveAttempt(moves, current_square, dir, row_diff, 0, 2, regular);
+                    Move.moveAttempt(moves, current_square, dir, row_diff, 0, 2, capture);
                 }
                 // Right moves
                 for (c = current_square.col; c < Board.width; c++)
                 {
                     int col_diff = c - current_square.col;
                     Move.moveAttempt(moves, current_square, dir, 0, col_diff, 2, regular);
+                    Move.moveAttempt(moves, current_square, dir, 0, col_diff, 2, capture);
                 }
                 // Left moves
                 for (c = current_square.col; c >= 0; c--)
                 {
                     int col_diff = c - current_square.col;
                     Move.moveAttempt(moves, current_square, dir, 0, col_diff, 2, regular);
+                    Move.moveAttempt(moves, current_square, dir, 0, col_diff, 2, capture);
                 }
             }
             return moves;

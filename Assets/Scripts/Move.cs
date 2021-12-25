@@ -10,7 +10,7 @@ namespace Dragonchess
         Square m_start;
         Square m_end;
 
-        public enum MoveType { Regular, Capture, Swoop };
+        public enum MoveType { Regular, Capture, MoveOrCapture, Swoop };
 
         public Move (Square start, Square end, MoveType type)
         {
@@ -74,7 +74,6 @@ namespace Dragonchess
 
         public bool IsValidMove ()
         {
-
             if (m_start.col < 0 || m_start.col >= Board.width)
                 return false;
             if (m_start.row < 0 || m_start.row >= Board.height)

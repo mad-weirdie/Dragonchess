@@ -33,25 +33,37 @@ namespace Dragonchess
 
             // ANY LEVEL: King-esque moves
             Move.moveAttempt(moves, current_square, dir, 1, 0, layer_num, regular);
-            Move.moveAttempt(moves, current_square, dir, 1, 1, layer_num, regular);
+            Move.moveAttempt(moves, current_square, dir, 1, 1, layer_num, capture);
             Move.moveAttempt(moves, current_square, dir, 0, 1, layer_num, regular);
-            Move.moveAttempt(moves, current_square, dir, -1, 1, layer_num, regular);
+            Move.moveAttempt(moves, current_square, dir, -1, 1, layer_num, capture);
             Move.moveAttempt(moves, current_square, dir, -1, 0, layer_num, regular);
-            Move.moveAttempt(moves, current_square, dir, -1, -1, layer_num, regular);
+            Move.moveAttempt(moves, current_square, dir, -1, -1, layer_num, capture);
             Move.moveAttempt(moves, current_square, dir, 0, -1, layer_num, regular);
-            Move.moveAttempt(moves, current_square, dir, 1, -1, layer_num, regular);
+            Move.moveAttempt(moves, current_square, dir, 1, -1, layer_num, capture);
+
+            Move.moveAttempt(moves, current_square, dir, 1, 0, layer_num, regular);
+            Move.moveAttempt(moves, current_square, dir, 1, 1, layer_num, capture);
+            Move.moveAttempt(moves, current_square, dir, 0, 1, layer_num, regular);
+            Move.moveAttempt(moves, current_square, dir, -1, 1, layer_num, capture);
+            Move.moveAttempt(moves, current_square, dir, -1, 0, layer_num, regular);
+            Move.moveAttempt(moves, current_square, dir, -1, -1, layer_num, capture);
+            Move.moveAttempt(moves, current_square, dir, 0, -1, layer_num, regular);
+            Move.moveAttempt(moves, current_square, dir, 1, -1, layer_num, capture);
 
             if (layer == Layer.Middle)
             {
                 // Move up
                 Move.moveAttempt(moves, current_square, dir, 0, 0, 3, regular);
+                Move.moveAttempt(moves, current_square, dir, 0, 0, 3, capture);
                 // Move down
                 Move.moveAttempt(moves, current_square, dir, 0, 0, 1, regular);
+                Move.moveAttempt(moves, current_square, dir, 0, 0, 1, capture);
             }
             else
             {
                 // Move back to middle layer
                 Move.moveAttempt(moves, current_square, dir, 0, 0, 2, regular);
+                Move.moveAttempt(moves, current_square, dir, 0, 0, 2, capture);
             }
 
             return moves;

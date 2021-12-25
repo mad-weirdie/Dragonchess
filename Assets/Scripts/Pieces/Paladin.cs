@@ -34,15 +34,15 @@ namespace Dragonchess
 
             print("current layer num: " + layer_num);
 
-            // Any board - Regular King moves
-            Move.moveAttempt(moves, current_square, dir, 1, 0, layer_num, regular);
-            Move.moveAttempt(moves, current_square, dir, 1, 1, layer_num, regular);
-            Move.moveAttempt(moves, current_square, dir, 0, 1, layer_num, regular);
-            Move.moveAttempt(moves, current_square, dir, -1, 1, layer_num, regular);
-            Move.moveAttempt(moves, current_square, dir, -1, 0, layer_num, regular);
-            Move.moveAttempt(moves, current_square, dir, -1, -1, layer_num, regular);
-            Move.moveAttempt(moves, current_square, dir, 0, -1, layer_num, regular);
-            Move.moveAttempt(moves, current_square, dir, 1, -1, layer_num, regular);
+            // Any board - move_cap King moves
+            Move.moveAttempt(moves, current_square, dir, 1, 0, layer_num, move_cap);
+            Move.moveAttempt(moves, current_square, dir, 1, 1, layer_num, move_cap);
+            Move.moveAttempt(moves, current_square, dir, 0, 1, layer_num, move_cap);
+            Move.moveAttempt(moves, current_square, dir, -1, 1, layer_num, move_cap);
+            Move.moveAttempt(moves, current_square, dir, -1, 0, layer_num, move_cap);
+            Move.moveAttempt(moves, current_square, dir, -1, -1, layer_num, move_cap);
+            Move.moveAttempt(moves, current_square, dir, 0, -1, layer_num, move_cap);
+            Move.moveAttempt(moves, current_square, dir, 1, -1, layer_num, move_cap);
 
             // Between-board knight-esque moves
             int[] layer_shift = { 1, 2, -1, -2 };
@@ -68,21 +68,21 @@ namespace Dragonchess
             {
                 // Knight-esque moves -----------------------------------------
                 // forward-right L
-                Move.moveAttempt(moves, current_square, dir, 2, 1, 2, regular);
+                Move.moveAttempt(moves, current_square, dir, 2, 1, 2, move_cap);
                 // right-forward L
-                Move.moveAttempt(moves, current_square, dir, 1, 2, 2, regular);
+                Move.moveAttempt(moves, current_square, dir, 1, 2, 2, move_cap);
                 // forward-left L
-                Move.moveAttempt(moves, current_square, dir, 2, -1, 2, regular);
+                Move.moveAttempt(moves, current_square, dir, 2, -1, 2, move_cap);
                 // left-forward L
-                Move.moveAttempt(moves, current_square, dir, 1, -2, 2, regular);
+                Move.moveAttempt(moves, current_square, dir, 1, -2, 2, move_cap);
                 // backward-right L
-                Move.moveAttempt(moves, current_square, dir, -2, 1, 2, regular);
+                Move.moveAttempt(moves, current_square, dir, -2, 1, 2, move_cap);
                 // right-backward L
-                Move.moveAttempt(moves, current_square, dir, -1, 2, 2, regular);
+                Move.moveAttempt(moves, current_square, dir, -1, 2, 2, move_cap);
                 // backward-left L
-                Move.moveAttempt(moves, current_square, dir, -2, -1, 2, regular);
+                Move.moveAttempt(moves, current_square, dir, -2, -1, 2, move_cap);
                 // left-backward L
-                Move.moveAttempt(moves, current_square, dir, -1, -2, 2, regular);
+                Move.moveAttempt(moves, current_square, dir, -1, -2, 2, move_cap);
             }
             return moves;
         }

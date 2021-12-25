@@ -16,6 +16,7 @@ namespace Dragonchess
     {
         public static Move.MoveType capture = Move.MoveType.Capture;
         public static Move.MoveType regular = Move.MoveType.Regular;
+        public static Move.MoveType move_cap = Move.MoveType.MoveOrCapture;
         public static Move.MoveType swoop = Move.MoveType.Swoop;
 
         Color m_color;
