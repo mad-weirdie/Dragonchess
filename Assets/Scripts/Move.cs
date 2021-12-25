@@ -43,6 +43,34 @@ namespace Dragonchess
             }
         }
 
+        public static void moveAttempt(ArrayList moves, Square current,
+        int dir, int rowShift, int colShift, int board, MoveType type)
+        {
+            Board newBoard;
+            Square endSquare;
+            rowShift = rowShift * dir;
+            colShift = colShift * dir;
+
+            if (board == 3)
+                newBoard = GameController.getUpperBoard();
+            else if (board == 2)
+                newBoard = GameController.getMiddleBoard();
+            else
+                newBoard = GameController.getLowerBoard();
+
+            int new_row = current.row + rowShift;
+            int new_col = current.col + colShift;
+            if (Square.IsValidSquare(new_row, new_col))
+            {
+                endSquare = newBoard.squares[new_row, new_col];
+                Move next_move = new Move(current, endSquare, type);
+                if (next_move.IsValidMove())
+                {
+                    moves.Add(next_move);
+                }
+            }
+        }
+
         public bool IsValidMove ()
         {
 

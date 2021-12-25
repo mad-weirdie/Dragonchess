@@ -14,10 +14,14 @@ namespace Dragonchess
 
     public class Piece : MonoBehaviour
     {
+        public static Move.MoveType capture = Move.MoveType.Capture;
+        public static Move.MoveType regular = Move.MoveType.Regular;
+
         Color m_color;
         public PieceType m_type;
         public GameObject pieceGameObject;
         bool isActive;
+
         Square m_location;
         Board m_board;
 

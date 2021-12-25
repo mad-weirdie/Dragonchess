@@ -21,90 +21,47 @@ namespace Dragonchess
         public override ArrayList GetMoves()
         {
             ArrayList moves = new ArrayList();
-            // Get current piece data
             Square current_square = this.location;
-            Square end;
-            Move next_move;
-            print("row: " + current_square.row);
-            print("col: " + current_square.col);
             Layer layer = current_square.layer;
-            int direction;
+            int dir;
 
             // Definition of "forward, left, right" changes based on piece color
             if (this.color == Color.White)
-                direction = 1;
+                dir = 1;
             else
-                direction = -1;
+                dir = -1;
 
             // Level 3 moves
             if (layer == Layer.Upper)
             {
                 // Move only: left forward diagonal
-                int new_row = current_square.row + direction;
-                int new_col = current_square.col - direction;
-                if (Square.IsValidSquare(new_row, new_col))
-                {
-                    end = board.squares[new_row, new_col];
-                    next_move = new Move(location, end, Move.MoveType.Regular);
-                    if (next_move.IsValidMove())
-                    {
-                        moves.Add(next_move);
-                    }
-                }
+                Move.moveAttempt(moves, current_square, dir, 1, -1, 3, regular);
 
                 // Move only: right forward diagonal
-                new_row = current_square.row + direction;
-                new_col = current_square.col + direction;
-                if (Square.IsValidSquare(new_row, new_col))
-                {
-                    end = board.squares[new_row, new_col];
-                    next_move = new Move(location, end, Move.MoveType.Regular);
-                    if (next_move.IsValidMove())
-                    {
-                        moves.Add(next_move);
-                    }
-                }
+                Move.moveAttempt(moves, current_square, dir, 1, 1, 3, regular);
 
                 // Capture: one forward
-                new_col = current_square.col;
-                if (Square.IsValidSquare(new_row, new_col))
-                {
-                    end = board.squares[new_row, new_col];
-                    next_move = new Move(location, end, Move.MoveType.Capture);
-                    if (next_move.IsValidMove())
-                    {
-                        moves.Add(next_move);
-                    }
-                }
+                Move.moveAttempt(moves, current_square, dir, 1, 0, 3, capture);
 
                 // Capture: one down
-                Board middleBoard = GameController.getMiddleBoard();
-                end = middleBoard.squares[current_square.row, current_square.col];
-                next_move = new Move(location, end, Move.MoveType.Capture);
-                if (next_move.IsValidMove())
-                {
-                    moves.Add(next_move);
-                }
-            }
+                Move.moveAttempt(moves, current_square, dir, 0, 0, 2, capture);
 
+            }
             else if (layer == Layer.Middle)
             {
                 // Move directly up
-                Board upperBoard = GameController.getUpperBoard();
-                end = upperBoard.squares[current_square.row, current_square.col];
-                next_move = new Move(location, end, Move.MoveType.Regular);
-                moves.Add(next_move);
+                Move.moveAttempt(moves, current_square, dir, 0, 0, 3, regular);
 
                 // Move to any of the starting Sylph locations
-                for (int i = 0; i < Board.width; i+=2)
+                for (int i = 0; i < Board.width; i += 2)
                 {
+                    int col_diff = i - current_square.col;
+                    int row_diff;
                     if (this.color == Color.White)
-                        end = upperBoard.squares[1, i];
+                        row_diff = 1 - current_square.row;
                     else
-                        end = upperBoard.squares[7, i];
-                    next_move = new Move(location, end, Move.MoveType.Regular);
-                    moves.Add(next_move);
-
+                        row_diff = 7 - current_square.row;
+                    Move.moveAttempt(moves, current_square, 1, row_diff, col_diff, 3, regular);
                 }
             }
 
