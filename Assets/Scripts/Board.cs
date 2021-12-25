@@ -11,7 +11,7 @@ namespace Dragonchess
 
         public static int width = 12;
         public static int height = 8;
-        public float square_scale = 2.0f;
+        public static float square_scale = 2.0f;
         public float board_width = 1.0f;
         public float base_height = 5;
         public float layer_spacing = 6;
@@ -43,7 +43,7 @@ namespace Dragonchess
             return m_squares[row, col];
         }
 
-        public void AddPieceAt(GameObject piece, Material mat, int r, int c)
+        public void AddPieceAt(GameObject piece, Material mat, Color color, int r, int c)
         {
             Vector3 pos = m_squares[r, c].cubeObject.transform.position;
             piece.layer = m_layer+3;
@@ -60,6 +60,7 @@ namespace Dragonchess
             Piece pieceScript = obj.GetComponent<Piece>();
             pieceScript.location = m_squares[r, c];
             pieceScript.board = this;
+            pieceScript.color = color;
 
             m_squares[r, c].occupied = true;
             m_squares[r, c].piece = pieceScript;

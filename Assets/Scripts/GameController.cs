@@ -130,7 +130,8 @@ namespace Dragonchess
             {
                 Board CurrentBoard;
                 GameObject piece;
-                Material c;
+                Material m;
+                Color c;
 
                 string[] vals = line.Split(' ');
                 int level = int.Parse(vals[0]);
@@ -147,13 +148,19 @@ namespace Dragonchess
                     CurrentBoard = LowerBoard;
 
                 if (color == 0)
-                    c = white_pieces_mat;
+                {
+                    c = Color.White;
+                    m = white_pieces_mat;
+                }
                 else
-                    c = black_pieces_mat;
+                {
+                    c = Color.Black;
+                    m = black_pieces_mat;
+                }
 
                 piece = piecePrefabs[piece_type];
                 
-                CurrentBoard.AddPieceAt(piece, c, row, col);
+                CurrentBoard.AddPieceAt(piece, m, c, row, col);
                 Piece script = CurrentBoard.squares[row, col].cubeObject.GetComponent<Piece>();
                 //print("row: " + script.location.row);
             }
@@ -172,30 +179,51 @@ namespace Dragonchess
             Square square;
             GameObject sObj;
             RaycastHit hit;
+            int layer;
 
             if (Physics.Raycast(ray, out hit))
             {
-                GameObject pieceGameObject = hit.transform.gameObject;
+                GameObject hitGameObject = hit.transform.gameObject;
                 if (selectedPiece != null)
                 {
                     piece = selectedPiece.GetComponent<Piece>();
                     square = piece.location;
+                    layer = hitGameObject.layer;
+
+                    if (layer == 6 || layer == 7 || layer == 8)
+                    {
+                        foreach (Square s in hightlightedSquares)
+                        {
+                            if (s.cubeObject == hitGameObject)
+                            {
+                                Vector3 pos = s.cubeObject.transform.position;
+                                pos.y += 1.0f / Board.square_scale;
+                                piece.pieceGameObject.transform.position = pos;
+                                sObj = piece.location.cubeObject;
+                                sObj.GetComponent<Renderer>().material = square.properMaterial;
+                                piece.location = s;
+
+                                piece.pieceGameObject.layer = s.board.m_layer+3;
+                                foreach (Transform child in piece.transform)
+                                    child.gameObject.layer = s.board.m_layer + 3;
+                            }
+                        }
+                    }
                     sObj = piece.location.cubeObject;
                     sObj.GetComponent<Renderer>().material = square.properMaterial;
 
                     foreach (Square s in hightlightedSquares)
                     {
-
                         s.cubeObject.GetComponent<Renderer>().material = s.properMaterial;
                     }
                     hightlightedSquares.Clear();
                 }
 
-                int layer = pieceGameObject.layer;
+                layer = hitGameObject.layer;
                 if (layer == 9 || layer == 10 || layer == 11)
                 {
 
-                    selectedPiece = pieceGameObject;
+                    selectedPiece = hitGameObject;
                     piece = selectedPiece.GetComponent<Piece>();
                     sObj = piece.location.cubeObject;
                     sObj.GetComponent<Renderer>().material = highlightMaterial;
@@ -215,6 +243,7 @@ namespace Dragonchess
                         print("possible move: (" + endSquare.row + ", " + endSquare.col + ")");
                     }
                 }
+
             }
         }
 

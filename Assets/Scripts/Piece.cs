@@ -15,7 +15,6 @@ namespace Dragonchess
     public class Piece : MonoBehaviour
     {
         Color m_color;
-
         public PieceType m_type;
         public GameObject pieceGameObject;
         bool isActive;

@@ -62,6 +62,14 @@ namespace Dragonchess
             return !this.IsOccupied();
         }
 
+        public Board board
+        {
+            get
+            {
+                return m_board;
+            }
+        }
+
         public int col
         {
             get
