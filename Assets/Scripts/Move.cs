@@ -46,6 +46,7 @@ namespace Dragonchess
         public static void moveAttempt(ArrayList moves, Square current,
         int dir, int rowShift, int colShift, int board, MoveType type)
         {
+            MonoBehaviour.print("current board before move: board #" + (current.layer));
             Board newBoard;
             Square endSquare;
             rowShift = rowShift * dir;

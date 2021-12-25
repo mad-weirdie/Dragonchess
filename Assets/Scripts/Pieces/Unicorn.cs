@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Dragonchess
 {
     /* ----------- Unicorn ------------
-     * 
+     * Moves and captures like a chess Knight - level 2 only
      */
     public class Unicorn : Piece
     {
@@ -14,8 +14,42 @@ namespace Dragonchess
         public override ArrayList GetMoves()
         {
             ArrayList moves = new ArrayList();
+            Square current_square = this.location;
+            Layer layer = current_square.layer;
+            int dir;
 
+            // Definition of "forward, left, right" changes based on piece color
+            if (this.color == Color.White)
+                dir = 1;
+            else
+                dir = -1;
             
+            // forward-right L
+            Move.moveAttempt(moves, current_square, dir, 2, 1, 2, regular);
+
+            // right-forward L
+            Move.moveAttempt(moves, current_square, dir, 1, 2, 2, regular);
+
+            // forward-left L
+            Move.moveAttempt(moves, current_square, dir, 2, -1, 2, regular);
+
+            // left-forward L
+            Move.moveAttempt(moves, current_square, dir, 1, -2, 2, regular);
+
+            // backward-right L
+            Move.moveAttempt(moves, current_square, dir, -2, 1, 2, regular);
+
+            // right-backward L
+            Move.moveAttempt(moves, current_square, dir, -1, 2, 2, regular);
+
+            // backward-left L
+            Move.moveAttempt(moves, current_square, dir, -2, -1, 2, regular);
+
+            // left-backward L
+            Move.moveAttempt(moves, current_square, dir, -1, -2, 2, regular);
+
+
+
             return moves;
         }
     }

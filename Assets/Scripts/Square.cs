@@ -41,7 +41,7 @@ namespace Dragonchess
             else if (b.m_layer == 7)
                 m_layer = Layer.Middle;
             else
-                m_layer = Layer.Upper;
+                m_layer = Layer.Lower;
             
             /*
             if ((r + c) % 2 == 0)

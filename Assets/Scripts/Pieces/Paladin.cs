@@ -1,4 +1,5 @@
 using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,8 +14,76 @@ namespace Dragonchess
         public override ArrayList GetMoves()
         {
             ArrayList moves = new ArrayList();
+            Square current_square = this.location;
+            Layer layer = current_square.layer;
+            int dir;
 
+            // Definition of "forward, left, right" changes based on piece color
+            if (this.color == Color.White)
+                dir = 1;
+            else
+                dir = -1;
 
+            int layer_num;
+            if (layer == Layer.Upper)
+                layer_num = 3;
+            else if (layer == Layer.Middle)
+                layer_num = 2;
+            else
+                layer_num = 1;
+
+            print("current layer num: " + layer_num);
+
+            // Any board - Regular King moves
+            Move.moveAttempt(moves, current_square, dir, 1, 0, layer_num, regular);
+            Move.moveAttempt(moves, current_square, dir, 1, 1, layer_num, regular);
+            Move.moveAttempt(moves, current_square, dir, 0, 1, layer_num, regular);
+            Move.moveAttempt(moves, current_square, dir, -1, 1, layer_num, regular);
+            Move.moveAttempt(moves, current_square, dir, -1, 0, layer_num, regular);
+            Move.moveAttempt(moves, current_square, dir, -1, -1, layer_num, regular);
+            Move.moveAttempt(moves, current_square, dir, 0, -1, layer_num, regular);
+            Move.moveAttempt(moves, current_square, dir, 1, -1, layer_num, regular);
+
+            // Between-board knight-esque moves
+            int[] layer_shift = { 1, 2, -1, -2 };
+            foreach (int shift in layer_shift)
+            {
+                int new_layer = layer_num - shift;
+                if ((new_layer <= 3) && (new_layer >= 1))
+                {
+                    int lat_shift = 3 - Math.Abs(shift);
+                    print(new_layer);
+                    // forward
+                    Move.moveAttempt(moves, current_square, dir, lat_shift, 0, new_layer, regular);
+                    // backward
+                    Move.moveAttempt(moves, current_square, dir, -lat_shift, 0, new_layer, regular);
+                    // left
+                    Move.moveAttempt(moves, current_square, dir, 0, lat_shift, new_layer, regular);
+                    // right
+                    Move.moveAttempt(moves, current_square, dir, 0, -lat_shift, new_layer, regular);
+                }
+            }
+            // Level 2 moves
+            if (layer == Layer.Middle)
+            {
+                // Knight-esque moves -----------------------------------------
+                // forward-right L
+                Move.moveAttempt(moves, current_square, dir, 2, 1, 2, regular);
+                // right-forward L
+                Move.moveAttempt(moves, current_square, dir, 1, 2, 2, regular);
+                // forward-left L
+                Move.moveAttempt(moves, current_square, dir, 2, -1, 2, regular);
+                // left-forward L
+                Move.moveAttempt(moves, current_square, dir, 1, -2, 2, regular);
+                // backward-right L
+                Move.moveAttempt(moves, current_square, dir, -2, 1, 2, regular);
+                // right-backward L
+                Move.moveAttempt(moves, current_square, dir, -1, 2, 2, regular);
+                // backward-left L
+                Move.moveAttempt(moves, current_square, dir, -2, -1, 2, regular);
+                // left-backward L
+                Move.moveAttempt(moves, current_square, dir, -1, -2, 2, regular);
+            }
             return moves;
         }
     }

@@ -29,7 +29,9 @@ namespace Dragonchess
         public Material LB_material;
         public Material black_pieces_mat;
         public Material white_pieces_mat;
-        public Material highlightMaterial;
+        public Material highlight_1;
+        public Material highlight_2;
+        public Material highlight_3;
 
         static Board UpperBoard = new Board(6);
         static Board MiddleBoard = new Board(7);
@@ -201,7 +203,7 @@ namespace Dragonchess
                                 sObj.GetComponent<Renderer>().material = square.properMaterial;
                                 piece.location = s;
 
-                                piece.pieceGameObject.layer = s.board.m_layer+3;
+                                piece.pieceGameObject.layer = s.board.m_layer + 3;
                                 foreach (Transform child in piece.transform)
                                     child.gameObject.layer = s.board.m_layer + 3;
 
@@ -249,7 +251,7 @@ namespace Dragonchess
                     selectedPiece = hitGameObject;
                     piece = selectedPiece.GetComponent<Piece>();
                     sObj = piece.location.cubeObject;
-                    sObj.GetComponent<Renderer>().material = highlightMaterial;
+                    sObj.GetComponent<Renderer>().material = highlight_1;
                     
                     // Generate list of possible moves
                     ArrayList possibleMoves = piece.GetMoves();
@@ -260,12 +262,11 @@ namespace Dragonchess
                         GameObject squareObj = endSquare.cubeObject;
                         hightlightedSquares.Add((endSquare, move.type));
                         if (move.type == Move.MoveType.Regular)
-                            squareObj.GetComponent<Renderer>().material = LB_material;
+                            squareObj.GetComponent<Renderer>().material = highlight_2;
                         else if (move.type == Move.MoveType.Capture)
-                            squareObj.GetComponent<Renderer>().material = LW_material;
+                            squareObj.GetComponent<Renderer>().material = highlight_3;
                         else
-                            squareObj.GetComponent<Renderer>().material = highlightMaterial;
-                        print("possible move: (" + endSquare.row + ", " + endSquare.col + ")");
+                            squareObj.GetComponent<Renderer>().material = highlight_1;
                     }
                 }
 

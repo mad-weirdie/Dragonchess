@@ -496,7 +496,9 @@ MonoBehaviour:
   LB_material: {fileID: 2100000, guid: 6e12877ba7149c94d8e3852f0d2868e4, type: 2}
   black_pieces_mat: {fileID: 2100000, guid: 618d3f5c0e77f214c99d7f14f70f7016, type: 2}
   white_pieces_mat: {fileID: 2100000, guid: cb83d7348458ff14db4d9b9a78342d7c, type: 2}
-  highlightMaterial: {fileID: 2100000, guid: 0009f848a5d047e4da6d2ebfe777863d, type: 2}
+  highlight_1: {fileID: 2100000, guid: 0009f848a5d047e4da6d2ebfe777863d, type: 2}
+  highlight_2: {fileID: 2100000, guid: 9c499cc27a677fb4d9bc059f228be1bb, type: 2}
+  highlight_3: {fileID: 2100000, guid: 2c6ad1b17fb85ee40ba3095794b5aff1, type: 2}
 --- !u!114 &1337925268
 MonoBehaviour:
   m_ObjectHideFlags: 0
