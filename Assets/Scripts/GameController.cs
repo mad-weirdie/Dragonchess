@@ -238,8 +238,10 @@ namespace Dragonchess
                         hightlightedSquares.Add(endSquare);
                         if (move.type == Move.MoveType.Regular)
                             squareObj.GetComponent<Renderer>().material = LB_material;
-                        else
+                        else if (move.type == Move.MoveType.Capture)
                             squareObj.GetComponent<Renderer>().material = LW_material;
+                        else
+                            squareObj.GetComponent<Renderer>().material = highlightMaterial;
                         print("possible move: (" + endSquare.row + ", " + endSquare.col + ")");
                     }
                 }

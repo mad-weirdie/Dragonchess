@@ -10,7 +10,7 @@ namespace Dragonchess
         Square m_start;
         Square m_end;
 
-        public enum MoveType { Regular, Capture };
+        public enum MoveType { Regular, Capture, Swoop };
 
         public Move (Square start, Square end, MoveType type)
         {
