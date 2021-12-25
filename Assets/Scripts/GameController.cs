@@ -159,9 +159,7 @@ namespace Dragonchess
                 }
 
                 piece = piecePrefabs[piece_type];
-                
                 CurrentBoard.AddPieceAt(piece, m, c, row, col);
-                Piece script = CurrentBoard.squares[row, col].cubeObject.GetComponent<Piece>();
                 //print("row: " + script.location.row);
             }
         }
@@ -206,6 +204,31 @@ namespace Dragonchess
                                 piece.pieceGameObject.layer = s.board.m_layer+3;
                                 foreach (Transform child in piece.transform)
                                     child.gameObject.layer = s.board.m_layer + 3;
+
+                                // Warrior Piece Promotion!
+                                if (piece.type == PieceType.Warrior)
+                                {
+                                    if (piece.color == Color.White)
+                                    {
+                                        if (s.row == 7)
+                                        {
+                                            Destroy(piece.pieceGameObject);
+                                            GameObject newHero = piecePrefabs[6];
+                                            MiddleBoard.AddPieceAt(newHero, white_pieces_mat, Color.White, 7, s.col);
+                                            piece.pieceGameObject = newHero;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (s.row == 0)
+                                        {
+                                            Destroy(piece.pieceGameObject);
+                                            GameObject newHero = piecePrefabs[6];
+                                            MiddleBoard.AddPieceAt(newHero, black_pieces_mat, Color.Black, 0, s.col);
+                                            piece.pieceGameObject = newHero;
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

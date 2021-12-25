@@ -64,7 +64,13 @@ namespace Dragonchess
 
         public bool active { get; set; }
 
-        public PieceType pieceType { get; set; }
+        public PieceType type
+        {
+            get
+            {
+                return m_type;
+            }
+        }
 
     }
 }
