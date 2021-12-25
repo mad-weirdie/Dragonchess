@@ -13,7 +13,7 @@ namespace Dragonchess
         public TextAsset board_init;
 
         GameObject selectedPiece;
-        List<Square> hightlightedSquares = new List<Square>();
+        List<(Square, Move.MoveType)> hightlightedSquares = new List<(Square, Move.MoveType)>();
 
         public GameObject UpperBoardGameObject;
         public GameObject MiddleBoardGameObject;
@@ -192,9 +192,9 @@ namespace Dragonchess
 
                     if (layer == 6 || layer == 7 || layer == 8)
                     {
-                        foreach (Square s in hightlightedSquares)
+                        foreach ((Square s, Move.MoveType m) in hightlightedSquares)
                         {
-                            if (s.cubeObject == hitGameObject)
+                            if (s.cubeObject == hitGameObject && m != Move.MoveType.Swoop)
                             {
                                 Vector3 pos = s.cubeObject.transform.position;
                                 pos.y += 1.0f / Board.square_scale;
@@ -212,7 +212,7 @@ namespace Dragonchess
                     sObj = piece.location.cubeObject;
                     sObj.GetComponent<Renderer>().material = square.properMaterial;
 
-                    foreach (Square s in hightlightedSquares)
+                    foreach ((Square s, Move.MoveType m) in hightlightedSquares)
                     {
                         s.cubeObject.GetComponent<Renderer>().material = s.properMaterial;
                     }
@@ -235,7 +235,7 @@ namespace Dragonchess
                     {
                         Square endSquare = move.end;
                         GameObject squareObj = endSquare.cubeObject;
-                        hightlightedSquares.Add(endSquare);
+                        hightlightedSquares.Add((endSquare, move.type));
                         if (move.type == Move.MoveType.Regular)
                             squareObj.GetComponent<Renderer>().material = LB_material;
                         else if (move.type == Move.MoveType.Capture)
