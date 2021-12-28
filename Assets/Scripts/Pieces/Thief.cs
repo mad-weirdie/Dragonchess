@@ -16,15 +16,9 @@ namespace Dragonchess
             ArrayList moves = new ArrayList();
             Square current_square = this.location;
             Layer layer = current_square.layer;
-            int dir;
+            int dir = 1;
 
-            // Definition of "forward, left, right" changes based on piece color
-            if (this.color == Color.White)
-                dir = 1;
-            else
-                dir = 1;
-
-            // Bisop-esque moves ------------------------------------------
+            // Bisop-esque moves ------------(CANNOT JUMP) --------------------
 
             // Forward-right diags
             int r = current_square.row + 1;
@@ -33,6 +27,8 @@ namespace Dragonchess
             {
                 int row_diff = r - current_square.row;
                 int col_diff = c - current_square.col;
+                if (Move.IsBlocked(current_square, dir, row_diff, col_diff, 2))
+                    break;
                 Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, regular);
                 Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, capture);
                 r++;
@@ -46,6 +42,8 @@ namespace Dragonchess
             {
                 int row_diff = r - current_square.row;
                 int col_diff = c - current_square.col;
+                if (Move.IsBlocked(current_square, dir, row_diff, col_diff, 2))
+                    break;
                 Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, regular);
                 Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, capture);
                 r++;
@@ -59,6 +57,8 @@ namespace Dragonchess
             {
                 int row_diff = r - current_square.row;
                 int col_diff = c - current_square.col;
+                if (Move.IsBlocked(current_square, dir, row_diff, col_diff, 2))
+                    break;
                 Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, regular);
                 Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, capture);
                 r--;
@@ -71,6 +71,8 @@ namespace Dragonchess
             {
                 int row_diff = r - current_square.row;
                 int col_diff = c - current_square.col;
+                if (Move.IsBlocked(current_square, dir, row_diff, col_diff, 2))
+                    break;
                 Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, regular);
                 Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, capture);
                 r--;

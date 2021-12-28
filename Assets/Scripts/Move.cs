@@ -25,23 +25,36 @@ namespace Dragonchess
 
         public MoveType type { get { return m_type; } }
 
+        public static bool IsBlocked(Square current, int dir, int rShift, int cShift, int b)
+        {
+            Board board = GetBoard(b);
+            int new_row = current.row + rShift*dir;
+            int new_col = current.col + cShift*dir;
+
+            if (Square.IsValidSquare(new_row, new_col))
+                return (board.squares[new_row, new_col].occupied);
+            else
+                return false;
+        }
+
+        public static Board GetBoard(int board)
+        {
+            if (board == 3)
+                return GameController.getUpperBoard();
+            else if (board == 2)
+                return GameController.getMiddleBoard();
+            else
+                return GameController.getLowerBoard();
+        }
+
         public static void moveAttempt(ArrayList moves, Square current,
         int dir, int rowShift, int colShift, int board, MoveType type)
         {
-            Board newBoard;
+            Board newBoard = GetBoard(board);
+            int new_row = current.row + rowShift*dir;
+            int new_col = current.col + colShift*dir;
             Square endSquare;
-            rowShift = rowShift * dir;
-            colShift = colShift * dir;
 
-            if (board == 3)
-                newBoard = GameController.getUpperBoard();
-            else if (board == 2)
-                newBoard = GameController.getMiddleBoard();
-            else
-                newBoard = GameController.getLowerBoard();
-
-            int new_row = current.row + rowShift;
-            int new_col = current.col + colShift;
             MonoBehaviour.print("new_row: " + new_row + "   new_col: " + new_col);
             if (Square.IsValidSquare(new_row, new_col))
             {

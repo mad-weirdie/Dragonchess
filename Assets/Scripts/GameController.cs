@@ -9,6 +9,7 @@ namespace Dragonchess
 {
     public class GameController : MonoBehaviour
     {
+        public static int layerMask = ~0;
         public TextAsset board_init;
         public MoveController mController;
 
@@ -131,7 +132,7 @@ namespace Dragonchess
             Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
             RaycastHit hit;
             // Check where we clicked
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
             {
                 // Locate GameObject of whatever we clicked on (piece or square)
                 GameObject hitGameObject = hit.transform.gameObject;

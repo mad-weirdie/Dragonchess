@@ -2,93 +2,117 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraController : MonoBehaviour
+namespace Dragonchess
 {
-    public Camera main_camera;
-
-    public Camera focus_upper;
-    public Camera focus_middle;
-    public Camera focus_lower;
-
-    public Camera over_upper;
-    public Camera over_middle;
-    public Camera over_lower;
-
-    int CurrentBoardNum;
-
-    // Start is called before the first frame update
-    void Start()
+    public class CameraController : MonoBehaviour
     {
-        // 0 - main camera
-        // 3 - upper board
-        // 2 - middle board
-        // 1 - lower board
-        CurrentBoardNum = 0;
-        main_camera.enabled = (true);
-    }
+        public Camera main_camera;
 
-    public Camera GetCamera(int boardNum)
-    {
-        if (boardNum == 0)
-            return main_camera;
-        else if (boardNum == 1)
-            return focus_lower;
-        else if (boardNum == 3)
-            return focus_upper;
-        else
-            return focus_middle;
-    }
+        public Camera focus_upper;
+        public Camera focus_middle;
+        public Camera focus_lower;
 
-    public void SetBoard(int boardNum)
-    {
-        print("board num: " + boardNum);
-        for (int i = 0; i < 4; i++)
+        public Camera over_upper;
+        public Camera over_middle;
+        public Camera over_lower;
+
+        int CurrentBoardNum;
+
+
+        // Start is called before the first frame update
+        void Start()
         {
-            if (i == boardNum)
-                GetCamera(i).enabled = true;
+            // 0 - main camera
+            // 3 - upper board
+            // 2 - middle board
+            // 1 - lower board
+            CurrentBoardNum = 0;
+            main_camera.enabled = (true);
+        }
+
+        public void SetLayerMask(int boardNum)
+        {
+            int layerMask;
+
+            // Lower layer mask
+            if (boardNum == 1)
+                layerMask = (1 << 8) | (1 << 11);
+            // Middle layer mask
+            else if (boardNum == 2)
+                layerMask = (1 << 7) | (1 << 10);
+            // Upper layer mask
+            else if (boardNum == 3)
+                layerMask = (1 << 6) | (1 << 9);
+            // Show all layers
             else
-                GetCamera(i).enabled = false;
+                layerMask = ~0;
 
+            GameController.layerMask = layerMask;
         }
-    }
 
-    public void BoardUp()
-    {
-        if (CurrentBoardNum == 0)
+        public Camera GetCamera(int boardNum)
         {
-            CurrentBoardNum = 3;
-            SetBoard(CurrentBoardNum);
-            return;
+            if (boardNum == 0)
+                return main_camera;
+            else if (boardNum == 1)
+                return focus_lower;
+            else if (boardNum == 3)
+                return focus_upper;
+            else
+                return focus_middle;
         }
 
-        if (CurrentBoardNum < 3)
-            CurrentBoardNum++;
-        SetBoard(CurrentBoardNum);
-    }
-
-    public void BoardDown()
-    {
-        if (CurrentBoardNum == 0)
+        public void SetBoard(int boardNum)
         {
-            CurrentBoardNum = 1;
-            SetBoard(CurrentBoardNum);
-            return;
+            print("board num: " + boardNum);
+            for (int i = 0; i < 4; i++)
+            {
+                if (i == boardNum)
+                    GetCamera(i).enabled = true;
+                else
+                    GetCamera(i).enabled = false;
+            }
+            SetLayerMask(boardNum);
         }
 
-        if (CurrentBoardNum > 0)
-            CurrentBoardNum--;
-        SetBoard(CurrentBoardNum);
-    }
+        public void BoardUp()
+        {
+            if (CurrentBoardNum == 0)
+            {
+                CurrentBoardNum = 3;
+                SetBoard(CurrentBoardNum);
+                return;
+            }
 
-    public void ViewAll()
-    {
-        CurrentBoardNum = 0;
-        SetBoard(0);
-    }
+            if (CurrentBoardNum < 3)
+                CurrentBoardNum++;
+            SetBoard(CurrentBoardNum);
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public void BoardDown()
+        {
+            if (CurrentBoardNum == 0)
+            {
+                CurrentBoardNum = 1;
+                SetBoard(CurrentBoardNum);
+                return;
+            }
+
+            if (CurrentBoardNum > 0)
+                CurrentBoardNum--;
+            SetBoard(CurrentBoardNum);
+        }
+
+        public void ViewAll()
+        {
+            CurrentBoardNum = 0;
+            SetBoard(0);
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
     }
 }
