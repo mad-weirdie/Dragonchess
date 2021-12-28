@@ -11,6 +11,8 @@ namespace Dragonchess
     public class Game : MonoBehaviour
     {
         public Color turn;
+        public GameObject black_text;
+        public GameObject white_text;
 
         void Start()
         {
@@ -20,9 +22,17 @@ namespace Dragonchess
         public void SwitchTurn()
         {
             if (turn == Color.White)
+            {
+                white_text.SetActive(false);
+                black_text.SetActive(true);
                 turn = Color.Black;
+            }
             else
+            {
+                black_text.SetActive(false);
+                white_text.SetActive(true);
                 turn = Color.White;
+            }
         }
     }
 }

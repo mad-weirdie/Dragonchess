@@ -149,6 +149,7 @@ namespace Dragonchess
                     if (m == Move.MoveType.Capture)
                         piece.Capture(s.piece);
                     piece.MoveTo(s);
+                    eventSystem.SetSelectedGameObject(null);
                     gameState.SwitchTurn();
                     captured = true;
                 }
@@ -159,13 +160,14 @@ namespace Dragonchess
                     if (m == Move.MoveType.Capture)
                         piece.Capture(s.piece);
                     piece.MoveTo(s);
+                    eventSystem.SetSelectedGameObject(null);
                     gameState.SwitchTurn();
 
                     // Check for warrior piece promotion
                     if (piece.type == PieceType.Warrior)
                         PromoteWarrior(s, piece);
                 }
-
+                eventSystem.SetSelectedGameObject(null);
                 // As the piece leaves, reset the color of the square underneath it
                 ResetColor(piece);
                 // Now that the piece has left, un-highlight all of the move option squares

@@ -56,7 +56,7 @@ namespace Dragonchess
             UpperBoard = new Board(UpperBoardGameObject, 6, UW_material, UB_material);
             MiddleBoard = new Board(MiddleBoardGameObject, 7, MW_material, MB_material);
             LowerBoard = new Board(LowerBoardGameObject, 8, LW_material, LB_material);
-            
+
 
             List<Board> boards = new List<Board> { LowerBoard, MiddleBoard, UpperBoard };
             int b = 0;
