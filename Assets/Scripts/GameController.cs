@@ -9,8 +9,8 @@ namespace Dragonchess
 {
     public class GameController : MonoBehaviour
     {
-        string[] Letters = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L" };
         public TextAsset board_init;
+        public MoveController mController;
 
         GameObject selectedPiece;
         List<(Square, Move.MoveType)> hightlightedSquares = new List<(Square, Move.MoveType)>();
@@ -27,15 +27,13 @@ namespace Dragonchess
         public Material MB_material;
         public Material LW_material;
         public Material LB_material;
+
         public Material black_pieces_mat;
         public Material white_pieces_mat;
-        public Material highlight_1;
-        public Material highlight_2;
-        public Material highlight_3;
 
-        static Board UpperBoard = new Board(6);
-        static Board MiddleBoard = new Board(7);
-        static Board LowerBoard = new Board(8);
+        static Board UpperBoard;
+        static Board MiddleBoard;
+        static Board LowerBoard;
 
         static public Board getUpperBoard()
         {
@@ -55,75 +53,30 @@ namespace Dragonchess
         // Start is called before the first frame update
         void Start()
         {
-            for (int b = 0; b < 3; b++)
+            UpperBoard = new Board(UpperBoardGameObject, 6, UW_material, UB_material);
+            MiddleBoard = new Board(MiddleBoardGameObject, 7, MW_material, MB_material);
+            LowerBoard = new Board(LowerBoardGameObject, 8, LW_material, LB_material);
+            
+
+            List<Board> boards = new List<Board> { LowerBoard, MiddleBoard, UpperBoard };
+            int b = 0;
+            foreach (Board currentBoard in boards)
             {
-                // Parent GameObject where all the squares of a board are stored
-                GameObject CurrentBoard;
-                Square[,] CurrentSquares;
-                if (b == 0)
-                {
-                    CurrentBoard = LowerBoardGameObject;
-                    CurrentSquares = LowerBoard.squares;
-                }
-                else if (b == 1)
-                {
-
-                    CurrentBoard = MiddleBoardGameObject;
-                    CurrentSquares = MiddleBoard.squares;
-                }
-                else
-                {
-                    CurrentBoard = UpperBoardGameObject;
-                    CurrentSquares = UpperBoard.squares;
-                }
-
-                // Allows for easier, scriptable editing of the boards, should one so desire
                 for (int r = 0; r < Board.height; r++)
                 {
                     for (int c = 0; c < Board.width; c++)
                     {
-                        // Maintains nice names for the squares, ie "A3", "E9", etc.
-                        string name = Letters[c] + (r + 1).ToString();
-                        GameObject cube = CurrentBoard.transform.Find(name).gameObject;
-
-                        //cube.transform.localScale = new Vector3(square_scale, board_width, square_scale);
-                        //cube.transform.position = new Vector3(c * square_scale, base_height + layer_spacing * b, r * square_scale);
-
-                        Board currentBoard;
-                        Material mat;
                         // Set material colors based on which layer we're instantiating
-                        if (b == 0)
-                        {
-                            currentBoard = LowerBoard;
-                            if ((r + c) % 2 == 0)
-                                mat = LB_material;
-                            else
-                                mat = LW_material;
-                        }
-                        else if (b == 1)
-                        {
-                            currentBoard = MiddleBoard;
-                            if ((r + c) % 2 == 0)
-                                mat = MB_material;
-                            else
-                                mat = MW_material;
-                        }
+                        Material mat;
+                        if ((r + c) % 2 == 0)
+                            mat = currentBoard.upper_mat;
                         else
-                        {
-                            currentBoard = UpperBoard;
-                            if ((r + c) % 2 == 0)
-                                mat = UB_material;
-                            else
-                                mat = UW_material;
-                        }
-                        cube.GetComponent<Renderer>().material = mat;
+                            mat = currentBoard.lower_mat;
 
-                        // Attach GameObject to the squares matrix
-                        CurrentSquares[r, c] = new Square(r, c, currentBoard);
-                        CurrentSquares[r, c].cubeObject = cube;
-                        CurrentSquares[r, c].properMaterial = mat;
+                        currentBoard.AddSquareAt(mat, b, r, c);
                     }
                 }
+                b++;
             }
 
             string[] lines = File.ReadAllLines("Assets/Files/board_init.txt");
@@ -176,126 +129,13 @@ namespace Dragonchess
         void OnClick()
         {
             Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-            Piece piece;
-            Square square;
-            GameObject sObj;
             RaycastHit hit;
-            int layer;
-
             // Check where we clicked
             if (Physics.Raycast(ray, out hit))
             {
                 // Locate GameObject of whatever we clicked on (piece or square)
                 GameObject hitGameObject = hit.transform.gameObject;
-                if (selectedPiece != null)  // read: "if we had something selected before this"
-                {
-                    // Get the attached script of the piece GameObject
-                    piece = selectedPiece.GetComponent<Piece>();
-                    square = piece.location;
-                    layer = hitGameObject.layer;
-
-                    if (layer == 6 || layer == 7 || layer == 8)
-                    {
-                        // Check to see if what we clicked was any of the highlighted squares
-                        foreach ((Square s, Move.MoveType m) in hightlightedSquares)
-                        {
-                            if (s.cubeObject == hitGameObject && m != Move.MoveType.Swoop)
-                            {
-                                if (m == Move.MoveType.Capture)
-                                {
-                                    sObj = piece.location.cubeObject;
-                                    sObj.GetComponent<Renderer>().material = square.properMaterial;
-                                    piece.Capture(s.piece);
-                                }
-
-                                Vector3 pos = s.cubeObject.transform.position;
-                                pos.y += 1.0f / Board.square_scale;
-                                piece.pieceGameObject.transform.position = pos;
-                                sObj = piece.location.cubeObject;
-                                sObj.GetComponent<Renderer>().material = square.properMaterial;
-
-                                // Link piece and square to each other
-                                piece.location.occupied = false;
-                                piece.location = s;
-                                s.piece = piece;
-
-                                // Set proper rendering layer (for the overhead cameras)
-                                piece.pieceGameObject.layer = s.board.m_layer + 3;
-                                foreach (Transform child in piece.transform)
-                                    child.gameObject.layer = s.board.m_layer + 3;
-
-                                // Check for warrior piece promotion
-                                if (piece.type == PieceType.Warrior)
-                                {
-                                    if (piece.color == Color.White)
-                                    {
-                                        if (s.row == 7)
-                                        {
-                                            Destroy(piece.pieceGameObject);
-                                            GameObject newHero = piecePrefabs[6];
-                                            MiddleBoard.AddPieceAt(newHero, white_pieces_mat, Color.White, 7, s.col);
-                                            piece.pieceGameObject = newHero;
-                                            piece.type = PieceType.Hero;
-    }
-                                    }
-                                    else
-                                    {
-                                        if (s.row == 0)
-                                        {
-                                            Destroy(piece.pieceGameObject);
-                                            GameObject newHero = piecePrefabs[6];
-                                            MiddleBoard.AddPieceAt(newHero, black_pieces_mat, Color.Black, 0, s.col);
-                                            piece.pieceGameObject = newHero;
-                                            piece.type = PieceType.Hero;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    // As the piece leaves, reset the color of the square underneath it
-                    // to its original material color
-                    sObj = piece.location.cubeObject;
-                    sObj.GetComponent<Renderer>().material = square.properMaterial;
-
-                    // Now that the piece has left, un-highlight all of the move option squares
-                    foreach ((Square s, Move.MoveType m) in hightlightedSquares)
-                    {
-                        s.cubeObject.GetComponent<Renderer>().material = s.properMaterial;
-                    }
-                    hightlightedSquares.Clear();
-                }
-
-                // We've taken care of if there was something selected before.
-                // Now nothing should be selected, and we check if we clicked on a piece
-                layer = hitGameObject.layer;
-                if (layer == 9 || layer == 10 || layer == 11)
-                {
-                    selectedPiece = hitGameObject;
-                    piece = selectedPiece.GetComponent<Piece>();
-                    sObj = piece.location.cubeObject;
-                    sObj.GetComponent<Renderer>().material = highlight_1;
-                    
-                    // Generate list of possible moves
-                    ArrayList possibleMoves = piece.GetMoves();
-
-                    // Highlight all the possible moves generated for that piece, with
-                    // different colors for the different move types (reg, capture, etc.)
-                    foreach (Move move in possibleMoves)
-                    {
-                        Square endSquare = move.end;
-                        GameObject squareObj = endSquare.cubeObject;
-                        hightlightedSquares.Add((endSquare, move.type));
-
-                        if (move.type == Move.MoveType.Regular)
-                            squareObj.GetComponent<Renderer>().material = highlight_2;
-                        else if (move.type == Move.MoveType.Capture)
-                            squareObj.GetComponent<Renderer>().material = highlight_3;
-                        else
-                            squareObj.GetComponent<Renderer>().material = highlight_1;
-                    }
-                }
-
+                mController.DisplayMoves(hitGameObject);
             }
         }
     }

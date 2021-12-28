@@ -39,12 +39,36 @@ namespace Dragonchess
 
         public bool Capture(Piece enemy)
         {
+            GameObject sObj = this.location.cubeObject;
+            sObj.GetComponent<Renderer>().material = this.location.properMaterial;
             enemy.location.piece = this;
             this.location.occupied = false;
             this.location = enemy.location;
             Destroy(enemy.pieceGameObject);
             Destroy(enemy);
             return true;
+        }
+
+        public void MoveTo(Square s)
+        {
+            // Set new position of the piece's GameObject on the board
+            Vector3 pos = s.cubeObject.transform.position;
+            pos.y += 1.0f / Board.square_scale;
+            this.pieceGameObject.transform.position = pos;
+            GameObject sObj = this.location.cubeObject;
+            sObj.GetComponent<Renderer>().material = this.location.properMaterial;
+
+            // Link piece and square to each other
+            print(this.location.row + " " + this.location.col);
+            this.location.occupied = false;
+            this.location = s;
+            this.location.occupied = true;
+            s.piece = this;
+
+            // Set proper rendering layer (for the overhead cameras)
+            this.pieceGameObject.layer = s.board.m_layer + 3;
+            foreach (Transform child in this.transform)
+                child.gameObject.layer = s.board.m_layer + 3;
         }
 
         public Square location

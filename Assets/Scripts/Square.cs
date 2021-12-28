@@ -6,6 +6,8 @@ namespace Dragonchess
 {
     public class Square
     {
+        static string[] Letters = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L" };
+
         GameObject cubeGameObject;
         public Material properMaterial;
 
@@ -47,6 +49,11 @@ namespace Dragonchess
                 m_color = Color.Black;
             else
                 m_color = Color.White;
+        }
+
+        public string GetColChar()
+        {
+            return Letters[m_col];
         }
 
         public bool IsOccupied()

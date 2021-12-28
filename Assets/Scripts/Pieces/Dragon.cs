@@ -10,6 +10,7 @@ namespace Dragonchess
         public Dragon() : base(PieceType.Dragon) { }
         public override ArrayList GetMoves()
         {
+            print("calling dragon moves");
             ArrayList moves = new ArrayList();
             Square current_square = this.location;
             Layer layer = current_square.layer;
@@ -19,7 +20,7 @@ namespace Dragonchess
             if (this.color == Color.White)
                 dir = 1;
             else
-                dir = -1;
+                dir = 1;
 
             // Level 3 moves
             if (layer == Layer.Upper)

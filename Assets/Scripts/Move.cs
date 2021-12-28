@@ -42,6 +42,7 @@ namespace Dragonchess
 
             int new_row = current.row + rowShift;
             int new_col = current.col + colShift;
+            MonoBehaviour.print("new_row: " + new_row + "   new_col: " + new_col);
             if (Square.IsValidSquare(new_row, new_col))
             {
                 endSquare = newBoard.squares[new_row, new_col];
@@ -64,7 +65,6 @@ namespace Dragonchess
             // If movetype = Regular(move-only), check the square is free
             if (m_type == MoveType.Regular)
             {
-                MonoBehaviour.print("checking regular");
                 if (end.IsOccupied())
                     return false;
             }
@@ -88,7 +88,7 @@ namespace Dragonchess
             if (m_type == MoveType.Capture && !m_end.IsOccupied())
                 return false;
             */
-            MonoBehaviour.print("Adding move of type: " + m_type);
+
             return true;
         }
     }

@@ -21,7 +21,7 @@ namespace Dragonchess
             if (this.color == Color.White)
                 dir = 1;
             else
-                dir = -1;
+                dir = 1;
 
             if (layer == Layer.Upper)
             {
