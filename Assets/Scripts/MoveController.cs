@@ -20,6 +20,8 @@ namespace Dragonchess
         public Material highlight_2;
         public Material highlight_3;
 
+        public Material frozen;
+
         static Board UpperBoard;
         static Board MiddleBoard;
         static Board LowerBoard;

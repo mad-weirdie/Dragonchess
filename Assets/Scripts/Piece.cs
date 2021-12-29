@@ -57,7 +57,7 @@ namespace Dragonchess
             return true;
         }
 
-        public void MoveTo(Square s)
+        virtual public void MoveTo(Square s)
         {
             // Set new position of the piece's GameObject on the board
             Vector3 pos = s.cubeObject.transform.position;

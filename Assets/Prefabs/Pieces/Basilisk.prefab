@@ -128,6 +128,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_type: 13
   pieceGameObject: {fileID: 4552675645360974910}
+  frozen: {fileID: 0}
+  frozen_mat: {fileID: 2100000, guid: db9e6141cedb03648aaa266ba31fc4aa, type: 2}
 --- !u!1 &9078758696515367797
 GameObject:
   m_ObjectHideFlags: 0

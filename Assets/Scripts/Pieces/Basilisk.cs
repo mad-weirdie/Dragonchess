@@ -4,12 +4,49 @@ using UnityEngine;
 
 namespace Dragonchess
 {
-    /* ----------- Basilisk ------------
-     * 
-     */
+    /* ----------- Basilisk ------------*/
     public class Basilisk : Piece
     {
+        public Square danger_square;
+        public Piece frozen;
         public Basilisk() : base(PieceType.Basilisk) { }
+        public Material frozen_mat;
+
+        public void FreezeSquare(Square s)
+        {
+            if (s.occupied)
+            {
+                GameObject p = s.piece.pieceGameObject;
+                if (p.GetComponent<Piece>().color != this.color)
+                    p.GetComponent<Renderer>().material = frozen_mat;
+            }
+        }
+
+        public override void MoveTo(Square s)
+        {
+            // Set new position of the piece's GameObject on the board
+            Vector3 pos = s.cubeObject.transform.position;
+            pos.y += 1.0f / Board.square_scale;
+            this.pieceGameObject.transform.position = pos;
+            GameObject sObj = this.location.cubeObject;
+            sObj.GetComponent<Renderer>().material = this.location.properMaterial;
+
+            // Link piece and square to each other
+            print(this.location.row + " " + this.location.col);
+            this.location.occupied = false;
+            this.location = s;
+            this.location.occupied = true;
+            s.piece = this;
+
+            // Set proper rendering layer (for the overhead cameras)
+            this.pieceGameObject.layer = s.board.m_layer + 3;
+            foreach (Transform child in this.transform)
+                child.gameObject.layer = s.board.m_layer + 3;
+
+            danger_square = GameController.getMiddleBoard().squares[s.row, s.col];
+            FreezeSquare(danger_square);
+        }
+
         public override ArrayList GetMoves()
         {
             ArrayList moves = new ArrayList();

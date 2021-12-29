@@ -83,9 +83,12 @@ namespace Dragonchess
             pieceScript.board = this;
             pieceScript.color = color;
 
+            // Set the basilisk's freezy-square danger-zone!
+            if (pieceScript.type == PieceType.Basilisk)
+                obj.GetComponent<Basilisk>().danger_square = m_squares[r, c];
+
             m_squares[r, c].occupied = true;
             m_squares[r, c].piece = pieceScript;
-
         }
 
     }
