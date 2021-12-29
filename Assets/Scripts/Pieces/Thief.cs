@@ -27,10 +27,10 @@ namespace Dragonchess
             {
                 int row_diff = r - current_square.row;
                 int col_diff = c - current_square.col;
-                if (Move.IsBlocked(current_square, dir, row_diff, col_diff, 2))
+                Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, capture);
+                if (Move.IsBlocked(current_square, dir, row_diff, col_diff, 2, this.color))
                     break;
                 Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, regular);
-                Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, capture);
                 r++;
                 c++;
             }
@@ -42,10 +42,10 @@ namespace Dragonchess
             {
                 int row_diff = r - current_square.row;
                 int col_diff = c - current_square.col;
-                if (Move.IsBlocked(current_square, dir, row_diff, col_diff, 2))
+                Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, capture);
+                if (Move.IsBlocked(current_square, dir, row_diff, col_diff, 2, this.color))
                     break;
                 Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, regular);
-                Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, capture);
                 r++;
                 c--;
             }
@@ -57,10 +57,10 @@ namespace Dragonchess
             {
                 int row_diff = r - current_square.row;
                 int col_diff = c - current_square.col;
-                if (Move.IsBlocked(current_square, dir, row_diff, col_diff, 2))
+                Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, capture);
+                if (Move.IsBlocked(current_square, dir, row_diff, col_diff, 2, this.color))
                     break;
                 Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, regular);
-                Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, capture);
                 r--;
                 c++;
             }
@@ -71,10 +71,10 @@ namespace Dragonchess
             {
                 int row_diff = r - current_square.row;
                 int col_diff = c - current_square.col;
-                if (Move.IsBlocked(current_square, dir, row_diff, col_diff, 2))
+                Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, capture);
+                if (Move.IsBlocked(current_square, dir, row_diff, col_diff, 2, this.color))
                     break;
                 Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, regular);
-                Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, capture);
                 r--;
                 c--;
             }

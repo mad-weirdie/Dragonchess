@@ -25,16 +25,20 @@ namespace Dragonchess
 
         public MoveType type { get { return m_type; } }
 
-        public static bool IsBlocked(Square current, int dir, int rShift, int cShift, int b)
+        public static bool IsBlocked(Square current, int dir, int rShift, int cShift, int b, Color c)
         {
             Board board = GetBoard(b);
             int new_row = current.row + rShift*dir;
             int new_col = current.col + cShift*dir;
+            
+            MonoBehaviour.print("r: " + new_row + " c: " + new_col);
 
             if (Square.IsValidSquare(new_row, new_col))
-                return (board.squares[new_row, new_col].occupied);
-            else
-                return false;
+            {
+                Square goal = board.squares[new_row, new_col];
+                return (goal.occupied);
+            }
+            return false;
         }
 
         public static Board GetBoard(int board)
@@ -50,6 +54,13 @@ namespace Dragonchess
         public static void moveAttempt(ArrayList moves, Square current,
         int dir, int rowShift, int colShift, int board, MoveType type)
         {
+            if (type == MoveType.MoveOrCapture)
+            {
+                moveAttempt(moves, current, dir, rowShift, colShift, board, MoveType.Regular);
+                moveAttempt(moves, current, dir, rowShift, colShift, board, MoveType.Capture);
+                return;
+            }
+
             Board newBoard = GetBoard(board);
             int new_row = current.row + rowShift*dir;
             int new_col = current.col + colShift*dir;
@@ -97,10 +108,11 @@ namespace Dragonchess
                 }
             }
 
-            /*
-            if (m_type == MoveType.Capture && !m_end.IsOccupied())
-                return false;
-            */
+            if (m_type == MoveType.Swoop)
+            {
+                Move m = new Move(m_start, m_end, MoveType.Capture);
+                return m.IsValidMove();
+            }
 
             return true;
         }

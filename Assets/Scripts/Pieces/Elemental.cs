@@ -39,11 +39,26 @@ namespace Dragonchess
                 // Move and capture one or two steps orthogonally
                 foreach (int shift in orthog_shift)
                 {
-                    Move.moveAttempt(moves, current_square, dir, shift, 0, 1, regular);
-                    Move.moveAttempt(moves, current_square, dir, 0, shift, 1, regular);
-
-                    Move.moveAttempt(moves, current_square, dir, shift, 0, 1, capture);
-                    Move.moveAttempt(moves, current_square, dir, 0, shift, 1, capture);
+                    if (Math.Abs(shift) == 2)
+                    {
+                        if (!Move.IsBlocked(current_square, dir, 0, shift / 2, 1, this.color))
+                        {
+                            Move.moveAttempt(moves, current_square, dir, 0, shift, 1, regular);
+                            Move.moveAttempt(moves, current_square, dir, 0, shift, 1, capture);
+                        }
+                        if (!Move.IsBlocked(current_square, dir, shift / 2, 0, 1, this.color))
+                        {
+                            Move.moveAttempt(moves, current_square, dir, shift, 0, 1, regular);
+                            Move.moveAttempt(moves, current_square, dir, shift, 0, 1, capture);
+                        }
+                    }
+                    else
+                    {
+                        Move.moveAttempt(moves, current_square, dir, shift, 0, 1, regular);
+                        Move.moveAttempt(moves, current_square, dir, shift, 0, 1, capture);
+                        Move.moveAttempt(moves, current_square, dir, 0, shift, 1, regular);
+                        Move.moveAttempt(moves, current_square, dir, 0, shift, 1, capture);
+                    }
 
                     // Capture in the following pattern: one step orthogonally
                     // followed by the square directly above on level 2.

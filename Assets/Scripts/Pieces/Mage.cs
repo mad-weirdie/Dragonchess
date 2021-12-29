@@ -25,32 +25,37 @@ namespace Dragonchess
 
             if (layer == Layer.Upper)
             {
-                // Move to either layer straight below
-                Move.moveAttempt(moves, current_square, dir, 0, 0, 2, regular);
-                Move.moveAttempt(moves, current_square, dir, 0, 0, 1, regular);
-
-                Move.moveAttempt(moves, current_square, dir, 0, 0, 2, capture);
-                Move.moveAttempt(moves, current_square, dir, 0, 0, 1, capture);
-
                 // Plus-shaped moves
                 Move.moveAttempt(moves, current_square, dir, 1, 0, 3, regular);
                 Move.moveAttempt(moves, current_square, dir, -1, 0, 3, regular);
                 Move.moveAttempt(moves, current_square, dir, 0, 1, 3, regular);
                 Move.moveAttempt(moves, current_square, dir, 0, -1, 3, regular);
+
+                // Move to either layer straight below
+                Move.moveAttempt(moves, current_square, dir, 0, 0, 2, capture);
+                if (!Move.IsBlocked(current_square, dir, 0, 0, 2, this.color))
+                {
+                    Move.moveAttempt(moves, current_square, dir, 0, 0, 2, regular);
+                    Move.moveAttempt(moves, current_square, dir, 0, 0, 1, regular);
+                    Move.moveAttempt(moves, current_square, dir, 0, 0, 1, capture);
+                }
             }
             else if (layer == Layer.Lower)
             {
-                // Move to either layer straight above
-                Move.moveAttempt(moves, current_square, dir, 0, 0, 2, regular);
-                Move.moveAttempt(moves, current_square, dir, 0, 0, 3, regular);
-                Move.moveAttempt(moves, current_square, dir, 0, 0, 2, capture);
-                Move.moveAttempt(moves, current_square, dir, 0, 0, 3, capture);
-
                 // Plus-shaped moves
                 Move.moveAttempt(moves, current_square, dir, 1, 0, 1, regular);
                 Move.moveAttempt(moves, current_square, dir, -1, 0, 1, regular);
                 Move.moveAttempt(moves, current_square, dir, 0, 1, 1, regular);
                 Move.moveAttempt(moves, current_square, dir, 0, -1, 1, regular);
+
+                // Move to either layer straight above
+                Move.moveAttempt(moves, current_square, dir, 0, 0, 2, capture);
+                if (!Move.IsBlocked(current_square, dir, 0, 0, 2, this.color))
+                {
+                    Move.moveAttempt(moves, current_square, dir, 0, 0, 2, regular);
+                    Move.moveAttempt(moves, current_square, dir, 0, 0, 3, regular);
+                    Move.moveAttempt(moves, current_square, dir, 0, 0, 3, capture);
+                }
             }
             // Level 2 moves
             else
@@ -69,12 +74,13 @@ namespace Dragonchess
                 {
                     int row_diff = r - current_square.row;
                     int col_diff = c - current_square.col;
-                    Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, regular);
                     Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, capture);
+                    if (Move.IsBlocked(current_square, dir, row_diff, col_diff, 2, this.color))
+                        break;
+                    Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, regular);
                     r++;
                     c++;
                 }
-
                 // Forward-left diags
                 r = current_square.row + 1;
                 c = current_square.col - 1;
@@ -82,8 +88,10 @@ namespace Dragonchess
                 {
                     int row_diff = r - current_square.row;
                     int col_diff = c - current_square.col;
-                    Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, regular);
                     Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, capture);
+                    if (Move.IsBlocked(current_square, dir, row_diff, col_diff, 2, this.color))
+                        break;
+                    Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, regular);
                     r++;
                     c--;
                 }
@@ -95,8 +103,10 @@ namespace Dragonchess
                 {
                     int row_diff = r - current_square.row;
                     int col_diff = c - current_square.col;
-                    Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, regular);
                     Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, capture);
+                    if (Move.IsBlocked(current_square, dir, row_diff, col_diff, 2, this.color))
+                        break;
+                    Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, regular);
                     r--;
                     c++;
                 }
@@ -107,39 +117,48 @@ namespace Dragonchess
                 {
                     int row_diff = r - current_square.row;
                     int col_diff = c - current_square.col;
-                    Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, regular);
                     Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, capture);
+                    if (Move.IsBlocked(current_square, dir, row_diff, col_diff, 2, this.color))
+                        break;
+                    Move.moveAttempt(moves, current_square, dir, row_diff, col_diff, 2, regular);
                     r--;
                     c--;
                 }
                 // Orthogonal movements ---------------------------------------
-                // Forward moves
-                for (r = current_square.row; r < Board.height; r++)
+                for (r = current_square.row + 1; r < Board.height; r++)
                 {
                     int row_diff = r - current_square.row;
-                    Move.moveAttempt(moves, current_square, dir, row_diff, 0, 2, regular);
                     Move.moveAttempt(moves, current_square, dir, row_diff, 0, 2, capture);
+                    if (Move.IsBlocked(current_square, dir, row_diff, 0, 2, this.color))
+                        break;
+                    Move.moveAttempt(moves, current_square, dir, row_diff, 0, 2, regular);
                 }
                 // Backward moves
-                for (r = current_square.row; r >= 0; r--)
+                for (r = current_square.row - 1; r >= 0; r--)
                 {
                     int row_diff = r - current_square.row;
-                    Move.moveAttempt(moves, current_square, dir, row_diff, 0, 2, regular);
                     Move.moveAttempt(moves, current_square, dir, row_diff, 0, 2, capture);
+                    if (Move.IsBlocked(current_square, dir, row_diff, 0, 2, this.color))
+                        break;
+                    Move.moveAttempt(moves, current_square, dir, row_diff, 0, 2, regular);
                 }
                 // Right moves
-                for (c = current_square.col; c < Board.width; c++)
+                for (c = current_square.col + 1; c < Board.width; c++)
                 {
                     int col_diff = c - current_square.col;
-                    Move.moveAttempt(moves, current_square, dir, 0, col_diff, 2, regular);
                     Move.moveAttempt(moves, current_square, dir, 0, col_diff, 2, capture);
+                    if (Move.IsBlocked(current_square, dir, 0, col_diff, 2, this.color))
+                        break;
+                    Move.moveAttempt(moves, current_square, dir, 0, col_diff, 2, regular);
                 }
                 // Left moves
-                for (c = current_square.col; c >= 0; c--)
+                for (c = current_square.col - 1; c >= 0; c--)
                 {
                     int col_diff = c - current_square.col;
-                    Move.moveAttempt(moves, current_square, dir, 0, col_diff, 2, regular);
                     Move.moveAttempt(moves, current_square, dir, 0, col_diff, 2, capture);
+                    if (Move.IsBlocked(current_square, dir, 0, col_diff, 2, this.color))
+                        break;
+                    Move.moveAttempt(moves, current_square, dir, 0, col_diff, 2, regular);
                 }
             }
             return moves;

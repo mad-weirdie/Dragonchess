@@ -49,8 +49,6 @@ namespace Dragonchess
             Move.moveAttempt(moves, current_square, dir, -1, -2, 2, regular);
             Move.moveAttempt(moves, current_square, dir, -1, -2, 2, capture);
 
-
-
             return moves;
         }
     }

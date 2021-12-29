@@ -37,6 +37,14 @@ namespace Dragonchess
         // GetMoves to be overridden by child classes
         virtual public ArrayList GetMoves() { return null; }
 
+        public bool RemoteCapture(Piece enemy)
+        {
+            enemy.location.occupied = false;
+            Destroy(enemy.pieceGameObject);
+            Destroy(enemy);
+            return true;
+        }
+
         public bool Capture(Piece enemy)
         {
             GameObject sObj = this.location.cubeObject;

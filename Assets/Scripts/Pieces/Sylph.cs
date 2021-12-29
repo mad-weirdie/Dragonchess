@@ -36,13 +36,10 @@ namespace Dragonchess
             {
                 // Move only: left forward diagonal
                 Move.moveAttempt(moves, current_square, dir, 1, -1, 3, regular);
-
                 // Move only: right forward diagonal
                 Move.moveAttempt(moves, current_square, dir, 1, 1, 3, regular);
-
                 // Capture: one forward
                 Move.moveAttempt(moves, current_square, dir, 1, 0, 3, capture);
-
                 // Capture: one down
                 Move.moveAttempt(moves, current_square, dir, 0, 0, 2, capture);
             }

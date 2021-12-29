@@ -72,7 +72,7 @@ namespace Dragonchess
         {
             foreach ((Square s, Move.MoveType m) in highlightedSquares)
             {
-                if ((s.cubeObject == hitGameObject) && m != Move.MoveType.Swoop)
+                if ((s.cubeObject == hitGameObject))
                 {
                     square = s;
                     type = m;
@@ -115,7 +115,7 @@ namespace Dragonchess
                 else if (move.type == Move.MoveType.Capture)
                     squareObj.GetComponent<Renderer>().material = highlight_3;
                 else
-                    squareObj.GetComponent<Renderer>().material = highlight_1;
+                    squareObj.GetComponent<Renderer>().material = highlight_3;
             }
         }
 
@@ -146,9 +146,15 @@ namespace Dragonchess
                 // capturing it rather than displaying that piece's moves
                 if (IsOccupiedEnemySquare(hitGameObject, ref s, ref m))
                 {
+                    if (m == Move.MoveType.Swoop)
+                        piece.RemoteCapture(s.piece);
                     if (m == Move.MoveType.Capture)
+                    {
                         piece.Capture(s.piece);
-                    piece.MoveTo(s);
+                        piece.MoveTo(s);
+                    }
+                        if (m != Move.MoveType.Swoop)
+                        
                     eventSystem.SetSelectedGameObject(null);
                     gameState.SwitchTurn();
                     captured = true;
@@ -157,9 +163,8 @@ namespace Dragonchess
                 // Check to see if what we clicked was any of the highlighted squares
                 if (IsHighlighted(hitGameObject, ref s, ref m))
                 {
-                    if (m == Move.MoveType.Capture)
-                        piece.Capture(s.piece);
-                    piece.MoveTo(s);
+                    if (m != Move.MoveType.Swoop)
+                        piece.MoveTo(s);
                     eventSystem.SetSelectedGameObject(null);
                     gameState.SwitchTurn();
 
