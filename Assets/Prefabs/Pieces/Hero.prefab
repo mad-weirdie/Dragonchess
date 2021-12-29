@@ -297,3 +297,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_type: 6
   pieceGameObject: {fileID: 5806972766582656371}
+  frozen: 0

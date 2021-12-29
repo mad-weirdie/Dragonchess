@@ -187,16 +187,23 @@ namespace Dragonchess
                 selectedPiece = hitGameObject;
                 piece = selectedPiece.GetComponent<Piece>();
 
-                // Check to make sure it's this piece's turn.
-                if (gameState.turn == piece.color)
+                if (!piece.frozen)
                 {
-                    ArrayList possibleMoves = piece.GetMoves();
-                    HighlightSquares(selectedPiece, possibleMoves);
+                    // Check to make sure it's this piece's turn.
+                    if (gameState.turn == piece.color)
+                    {
+                        ArrayList possibleMoves = piece.GetMoves();
+                        HighlightSquares(selectedPiece, possibleMoves);
+                    }
+                    else
+                    {
+                        print("It's not that color's turn!");
+                        eventSystem.SetSelectedGameObject(null);
+                    }
                 }
                 else
                 {
-                    print("It's not that color's turn!");
-                    eventSystem.SetSelectedGameObject(null); 
+                    print("This piece is frozen.");
                 }
                
             }

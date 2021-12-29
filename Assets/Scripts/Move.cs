@@ -66,7 +66,6 @@ namespace Dragonchess
             int new_col = current.col + colShift*dir;
             Square endSquare;
 
-            MonoBehaviour.print("new_row: " + new_row + "   new_col: " + new_col);
             if (Square.IsValidSquare(new_row, new_col))
             {
                 endSquare = newBoard.squares[new_row, new_col];

@@ -23,6 +23,7 @@ namespace Dragonchess
         public PieceType m_type;
         public GameObject pieceGameObject;
         bool isActive;
+        public bool frozen = false;
 
         Square m_location;
         Board m_board;
@@ -67,7 +68,6 @@ namespace Dragonchess
             sObj.GetComponent<Renderer>().material = this.location.properMaterial;
 
             // Link piece and square to each other
-            print(this.location.row + " " + this.location.col);
             this.location.occupied = false;
             this.location = s;
             this.location.occupied = true;
@@ -77,6 +77,19 @@ namespace Dragonchess
             this.pieceGameObject.layer = s.board.m_layer + 3;
             foreach (Transform child in this.transform)
                 child.gameObject.layer = s.board.m_layer + 3;
+
+            if (s.board == GameController.getMiddleBoard())
+            {
+                if (GameController.getLowerBoard().squares[s.row, s.col].occupied)
+                {
+                    Piece checkB = GameController.getLowerBoard().squares[s.row, s.col].piece;
+                    if (checkB.type == PieceType.Basilisk)
+                    {
+                        checkB.pieceGameObject.GetComponent<Basilisk>().FreezeSquare(s);
+                        this.frozen = true;
+                    }
+                }
+            }
         }
 
         public Square location

@@ -8,9 +8,9 @@ namespace Dragonchess
     public class Basilisk : Piece
     {
         public Square danger_square;
-        public Piece frozen;
         public Basilisk() : base(PieceType.Basilisk) { }
         public Material frozen_mat;
+        Material original_mat;
 
         public void FreezeSquare(Square s)
         {
@@ -18,7 +18,24 @@ namespace Dragonchess
             {
                 GameObject p = s.piece.pieceGameObject;
                 if (p.GetComponent<Piece>().color != this.color)
+                {
+                    p.GetComponent<Piece>().frozen = true;
+                    original_mat = p.GetComponent<Renderer>().material;
                     p.GetComponent<Renderer>().material = frozen_mat;
+                }
+            }
+        }
+
+        public void UnfreezeSquare(Square s)
+        {
+            if (s.occupied)
+            {
+                GameObject p = s.piece.pieceGameObject;
+                if (p.GetComponent<Piece>().color != this.color)
+                {
+                    p.GetComponent<Piece>().frozen = false;
+                    p.GetComponent<Renderer>().material = original_mat;
+                }
             }
         }
 
@@ -43,6 +60,7 @@ namespace Dragonchess
             foreach (Transform child in this.transform)
                 child.gameObject.layer = s.board.m_layer + 3;
 
+            UnfreezeSquare(danger_square);
             danger_square = GameController.getMiddleBoard().squares[s.row, s.col];
             FreezeSquare(danger_square);
         }

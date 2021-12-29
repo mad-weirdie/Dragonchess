@@ -13,7 +13,6 @@ namespace Dragonchess
         public void ClickSquare()
         {
             m_square = square.board.GetSquare(square.row, square.col);
-            print("You clicked on the square at " + m_square.GetColChar() + (m_square.row+1));
 
             if (m_square.IsOccupied())
                 mController.DisplayMoves(m_square.piece.pieceGameObject);
