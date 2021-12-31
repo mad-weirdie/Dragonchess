@@ -77,9 +77,9 @@ namespace Dragonchess
             obj.transform.localScale = new Vector3(0.7f*square_scale, 0.7f*square_scale, 0.7f*square_scale);
             obj.GetComponent<Renderer>().material = mat;
 
-            // Attach square location to new piece GameObject we've instantiated
+            // Attach square pos to new piece GameObject we've instantiated
             Piece pieceScript = obj.GetComponent<Piece>();
-            pieceScript.location = m_squares[r, c];
+            pieceScript.pos = m_squares[r, c];
             pieceScript.board = this;
             pieceScript.color = color;
 
@@ -89,6 +89,11 @@ namespace Dragonchess
 
             m_squares[r, c].occupied = true;
             m_squares[r, c].piece = pieceScript;
+
+            if (color == Color.White)
+                GameController.P1.AddPiece(pieceScript);
+            else
+                GameController.P2.AddPiece(pieceScript);
         }
 
     }

@@ -8,11 +8,10 @@ namespace Dragonchess
     public class Dragon : Piece
     {
         public Dragon() : base(PieceType.Dragon) { }
-        public override ArrayList GetMoves()
+        public override List<Move> GetMoves()
         {
-            print("calling dragon moves");
-            ArrayList moves = new ArrayList();
-            Square current_square = this.location;
+            List<Move> moves = new List<Move>();
+            Square current_square = this.pos;
             Layer layer = current_square.layer;
             int dir;
 

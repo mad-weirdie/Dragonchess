@@ -10,10 +10,10 @@ namespace Dragonchess
     public class Dwarf : Piece
     {
         public Dwarf() : base(PieceType.Dwarf) { }
-        public override ArrayList GetMoves()
+        public override List<Move> GetMoves()
         {
-            ArrayList moves = new ArrayList();
-            Square current_square = this.location;
+            List<Move> moves = new List<Move>();
+            Square current_square = this.pos;
             Layer layer = current_square.layer;
             int dir;
 
@@ -32,11 +32,15 @@ namespace Dragonchess
                 layer_num = 1;
 
             // Can move one step straight forward or sideways (layers 1 and 2)
+            // Can CAPTURE one step diagonally forward (layers 1 and 2)
             if (layer == Layer.Lower || layer == Layer.Middle)
             {
                 Move.moveAttempt(moves, current_square, dir, 1, 0, layer_num, regular);
                 Move.moveAttempt(moves, current_square, dir, 0, 1, layer_num, regular);
                 Move.moveAttempt(moves, current_square, dir, 0, -1, layer_num, regular);
+
+                Move.moveAttempt(moves, current_square, dir, 1, 1, layer_num, capture);
+                Move.moveAttempt(moves, current_square, dir, 1, -1, layer_num, capture);
             }
             // Level 1: - can CAPTURE on the square directly above on level 2.
             if (layer == Layer.Lower)

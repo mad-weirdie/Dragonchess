@@ -11,10 +11,10 @@ namespace Dragonchess
     public class Paladin : Piece
     {
         public Paladin() : base(PieceType.Paladin) { }
-        public override ArrayList GetMoves()
+        public override List<Move> GetMoves()
         {
-            ArrayList moves = new ArrayList();
-            Square current_square = this.location;
+            List<Move> moves = new List<Move>();
+            Square current_square = this.pos;
             Layer layer = current_square.layer;
             int dir;
 
@@ -32,7 +32,6 @@ namespace Dragonchess
             else
                 layer_num = 1;
 
-            print("current layer num: " + layer_num);
 
             // Any board - move_cap King moves
             Move.moveAttempt(moves, current_square, dir, 1, 0, layer_num, move_cap);
@@ -52,7 +51,6 @@ namespace Dragonchess
                 if ((new_layer <= 3) && (new_layer >= 1))
                 {
                     int lat_shift = 3 - Math.Abs(shift);
-                    print(new_layer);
                     // forward
                     Move.moveAttempt(moves, current_square, dir, lat_shift, 0, new_layer, regular);
                     // backward

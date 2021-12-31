@@ -8,102 +8,79 @@ namespace Dragonchess
     {
         static string[] Letters = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L" };
 
-        GameObject cubeGameObject;
+        public GameObject cubeObject;
         public Material properMaterial;
 
-        int m_row;
-        int m_col;
-        Board m_board;
-        Layer m_layer;
+        public int row;
+        public int col;
+        public Board board;
+        public Layer layer;
 
-        Color m_color;
-        bool m_occupied;
-        Piece m_piece;
+        public Color color;
+        public bool occupied;
+        public Piece piece;
 
         // Default constructor
         public Square()
         {
-            m_row = 0;
-            m_col = 0;
-            m_color = Color.Black;
-            m_occupied = false;
+            row = 0;
+            col = 0;
+            color = Color.Black;
+            occupied = false;
         }
 
         // Constructor for square at (r, c)
         // Automatically calculates square color
         public Square(int r, int c, Board b)
         {
-            m_row = r;
-            m_col = c;
-            m_board = b;
-            m_occupied = false;
+            row = r;
+            col = c;
+            board = b;
+            occupied = false;
 
             if (b.m_layer == 6)
-                m_layer = Layer.Upper;
+                layer = Layer.Upper;
             else if (b.m_layer == 7)
-                m_layer = Layer.Middle;
+                layer = Layer.Middle;
             else
-                m_layer = Layer.Lower;
+                layer = Layer.Lower;
             
             if ((r + c) % 2 == 0)
-                m_color = Color.Black;
+                color = Color.Black;
             else
-                m_color = Color.White;
+                color = Color.White;
+        }
+
+        public bool ContainsEnemyKing(Color c)
+        {
+            if (occupied)
+                return ((this.piece.type == PieceType.King) && (this.piece.color != c));
+            return false;
+        }
+
+        public string SquareName()
+        {
+            return GetColChar() + row;
         }
 
         public string GetColChar()
         {
-            return Letters[m_col];
+            return Letters[col];
+        }
+
+        public static void SetColor(Square s, Material m)
+        {
+            s.cubeObject.GetComponent<Renderer>().material = m;
         }
 
         public bool IsOccupied()
         {
-            return m_occupied;
+            return occupied;
         }
 
         public bool IsEmpty()
         {
             return !IsOccupied();
-        }
-
-        public Board board
-        {
-            get
-            {
-                return m_board;
-            }
-        }
-
-        public int col
-        {
-            get
-            {
-                return m_col;
-            }
-            set
-            {
-                m_col = value;
-            }
-        }
-
-        public int row
-        {
-            get
-            {
-                return m_row;
-            }
-            set
-            {
-                m_row = value;
-            }
-        }
-
-        public Layer layer
-        {
-            get
-            {
-                return m_layer;
-            }
         }
 
         static public bool IsValidSquare(int row, int col)
@@ -120,55 +97,5 @@ namespace Dragonchess
 
             return true;
         }
-
-        public Color color
-        {
-            get
-            {
-                return m_color;
-            }
-            set
-            {
-                m_color = value;
-            }
-        }
-
-        public Piece piece
-        {
-            get
-            {
-                return m_piece;
-            }
-            set
-            {
-                m_piece = value;
-            }
-        }
-
-        public GameObject cubeObject
-        {
-            get
-            {
-                return cubeGameObject;
-            }
-            set
-            {
-                cubeGameObject = value;
-            }
-        }
-
-        public bool occupied
-        {
-            get
-            {
-                return m_occupied;
-            }
-            set
-            {
-                m_occupied = value;
-            }
-        }
-
     }
-
 }

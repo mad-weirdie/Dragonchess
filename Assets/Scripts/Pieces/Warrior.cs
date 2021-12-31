@@ -11,11 +11,10 @@ namespace Dragonchess
     {
         public Warrior() : base(PieceType.Warrior) { }
 
-        public override ArrayList GetMoves()
+        public override List<Move> GetMoves()
         {
-
-            ArrayList moves = new ArrayList();
-            Square current_square = this.location;
+            List<Move> moves = new List<Move>();
+            Square current_square = this.pos;
             Layer layer = current_square.layer;
             int dir;
 
@@ -30,13 +29,10 @@ namespace Dragonchess
             {
                 // Move only: forward
                 Move.moveAttempt(moves, current_square, dir, 1, 0, 2, regular);
-
                 // Capture only: forward-left
                 Move.moveAttempt(moves, current_square, dir, 1, -1, 2, capture);
-
                 // Capture only: forward-right
                 Move.moveAttempt(moves, current_square, dir, 1, 1, 2, capture);
-
             }
             return moves;
         }

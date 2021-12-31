@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Dragonchess
 {
+    
     public class Move
     {
         MoveType m_type;
@@ -25,14 +26,13 @@ namespace Dragonchess
 
         public MoveType type { get { return m_type; } }
 
+        // Check if a particular square is blocked from moving there
         public static bool IsBlocked(Square current, int dir, int rShift, int cShift, int b, Color c)
         {
             Board board = GetBoard(b);
             int new_row = current.row + rShift*dir;
             int new_col = current.col + cShift*dir;
             
-            MonoBehaviour.print("r: " + new_row + " c: " + new_col);
-
             if (Square.IsValidSquare(new_row, new_col))
             {
                 Square goal = board.squares[new_row, new_col];
@@ -41,6 +41,7 @@ namespace Dragonchess
             return false;
         }
 
+        // Get the board of a particular index/layer value
         public static Board GetBoard(int board)
         {
             if (board == 3)
@@ -51,7 +52,9 @@ namespace Dragonchess
                 return GameController.getLowerBoard();
         }
 
-        public static void moveAttempt(ArrayList moves, Square current,
+        // Check whether or not we can move to a particular square.
+		// If so, add the move to the argument "moves" passed in.
+        public static void moveAttempt(List<Move> moves, Square current,
         int dir, int rowShift, int colShift, int board, MoveType type)
         {
             if (type == MoveType.MoveOrCapture)
@@ -70,47 +73,78 @@ namespace Dragonchess
             {
                 endSquare = newBoard.squares[new_row, new_col];
                 Move next_move = new Move(current, endSquare, type);
-                if (next_move.IsValidMove())
+                if (IsValidMove(next_move))
                 {
                     moves.Add(next_move);
                 }
             }
         }
 
-        public bool IsValidMove ()
+        public void DoMove(Piece piece, Square goal)
+		{
+
+		}
+
+        // Checks whether or not moving the king to a goal square would put
+        // the king in check (an invalid move).
+        public static bool WouldCheck(Piece piece, Square goal)
         {
+            Piece prev_owner = null;
+            bool was_occupied = goal.occupied;
+            if (was_occupied)
+                prev_owner = goal.piece;
+
+            Square current = piece.pos;
+            bool isbadmove = false;
+            piece.MoveTo(goal);
+
+            if (piece.color == Color.White)
+            {
+                if (GameController.IsCheck(GameController.P2))
+                    isbadmove = true;
+            }
+            else
+            {
+                if (GameController.IsCheck(GameController.P1))
+                    isbadmove = true;
+            }
+
+            piece.MoveTo(current);
+            if (was_occupied)
+                prev_owner.MoveTo(goal);
+            return isbadmove;
+        }
+
+        // Returns whether or not a move is valid based on the movetype
+        public static bool IsValidMove (Move m)
+        {
+            Piece piece = m.start.piece;
+
             // First, check that the move goal isn't out of bounds
-            if (m_end.col < 0 || m_end.col >= Board.width)
+            if (m.m_end.col < 0 || m.m_end.col >= Board.width)
                 return false;
-            if (m_end.row < 0 || m_end.row >= Board.height)
+            if (m.m_end.row < 0 || m.m_end.row >= Board.height)
+                return false;
+
+            // check if move would put the king in check
+            if (piece.type == PieceType.King && WouldCheck(piece, m.end))
                 return false;
 
             // If movetype = Regular(move-only), check the square is free
-            if (m_type == MoveType.Regular)
+            if (m.m_type == MoveType.Regular && m.end.IsOccupied())
+                return false;
+            
+            // If Capture, check that the square contains enemy piece
+            if (m.m_type == MoveType.Capture)
             {
-                if (end.IsOccupied())
-                    return false;
-            }
-
-            // If movetype = Capture, check the square is occupied by another
-            // piece of the opposing team's color
-            if (m_type == MoveType.Capture)
-            {
-                if (end.IsEmpty())
-                {
-                    return false;
-                }
-                else
-                {
-                    if (start.piece.color == end.piece.color)
+                if (m.end.IsEmpty() || (m.start.piece.color == m.end.piece.color))
                         return false;
-                }
             }
-
-            if (m_type == MoveType.Swoop)
+            // Then, check for dragon swoop
+            if (m.m_type == MoveType.Swoop)
             {
-                Move m = new Move(m_start, m_end, MoveType.Capture);
-                return m.IsValidMove();
+                Move swoop_move = new Move(m.m_start, m.m_end, MoveType.Capture);
+                return IsValidMove(swoop_move);
             }
 
             return true;

@@ -45,14 +45,13 @@ namespace Dragonchess
             Vector3 pos = s.cubeObject.transform.position;
             pos.y += 1.0f / Board.square_scale;
             this.pieceGameObject.transform.position = pos;
-            GameObject sObj = this.location.cubeObject;
-            sObj.GetComponent<Renderer>().material = this.location.properMaterial;
+            GameObject sObj = this.pos.cubeObject;
+            sObj.GetComponent<Renderer>().material = this.pos.properMaterial;
 
             // Link piece and square to each other
-            print(this.location.row + " " + this.location.col);
-            this.location.occupied = false;
-            this.location = s;
-            this.location.occupied = true;
+            this.pos.occupied = false;
+            this.pos = s;
+            this.pos.occupied = true;
             s.piece = this;
 
             // Set proper rendering layer (for the overhead cameras)
@@ -65,10 +64,10 @@ namespace Dragonchess
             FreezeSquare(danger_square);
         }
 
-        public override ArrayList GetMoves()
+        public override List<Move> GetMoves()
         {
-            ArrayList moves = new ArrayList();
-            Square current_square = this.location;
+            List<Move> moves = new List<Move>();
+            Square current_square = this.pos;
             Layer layer = current_square.layer;
             int dir;
 
@@ -77,16 +76,6 @@ namespace Dragonchess
                 dir = 1;
             else
                 dir = -1;
-
-            /* Basilisk moves
-             * - can move and capture one step diagonally forward or straight
-             *   forward on level 1, or move one step straight backward
-             * 
-             * - automatically freezes(immobilizes) an enemy piece on the
-             *   squaredirectly above on level 2, whether the Basilisk moves
-             *   to the space below or the enemy moves to the space above, and
-             *   until the Basilisk moves away or is captured.
-             */
 
             // One step forward (move or capture)
             Move.moveAttempt(moves, current_square, dir, 1, 0, 1, regular);

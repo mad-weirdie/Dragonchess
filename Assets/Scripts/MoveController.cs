@@ -8,12 +8,9 @@ namespace Dragonchess
 {
     public class MoveController : MonoBehaviour
     {
-        GameObject selectedPiece;
-
+        public GameObject selectedPiece;
         public EventSystem eventSystem;
-        public Game gameState;
-
-        public static GameController gameController;
+        public GameController gameController;
         public static List<(Square, Move.MoveType)> highlightedSquares = new List<(Square, Move.MoveType)>();
 
         public Material highlight_1;
@@ -21,7 +18,6 @@ namespace Dragonchess
         public Material highlight_3;
 
         public Material frozen;
-
         static Board UpperBoard;
         static Board MiddleBoard;
         static Board LowerBoard;
@@ -29,8 +25,8 @@ namespace Dragonchess
         public void Start()
         {
             UpperBoard = GameController.getUpperBoard();
-            MiddleBoard = GameController.getUpperBoard();
-            LowerBoard = GameController.getUpperBoard();
+            MiddleBoard = GameController.getMiddleBoard();
+            LowerBoard = GameController.getLowerBoard();
         }
 
         public bool IsPiece(int layer)
@@ -40,8 +36,8 @@ namespace Dragonchess
 
         public void ResetColor(Piece piece)
         {
-            GameObject sObj = piece.location.cubeObject;
-            sObj.GetComponent<Renderer>().material = piece.location.properMaterial;
+            GameObject sObj = piece.pos.cubeObject;
+            sObj.GetComponent<Renderer>().material = piece.pos.properMaterial;
         }
 
         public void PromoteWarrior(Square s, Piece piece)
@@ -52,7 +48,7 @@ namespace Dragonchess
                 {
                     Destroy(piece.pieceGameObject);
                     GameObject newHero = gameController.piecePrefabs[6];
-                    MiddleBoard.AddPieceAt(newHero, gameController.white_pieces_mat, Color.White, 7, s.col);
+                    MiddleBoard.AddPieceAt(newHero, gameController.materials[9], Color.White, 7, s.col);
                     piece.pieceGameObject = newHero;
                     piece.type = PieceType.Hero;
                 }
@@ -63,7 +59,7 @@ namespace Dragonchess
                 {
                     Destroy(piece.pieceGameObject);
                     GameObject newHero = gameController.piecePrefabs[6];
-                    MiddleBoard.AddPieceAt(newHero, gameController.black_pieces_mat, Color.Black, 0, s.col);
+                    MiddleBoard.AddPieceAt(newHero, gameController.materials[10], Color.Black, 0, s.col);
                     piece.pieceGameObject = newHero;
                     piece.type = PieceType.Hero;
                 }
@@ -91,7 +87,7 @@ namespace Dragonchess
             {
                 Piece p = hitGameObject.GetComponent<Piece>();
                 if (p != null)
-                    clicked = p.location.cubeObject;
+                    clicked = p.pos.cubeObject;
             }
             if (clicked == null)
                 return false;
@@ -99,10 +95,10 @@ namespace Dragonchess
             return (IsHighlighted(clicked, ref s, ref m));
         }
 
-        public void HighlightSquares(GameObject selectedPiece, ArrayList possibleMoves)
+        public void HighlightSquares(GameObject selectedPiece, List<Move> possibleMoves)
         {
             Piece piece = selectedPiece.GetComponent<Piece>();
-            GameObject sObj = piece.location.cubeObject;
+            GameObject sObj = piece.pos.cubeObject;
             sObj.GetComponent<Renderer>().material = highlight_1;
 
             // Highlight all the possible moves generated for a piece
@@ -130,6 +126,57 @@ namespace Dragonchess
             highlightedSquares.Clear();
         }
 
+        public static void RemoveIllegal(Player p, ref List<Move> moves)
+		{
+            List<Move> illegal = new List<Move>();
+
+            foreach (Move m in moves)
+			{
+                Piece moving_piece = m.start.piece;
+                Square prev = m.start;
+
+                if (m.type == Move.MoveType.Capture)
+				{
+                    Piece captured_piece = m.end.piece;
+                    m.start.occupied = false;
+                    m.start.piece = null;
+                    m.end.piece = moving_piece;
+                    moving_piece.pos = m.end;
+
+                    if (GameController.IsCheck(GameController.GetEnemy(p)))
+					{
+                        print("Unsafe move. Removing.");
+                        illegal.Add(m);
+					}
+                    m.start.occupied = true;
+                    m.start.piece = moving_piece;
+                    m.end.piece = captured_piece;
+                    moving_piece.pos = m.start;
+                    captured_piece.pos = m.end;
+                }
+                else
+				{
+                    m.start.occupied = false;
+                    m.start.piece = null;
+                    m.end.piece = moving_piece;
+                    moving_piece.pos = m.end;
+
+                    if (GameController.IsCheck(GameController.GetEnemy(p)))
+                    {
+                        print("Unsafe move. Removing.");
+                        illegal.Add(m);
+                    }
+
+                    m.start.occupied = true;
+                    m.start.piece = moving_piece;
+                    moving_piece.pos = m.start;
+                }
+			}
+            foreach (Move illegal_move in illegal)
+                moves.Remove(illegal_move);
+
+        }
+
         public void DisplayMoves(GameObject hitGameObject)
         {
             Piece piece;
@@ -141,7 +188,7 @@ namespace Dragonchess
             {
                 // Get the attached script of the piece GameObject
                 piece = selectedPiece.GetComponent<Piece>();
-                square = piece.location;
+                square = piece.pos;
                 Square s = new Square(); Move.MoveType m = Move.MoveType.Regular;
 
                 // Checks for a player clicking on a higlighted enemy piece,
@@ -155,20 +202,26 @@ namespace Dragonchess
                         piece.Capture(s.piece);
                         piece.MoveTo(s);
                     }
-                        if (m != Move.MoveType.Swoop)
-                        
-                    eventSystem.SetSelectedGameObject(null);
-                    gameState.SwitchTurn();
+                    gameController.SwitchTurn();
                     captured = true;
+
+                    // Check for warrior piece promotion
+                    if (piece.type == PieceType.Warrior)
+                        PromoteWarrior(s, piece);
                 }
 
                 // Check to see if what we clicked was any of the highlighted squares
-                if (IsHighlighted(hitGameObject, ref s, ref m))
+                else if (IsHighlighted(hitGameObject, ref s, ref m))
                 {
+                    if (m == Move.MoveType.Swoop)
+                        piece.RemoteCapture(s.piece);
+                    if (m == Move.MoveType.Capture)
+                        piece.Capture(s.piece);
                     if (m != Move.MoveType.Swoop)
                         piece.MoveTo(s);
-                    eventSystem.SetSelectedGameObject(null);
-                    gameState.SwitchTurn();
+
+                    gameController.SwitchTurn();
+                    captured = true;
 
                     // Check for warrior piece promotion
                     if (piece.type == PieceType.Warrior)
@@ -190,9 +243,16 @@ namespace Dragonchess
                 if (!piece.frozen)
                 {
                     // Check to make sure it's this piece's turn.
-                    if (gameState.turn == piece.color)
+                    if (gameController.CurrentTurn() == piece.color)
                     {
-                        ArrayList possibleMoves = piece.GetMoves();
+                        List<Move> possibleMoves = piece.GetMoves();
+                        if (piece.color == Color.White && GameController.P1.inCheck)
+                        {
+                            print("King in check. Removing illegal moves.");
+                            RemoveIllegal(GameController.P1, ref possibleMoves);
+                        }
+                    else if (piece.color == Color.Black && GameController.P2.inCheck)
+                        RemoveIllegal(GameController.P2, ref possibleMoves);
                         HighlightSquares(selectedPiece, possibleMoves);
                     }
                     else

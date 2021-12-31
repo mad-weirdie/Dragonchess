@@ -25,7 +25,7 @@ namespace Dragonchess
         bool isActive;
         public bool frozen = false;
 
-        Square m_location;
+        Square m_pos;
         Board m_board;
 
         public Piece() { }
@@ -36,11 +36,35 @@ namespace Dragonchess
         }
 
         // GetMoves to be overridden by child classes
-        virtual public ArrayList GetMoves() { return null; }
+        virtual public List<Move> GetMoves() { return null; }
+
+        public List<Square> GetThreats()
+        {
+            List<Square> threats = new List<Square>();
+            foreach (Move move in this.GetMoves())
+            {
+                if (move.type == Move.MoveType.Capture)
+                    threats.Add(move.end);
+            }
+            return threats;
+        }
+
+        public bool ThreatToKing()
+        {
+            foreach (Square s in this.GetThreats())
+            {
+                if (s.ContainsEnemyKing(this.color))
+                {
+                    print("contains enemy king.");
+                    return true;
+                }
+            }
+            return false;
+        }
 
         public bool RemoteCapture(Piece enemy)
         {
-            enemy.location.occupied = false;
+            enemy.pos.occupied = false;
             Destroy(enemy.pieceGameObject);
             Destroy(enemy);
             return true;
@@ -48,13 +72,31 @@ namespace Dragonchess
 
         public bool Capture(Piece enemy)
         {
-            GameObject sObj = this.location.cubeObject;
-            sObj.GetComponent<Renderer>().material = this.location.properMaterial;
-            enemy.location.piece = this;
-            this.location.occupied = false;
-            this.location = enemy.location;
+            if (enemy.type == PieceType.Basilisk)
+            {
+                if (GameController.getMiddleBoard().squares[enemy.row, enemy.col].occupied)
+                {
+                    Square basilisk = GameController.getLowerBoard().squares[enemy.row, enemy.col];
+                    Square above = GameController.getMiddleBoard().squares[enemy.row, enemy.col];
+
+                    print("captured basilisk. unfreezing square.");
+                    basilisk.piece.pieceGameObject.GetComponent<Basilisk>().UnfreezeSquare(above);
+                    above.piece.frozen = false;
+                }
+            }
+            if (enemy.color == Color.White)
+                GameController.P1.pieces.Remove(enemy);
+            else
+                GameController.P2.pieces.Remove(enemy);
+
+            GameObject sObj = this.pos.cubeObject;
+            sObj.GetComponent<Renderer>().material = this.pos.properMaterial;
+            enemy.pos.piece = this;
+            this.pos.occupied = false;
+            this.pos = enemy.pos;
             Destroy(enemy.pieceGameObject);
             Destroy(enemy);
+
             return true;
         }
 
@@ -64,13 +106,13 @@ namespace Dragonchess
             Vector3 pos = s.cubeObject.transform.position;
             pos.y += 1.0f / Board.square_scale;
             this.pieceGameObject.transform.position = pos;
-            GameObject sObj = this.location.cubeObject;
-            sObj.GetComponent<Renderer>().material = this.location.properMaterial;
+            GameObject sObj = this.pos.cubeObject;
+            sObj.GetComponent<Renderer>().material = this.pos.properMaterial;
 
             // Link piece and square to each other
-            this.location.occupied = false;
-            this.location = s;
-            this.location.occupied = true;
+            this.pos.occupied = false;
+            this.pos = s;
+            this.pos.occupied = true;
             s.piece = this;
 
             // Set proper rendering layer (for the overhead cameras)
@@ -85,22 +127,38 @@ namespace Dragonchess
                     Piece checkB = GameController.getLowerBoard().squares[s.row, s.col].piece;
                     if (checkB.type == PieceType.Basilisk)
                     {
-                        checkB.pieceGameObject.GetComponent<Basilisk>().FreezeSquare(s);
+                        GameController.getLowerBoard().squares[s.row, s.col].piece.pieceGameObject.GetComponent<Basilisk>().FreezeSquare(s);
                         this.frozen = true;
                     }
                 }
             }
         }
 
-        public Square location
+        public Square pos
         {
             get
             {
-                return m_location;
+                return m_pos;
             }
             set
             {
-                m_location = value;
+                m_pos = value;
+            }
+        }
+
+        public int row
+        {
+            get
+            {
+                return m_pos.row;
+            }
+        }
+
+        public int col
+        {
+            get
+            {
+                return m_pos.col;
             }
         }
 
@@ -131,6 +189,5 @@ namespace Dragonchess
                 m_type = value;
             }
         }
-
     }
 }

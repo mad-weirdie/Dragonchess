@@ -7,12 +7,21 @@ namespace Dragonchess
     public class Player
     {
         Color m_color;
-        public enum Color { White, Black };
+        PlayerType m_type;
+        public List<Piece> pieces;
+        public bool inCheck = false;
 
         // Initialize player with color c
-        public Player(Color c)
+        public Player(Color c, PlayerType t)
         {
             m_color = c;
+            m_type = t;
+            pieces = new List<Piece>();
+        }
+
+        public void AddPiece(Piece p)
+        {
+            pieces.Add(p);
         }
 
         public Color color
@@ -24,6 +33,18 @@ namespace Dragonchess
             set
             {
                 m_color = value;
+            }
+        }
+
+        public PlayerType type
+        {
+            get
+            {
+                return m_type;
+            }
+            set
+            {
+                m_type = value;
             }
         }
 

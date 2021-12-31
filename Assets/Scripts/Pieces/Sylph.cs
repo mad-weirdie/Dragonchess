@@ -18,10 +18,10 @@ namespace Dragonchess
     {
         public Sylph() : base(PieceType.Sylph) { }
 
-        public override ArrayList GetMoves()
+        public override List<Move> GetMoves()
         {
-            ArrayList moves = new ArrayList();
-            Square current_square = this.location;
+            List<Move> moves = new List<Move>();
+            Square current_square = this.pos;
             Layer layer = current_square.layer;
             int dir;
 
