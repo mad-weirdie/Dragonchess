@@ -32,6 +32,8 @@ namespace Dragonchess
         public GameObject black_text;
         public GameObject white_text;
 
+        public Material invisible;
+
         static List<(Square, Move.MoveType)> hightlightedSquares;
         static List<Board> boards;
 
@@ -60,6 +62,16 @@ namespace Dragonchess
             NewGame();
             hightlightedSquares = new List<(Square, Move.MoveType)>();
 
+        }
+
+        public static void AddDotAt(Square s, int layer)
+		{
+            GameObject newDot = Instantiate(Resources.Load("dot", typeof(GameObject))) as GameObject;
+            Transform t = newDot.transform;
+            newDot.transform.parent = s.cubeObject.transform;
+            newDot.transform.localPosition = t.position;
+            newDot.layer = layer;
+            s.dot = newDot;
         }
 
         // Initialize new game
@@ -92,7 +104,7 @@ namespace Dragonchess
                         else
                             mat = currentBoard.lower_mat;
 
-                        currentBoard.AddSquareAt(mat, b, r, c);
+                        currentBoard.AddSquareAt(mat, invisible, b, r, c);
                     }
                 }
                 b++;

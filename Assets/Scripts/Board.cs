@@ -51,7 +51,7 @@ namespace Dragonchess
             return m_squares[row, col];
         }
 
-        public void AddSquareAt(Material mat, int b, int r, int c)
+        public void AddSquareAt(Material mat, Material inv, int b, int r, int c)
         {
             // Maintains nice names for the squares, ie "A3", "E9", etc.
             string name = Letters[c] + (r + 1).ToString();
@@ -62,6 +62,9 @@ namespace Dragonchess
             m_squares[r, c] = new Square(r, c, this);
             m_squares[r, c].cubeObject = cube;
             m_squares[r, c].properMaterial = mat;
+            m_squares[r, c].invisible = inv;
+
+            GameController.AddDotAt(m_squares[r, c], m_squares[r,c].cubeObject.layer);
         }
 
         public void AddPieceAt(GameObject piece, Material mat, Color color, int r, int c)
@@ -94,6 +97,7 @@ namespace Dragonchess
                 GameController.P1.AddPiece(pieceScript);
             else
                 GameController.P2.AddPiece(pieceScript);
+
         }
 
     }

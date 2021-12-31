@@ -16,6 +16,7 @@ namespace Dragonchess
         public Material highlight_1;
         public Material highlight_2;
         public Material highlight_3;
+        public Material invisible;
 
         public Material frozen;
         static Board UpperBoard;
@@ -36,8 +37,8 @@ namespace Dragonchess
 
         public void ResetColor(Piece piece)
         {
-            GameObject sObj = piece.pos.cubeObject;
-            sObj.GetComponent<Renderer>().material = piece.pos.properMaterial;
+            GameObject sObj = piece.pos.dot;
+            sObj.GetComponent<Renderer>().material = invisible;
         }
 
         public void PromoteWarrior(Square s, Piece piece)
@@ -98,22 +99,21 @@ namespace Dragonchess
         public void HighlightSquares(GameObject selectedPiece, List<Move> possibleMoves)
         {
             Piece piece = selectedPiece.GetComponent<Piece>();
-            GameObject sObj = piece.pos.cubeObject;
-            sObj.GetComponent<Renderer>().material = highlight_1;
+            Square s = piece.pos;
+            s.dot.GetComponent<Renderer>().material = highlight_1;
 
             // Highlight all the possible moves generated for a piece
             foreach (Move move in possibleMoves)
             {
-                Square endSquare = move.end;
-                GameObject squareObj = endSquare.cubeObject;
-                highlightedSquares.Add((endSquare, move.type));
+                GameObject dot = move.end.dot;
+                highlightedSquares.Add((move.end, move.type));
 
                 if (move.type == Move.MoveType.Regular)
-                    squareObj.GetComponent<Renderer>().material = highlight_2;
+                    dot.GetComponent<Renderer>().material = highlight_2;
                 else if (move.type == Move.MoveType.Capture)
-                    squareObj.GetComponent<Renderer>().material = highlight_3;
+                    dot.GetComponent<Renderer>().material = highlight_3;
                 else
-                    squareObj.GetComponent<Renderer>().material = highlight_3;
+                    dot.GetComponent<Renderer>().material = highlight_3;
             }
         }
 
@@ -121,7 +121,7 @@ namespace Dragonchess
         {
             foreach ((Square s, Move.MoveType m) in highlightedSquares)
             {
-                s.cubeObject.GetComponent<Renderer>().material = s.properMaterial;
+                s.dot.GetComponent<Renderer>().material = invisible;
             }
             highlightedSquares.Clear();
         }

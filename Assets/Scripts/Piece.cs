@@ -89,8 +89,7 @@ namespace Dragonchess
             else
                 GameController.P2.pieces.Remove(enemy);
 
-            GameObject sObj = this.pos.cubeObject;
-            sObj.GetComponent<Renderer>().material = this.pos.properMaterial;
+            this.pos.dot.GetComponent<Renderer>().material = this.pos.invisible;
             enemy.pos.piece = this;
             this.pos.occupied = false;
             this.pos = enemy.pos;
@@ -106,8 +105,7 @@ namespace Dragonchess
             Vector3 pos = s.cubeObject.transform.position;
             pos.y += 1.0f / Board.square_scale;
             this.pieceGameObject.transform.position = pos;
-            GameObject sObj = this.pos.cubeObject;
-            sObj.GetComponent<Renderer>().material = this.pos.properMaterial;
+            this.pos.dot.GetComponent<Renderer>().material = this.pos.properMaterial;
 
             // Link piece and square to each other
             this.pos.occupied = false;

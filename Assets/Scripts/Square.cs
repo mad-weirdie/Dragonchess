@@ -10,6 +10,8 @@ namespace Dragonchess
 
         public GameObject cubeObject;
         public Material properMaterial;
+        public Material invisible;
+        public GameObject dot;
 
         public int row;
         public int col;
