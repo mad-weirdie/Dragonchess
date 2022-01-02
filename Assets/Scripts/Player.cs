@@ -10,6 +10,7 @@ namespace Dragonchess
         PlayerType m_type;
         public List<Piece> pieces;
         public bool inCheck = false;
+        public Move prevMove;
 
         // Initialize player with color c
         public Player(Color c, PlayerType t)
@@ -52,6 +53,7 @@ namespace Dragonchess
         {
             return (this.color == Color.White);
         }
+
         public bool isBlack()
         {
             return (this.color == Color.Black);

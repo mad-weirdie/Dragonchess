@@ -22,11 +22,13 @@ namespace Dragonchess
         Color m_color;
         public PieceType m_type;
         public GameObject pieceGameObject;
-        bool isActive;
         public bool frozen = false;
+        bool isActive;
 
         Square m_pos;
         Board m_board;
+
+        public string nameChar;
 
         public Piece() { }
 
@@ -38,32 +40,13 @@ namespace Dragonchess
         // GetMoves to be overridden by child classes
         virtual public List<Move> GetMoves() { return null; }
 
-        public List<Square> GetThreats()
-        {
-            List<Square> threats = new List<Square>();
-            foreach (Move move in this.GetMoves())
-            {
-                if (move.type == Move.MoveType.Capture)
-                    threats.Add(move.end);
-            }
-            return threats;
-        }
-
-        public bool ThreatToKing()
-        {
-            foreach (Square s in this.GetThreats())
-            {
-                if (s.ContainsEnemyKing(this.color))
-                {
-                    print("contains enemy king.");
-                    return true;
-                }
-            }
-            return false;
-        }
-
         public bool RemoteCapture(Piece enemy)
         {
+            if (enemy.color == Color.White)
+                GameController.P1.pieces.Remove(enemy);
+            else
+                GameController.P2.pieces.Remove(enemy);
+
             enemy.pos.occupied = false;
             Destroy(enemy.pieceGameObject);
             Destroy(enemy);
@@ -72,6 +55,7 @@ namespace Dragonchess
 
         public bool Capture(Piece enemy)
         {
+            Square s = enemy.pos;
             if (enemy.type == PieceType.Basilisk)
             {
                 if (GameController.getMiddleBoard().squares[enemy.row, enemy.col].occupied)
@@ -143,7 +127,7 @@ namespace Dragonchess
                 m_pos = value;
             }
         }
-
+        
         public int row
         {
             get

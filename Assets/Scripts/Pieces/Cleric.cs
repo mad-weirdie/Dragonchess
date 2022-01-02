@@ -9,7 +9,7 @@ namespace Dragonchess
      */
     public class Cleric : Piece
     {
-        public Cleric() : base(PieceType.Cleric) { }
+        public Cleric() : base(PieceType.Cleric) { nameChar = "C"; }
         public override List<Move> GetMoves()
         {
             List<Move> moves = new List<Move>();

@@ -8,7 +8,7 @@ namespace Dragonchess
     public class Basilisk : Piece
     {
         public Square danger_square;
-        public Basilisk() : base(PieceType.Basilisk) { }
+        public Basilisk() : base(PieceType.Basilisk) { nameChar = "B"; }
         public Material frozen_mat;
         Material original_mat;
 

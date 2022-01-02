@@ -10,11 +10,20 @@ namespace Dragonchess
         MoveType m_type;
         Square m_start;
         Square m_end;
+        public Piece piece;
 
         public enum MoveType { Regular, Capture, MoveOrCapture, Swoop };
 
         public Move (Square start, Square end, MoveType type)
         {
+            m_start = start;
+            m_end = end;
+            m_type = type;
+        }
+
+        public Move(Piece p, Square start, Square end, MoveType type)
+        {
+            piece = p;
             m_start = start;
             m_end = end;
             m_type = type;
@@ -100,12 +109,12 @@ namespace Dragonchess
 
             if (piece.color == Color.White)
             {
-                if (GameController.IsCheck(GameController.P2))
+                if (GameController.IsCheck(GameController.P1))
                     isbadmove = true;
             }
             else
             {
-                if (GameController.IsCheck(GameController.P1))
+                if (GameController.IsCheck(GameController.P2))
                     isbadmove = true;
             }
 
@@ -124,10 +133,6 @@ namespace Dragonchess
             if (m.m_end.col < 0 || m.m_end.col >= Board.width)
                 return false;
             if (m.m_end.row < 0 || m.m_end.row >= Board.height)
-                return false;
-
-            // check if move would put the king in check
-            if (piece.type == PieceType.King && WouldCheck(piece, m.end))
                 return false;
 
             // If movetype = Regular(move-only), check the square is free

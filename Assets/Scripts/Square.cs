@@ -6,7 +6,7 @@ namespace Dragonchess
 {
     public class Square
     {
-        static string[] Letters = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L" };
+        static string[] Letters = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l" };
 
         public GameObject cubeObject;
         public Material properMaterial;
@@ -62,7 +62,7 @@ namespace Dragonchess
 
         public string SquareName()
         {
-            return GetColChar() + row;
+            return GetColChar() + (row+1);
         }
 
         public string GetColChar()

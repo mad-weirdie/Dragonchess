@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: cb83d7348458ff14db4d9b9a78342d7c, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -129,6 +129,7 @@ MonoBehaviour:
   m_type: 8
   pieceGameObject: {fileID: 3114343201326126343}
   frozen: 0
+  nameChar: C
 --- !u!1 &7920503088337558307
 GameObject:
   m_ObjectHideFlags: 0

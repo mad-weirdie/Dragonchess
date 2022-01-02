@@ -9,7 +9,7 @@ namespace Dragonchess
      */
     public class King : Piece
     {
-        public King() : base(PieceType.King) { }
+        public King() : base(PieceType.King) { nameChar = "K"; }
         public override List<Move> GetMoves()
         {
             List<Move> moves = new List<Move>();

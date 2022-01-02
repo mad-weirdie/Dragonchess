@@ -18,7 +18,7 @@ namespace Dragonchess
      */
     public class Elemental : Piece
     {
-        public Elemental() : base(PieceType.Elemental) { }
+        public Elemental() : base(PieceType.Elemental) { nameChar = "E"; }
         public override List<Move> GetMoves()
         {
             List<Move> moves = new List<Move>();

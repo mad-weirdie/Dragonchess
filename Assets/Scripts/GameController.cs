@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 using UnityEngine.InputSystem;
 
 namespace Dragonchess
@@ -39,39 +40,55 @@ namespace Dragonchess
 
         GameObject selectedPiece;
 
+        static int moveNum = 0;
+        static public List<string> moveLog = new List<string>();
+
+        /*static string path = "Assets/Resources/game_out.txt";
+        FileStream fs = File.Create(path);
+        static StreamWriter w = new StreamWriter(path);*/
         // --------------------------------------------------------------------
-
-        static public Board getUpperBoard()
-        {
-            return boards[2];
-        }
-
-        static public Board getMiddleBoard()
-        {
-            return boards[1];
-        }
-
-        static public Board getLowerBoard()
-        {
-            return boards[0];
-        }
 
         // Start is called before the first frame update
         void Start()
         {
             NewGame();
             hightlightedSquares = new List<(Square, Move.MoveType)>();
-
         }
 
-        public static void AddDotAt(Square s, int layer)
+        static void LogMove(Player player, bool isCheck)
 		{
-            GameObject newDot = Instantiate(Resources.Load("dot", typeof(GameObject))) as GameObject;
-            Transform t = newDot.transform;
-            newDot.transform.parent = s.cubeObject.transform;
-            newDot.transform.localPosition = t.position;
-            newDot.layer = layer;
-            s.dot = newDot;
+            /*
+            // Open the log file
+            w = new StreamWriter(path); */
+
+            // Uppercase char - indicate the name of the piece
+            Move move = player.prevMove;
+
+            string moveText = move.piece.nameChar;
+            // If the move was a capture, indicate with an 'x'
+            if (move.type == Move.MoveType.Capture)
+                moveText += "x";
+            // If the move was a remote capture, indicate with an '-'
+            if (move.type == Move.MoveType.Swoop)
+                moveText += "-";
+            // Coordinates of the square the piece moved to
+            moveText += move.end.SquareName();
+            if (move.type == Move.MoveType.Capture)
+            // If the move put the opponent in check, indicate with a '+'
+            if (isCheck)
+                moveText += "+";
+
+            if (player.color == Color.White)
+			{
+                moveLog.Add(moveText);
+			}
+            else
+			{
+                moveLog[moveNum] = moveLog[moveNum] + " " + moveText;
+                print((moveNum + 1) + ". " + moveLog[moveNum]);
+                moveNum++;
+			}
+
         }
 
         // Initialize new game
@@ -84,7 +101,6 @@ namespace Dragonchess
 
             P1 = new Player(Color.White, P1_type);
             P2 = new Player(Color.Black, P2_type);
-
 
             turn = Color.White;
             ActivePlayer = P1;
@@ -150,6 +166,29 @@ namespace Dragonchess
             }
         }
 
+        void OnApplicationQuit()
+		{
+            /*
+            AssetDatabase.ImportAsset(path);
+            TextAsset txt = Resources.Load("game_out", typeof(TextAsset)) as TextAsset;
+
+            Debug.Log(txt.text);
+            w.Close();*/
+		}
+
+        void ResetGame()
+		{
+            foreach (Piece piece in P1.pieces)
+			{
+                Destroy(piece.pieceGameObject);
+			}
+            foreach (Piece piece in P2.pieces)
+			{
+                Destroy(piece.pieceGameObject);
+			}
+            NewGame();
+		}
+
         void OnClick()
         {
             Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
@@ -170,14 +209,53 @@ namespace Dragonchess
 
         public void SwitchTurn()
         {
-            if (turn == Color.White)
+            // See if P1's move put P2 in check
+            if (IsCheck(P2))
+            {
+                print("PLAYER 2'S KING IN CHECK.");
+                P2.inCheck = true;
+                Square.SetColor(GetKing(P2).pos, materials[11]);
+                if (IsCheckmate(P2))
+                {
+                    print("GAME OVER: CHECKMATE. PLAYER 1 WINS.");
+                    ResetGame();
+                    return;
+                }
+            }
+            else
+            {
+                P2.inCheck = false;
+                Square.SetColor(GetKing(P2).pos, GetKing(P2).pos.properMaterial);
+            }
+            // See if P2's move put P1 in check
+            if (IsCheck(P1))
+            {
+                P1.inCheck = true;
+                print("PLAYER 1'S KING IN CHECK.");
+                Square.SetColor(GetKing(P1).pos, materials[11]);
+                if (IsCheckmate(P1))
+                {
+                    print("GAME OVER: CHECKMATE. PLAYER 2 WINS.");
+                    ResetGame();
+                    return;
+                }
+            }
+            else
+            {
+                P1.inCheck = false;
+                Square.SetColor(GetKing(P1).pos, GetKing(P1).pos.properMaterial);
+            }
+
+            // Log the move, including the check state
+            LogMove(ActivePlayer, ActivePlayer.inCheck);
+
+            // Switch the currently active player
+            if (ActivePlayer == P1)
             {
                 white_text.SetActive(false);
                 black_text.SetActive(true);
                 turn = Color.Black;
                 ActivePlayer = P2;
-
-                
             }
             else
             {
@@ -185,63 +263,24 @@ namespace Dragonchess
                 white_text.SetActive(true);
                 turn = Color.White;
                 ActivePlayer = P1;
-
-                
             }
-
-            // See if P1's move put P2 in check
-            if (IsCheck(P1))
-            {
-                print("PLAYER 2'S KING IN CHECK.");
-                P2.inCheck = true;
-                Square.SetColor(GetKing(P2).pos, materials[11]);
-                if (IsCheckmate(P1))
-                {
-                    print("GAME OVER: CHECKMATE. PLAYER 1 WINS.");
-                    NewGame();
-                    return;
-
-                }
-            }
-            else
-                P2.inCheck = false;
-
-            // See if P2's move put P1 in check
-            if (IsCheck(P2))
-            {
-                P1.inCheck = true;
-                print("PLAYER 1'S KING IN CHECK.");
-                Square.SetColor(GetKing(P1).pos, materials[11]);
-                if (IsCheckmate(P2))
-                {
-                    print("GAME OVER: CHECKMATE. PLAYER 2 WINS.");
-                    NewGame();
-                    return;
-                }
-            }
-            else
-                P1.inCheck = false;
 
             if (ActivePlayer.type == PlayerType.AI)
             {
                 Move next = AI.GetNextMove(ActivePlayer);
+
                 Piece piece = next.start.piece;
 
-                moveController.DisplayMoves(next.start.piece.pieceGameObject);
+                moveController.DisplayMoves(piece.pieceGameObject);
                 moveController.DisplayMoves(next.end.cubeObject);
             }
         }
 
-        public static Piece GetKing(Player p)
-        {
-            return p.pieces.Find(x => (x.type == PieceType.King));
-        }
-
-        // Evaluates if the current gamestate is in check (p is THREATENING player)
+        // Evaluate whether or not player p's king is in check
         public static bool IsCheck(Player p)
         {
-            Piece king = GetKing(GetEnemy(p));
-            Player enemy = p;
+            Piece king = GetKing(p);
+            Player enemy = GetEnemy(p);
             Square current = king.pos;
 
             foreach (Piece enemy_piece in enemy.pieces)
@@ -250,11 +289,10 @@ namespace Dragonchess
                 {
                     foreach (Move enemy_move in enemy_piece.GetMoves())
                     {
-                        if (enemy_move.type == Move.MoveType.Capture)
+                        if (enemy_move.type == Move.MoveType.Capture || enemy_move.type == Move.MoveType.Swoop)
                         {
                             if (enemy_move.end == king.pos)
                             {
-                                print("Threat found: " + enemy_piece.type + " at " + enemy_piece.pos.SquareName());
                                 return true;
                             }
                         }
@@ -262,6 +300,23 @@ namespace Dragonchess
                 }
             }
             return false;
+        }
+
+        // Given that the king is in check, see if it is also checkmate
+        public static bool IsCheckmate(Player player)
+        {
+            List<(Piece p, Move m)> safe_moves = new List<(Piece p, Move m)>();
+
+            // Iterate through all the pieces - see if we can move ANY of
+            // the player's pieces to escape check. If so, it is not checkmate.
+            foreach (Piece p in player.pieces)
+            {
+                List<Move> potential_moves = p.GetMoves();
+                MoveController.RemoveIllegal(player, ref potential_moves);
+                if (potential_moves.Count > 0)
+                    return false;
+            }
+            return true;
         }
 
         public static Player GetEnemy(Player player)
@@ -272,21 +327,34 @@ namespace Dragonchess
                 return P1;
         }
 
-        // Given that the king is in check, see if it is also checkmate
-        public static bool IsCheckmate(Player player)
+        public static Piece GetKing(Player p)
         {
-            Player enemy = GetEnemy(player);
-            Piece king = GetKing(player);
-            Square current = king.pos;
+            return p.pieces.Find(x => (x.type == PieceType.King));
+        }
 
-            List<(Piece p, Move m)> safe_moves = new List<(Piece p, Move m)>();
+        static public Board getUpperBoard()
+        {
+            return boards[2];
+        }
 
-            foreach(Piece p in enemy.pieces)
-			{
-                List<Move> potential_moves = p.GetMoves();
-                MoveController.RemoveIllegal(enemy, ref potential_moves);
-			}
-            return true;
+        static public Board getMiddleBoard()
+        {
+            return boards[1];
+        }
+
+        static public Board getLowerBoard()
+        {
+            return boards[0];
+        }
+
+        public static void AddDotAt(Square s, int layer)
+        {
+            GameObject newDot = Instantiate(Resources.Load("dot", typeof(GameObject))) as GameObject;
+            Transform t = newDot.transform;
+            newDot.transform.parent = s.cubeObject.transform;
+            newDot.transform.localPosition = t.position;
+            newDot.layer = layer;
+            s.dot = newDot;
         }
     }
 }

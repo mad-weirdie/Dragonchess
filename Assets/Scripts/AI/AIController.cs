@@ -24,11 +24,13 @@ namespace Dragonchess {
                 p = Random.Range(0, player.pieces.Count);
                 piece = player.pieces[p];
                 moves = piece.GetMoves();
+                MoveController.RemoveIllegal(player, ref moves);
             }
 
             move = Random.Range(0, moves.Count);
             Move AIMove = moves[move];
             print("The AI has chosen to move the " + piece.type + " at " + piece.pos.SquareName() + " to " + AIMove.end.SquareName() + ". MoveType: " + AIMove.type);
+            player.prevMove = new Move(piece, AIMove.start, AIMove.end, AIMove.type);
             return moves[move];
         }
     }

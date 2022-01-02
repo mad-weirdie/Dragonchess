@@ -41,11 +41,6 @@ namespace Dragonchess
             }
         }
 
-        public void SetSquare(int row, int col, Square s)
-        {
-            m_squares[row, col] = s;
-        }
-
         public Square GetSquare(int row, int col)
         {
             return m_squares[row, col];
