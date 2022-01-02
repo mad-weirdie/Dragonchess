@@ -6524,7 +6524,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   P1_type: 0
-  P2_type: 0
+  P2_type: 1
   board_init: {fileID: 4900000, guid: 002777df588e11b4e9930b96c3fbae74, type: 3}
   moveController: {fileID: 1337925267}
   AI: {fileID: 1337925270}

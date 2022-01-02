@@ -155,7 +155,6 @@ namespace Dragonchess
                 }
                 else if (m.type == Move.MoveType.Swoop)
 				{
-                    print("Checking legality of swoop move...");
                     Piece captured_piece = m.end.piece;
                     m.end.occupied = false;
 
@@ -163,8 +162,6 @@ namespace Dragonchess
                     {
                         illegal.Add(m);
                     }
-                    m.start.piece = moving_piece;
-                    moving_piece.pos = m.start;
                     m.end.occupied = true;
                     m.end.piece = captured_piece;
                 }
@@ -243,6 +240,7 @@ namespace Dragonchess
                     {
                         piece.Capture(s.piece);
                         piece.MoveTo(s);
+                        GameController.ActivePlayer.prevMove = new Move(piece, square, square, m);
                         captured = true;
                     }
                     if (m != Move.MoveType.Swoop)

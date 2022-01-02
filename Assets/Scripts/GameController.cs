@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
@@ -43,9 +43,6 @@ namespace Dragonchess
         static int moveNum = 0;
         static public List<string> moveLog = new List<string>();
 
-        /*static string path = "Assets/Resources/game_out.txt";
-        FileStream fs = File.Create(path);
-        static StreamWriter w = new StreamWriter(path);*/
         // --------------------------------------------------------------------
 
         // Start is called before the first frame update
@@ -57,10 +54,6 @@ namespace Dragonchess
 
         static void LogMove(Player player, bool isCheck)
 		{
-            /*
-            // Open the log file
-            w = new StreamWriter(path); */
-
             // Uppercase char - indicate the name of the piece
             Move move = player.prevMove;
 
@@ -168,13 +161,16 @@ namespace Dragonchess
 
         void OnApplicationQuit()
 		{
-            /*
-            AssetDatabase.ImportAsset(path);
-            TextAsset txt = Resources.Load("game_out", typeof(TextAsset)) as TextAsset;
+            string path = "Assets/Resources/game_out.txt";
+            StreamWriter w = new StreamWriter(path);
 
-            Debug.Log(txt.text);
-            w.Close();*/
-		}
+            foreach (string line in moveLog)
+			{
+                w.WriteLine(line);
+			}
+
+            w.Close();
+        }
 
         void ResetGame()
 		{
@@ -247,7 +243,7 @@ namespace Dragonchess
             }
 
             // Log the move, including the check state
-            LogMove(ActivePlayer, ActivePlayer.inCheck);
+            LogMove(ActivePlayer, GetEnemy(ActivePlayer).inCheck);
 
             // Switch the currently active player
             if (ActivePlayer == P1)
@@ -268,7 +264,7 @@ namespace Dragonchess
             if (ActivePlayer.type == PlayerType.AI)
             {
                 Move next = AI.GetNextMove(ActivePlayer);
-
+                ActivePlayer.prevMove = new Move(next.piece, next.start, next.end, next.type);
                 Piece piece = next.start.piece;
 
                 moveController.DisplayMoves(piece.pieceGameObject);
