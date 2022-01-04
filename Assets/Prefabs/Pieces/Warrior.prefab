@@ -295,7 +295,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52db752d7a84d8d4ab36298bda43c889, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  frozen: 0
   m_type: 3
   pieceGameObject: {fileID: 5150302628352122941}
-  frozen: 0
   nameChar: W

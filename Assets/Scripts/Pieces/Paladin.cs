@@ -52,13 +52,13 @@ namespace Dragonchess
                 {
                     int lat_shift = 3 - Math.Abs(shift);
                     // forward
-                    Move.moveAttempt(moves, current_square, dir, lat_shift, 0, new_layer, regular);
+                    Move.moveAttempt(moves, current_square, dir, lat_shift, 0, new_layer, move_cap);
                     // backward
-                    Move.moveAttempt(moves, current_square, dir, -lat_shift, 0, new_layer, regular);
+                    Move.moveAttempt(moves, current_square, dir, -lat_shift, 0, new_layer, move_cap);
                     // left
-                    Move.moveAttempt(moves, current_square, dir, 0, lat_shift, new_layer, regular);
+                    Move.moveAttempt(moves, current_square, dir, 0, lat_shift, new_layer, move_cap);
                     // right
-                    Move.moveAttempt(moves, current_square, dir, 0, -lat_shift, new_layer, regular);
+                    Move.moveAttempt(moves, current_square, dir, 0, -lat_shift, new_layer, move_cap);
                 }
             }
             // Level 2 moves

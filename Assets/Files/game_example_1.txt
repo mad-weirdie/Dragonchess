@@ -1,0 +1,79 @@
+1)	R1d4	 P1h6
+2)	G1e4	 R1j5
+3)	S1g2-1h3 P1g6
+4)	H2h3	S1e7-1f6
+5)	R1d5	R1i5
+6)	P2i3	W2e6
+7)	PxR	GxP
+8)	R1e6	G1a5
+9)	R1e7	P1f7
+10)	R1d8	C1e8
+11)	RxS1c7	G2b6
+12)	R1c6	C1d7
+13)	R1d5	C1e6
+14)	R1c4	G1a5
+15)	GxS	M2d6
+16)	H2a3	GxS1k2
+17)	H2c5	M2e5
+18)	W2j3	H2h6
+19)	G1j5	U2c6
+20)	G2j2	W2b6
+21)	G2i3	WxH
+22)	G1h4	GxG
+23)	SxG	O2b8
+24)	G1h8	C1e7
+25)	R1d5	M2f6
+26)	T2j2	H2g5
+27)	E3g3	W2h6
+28)	E3g4	M2g6
+29)	H2i4	M2f5
+30)	S1g5	H2f4
+31)	W2e3	HxS1g5
+32)	R1e5	GxS
+33)	RxM	GxR
+34)	TxT	UxT
+35)	M2c4	W2d6
+36)	H2h5	S1i7-1j6
+37)	E3f5	E3g7
+38)	H2i6+	WxH
+39)	TxW+	T2h7
+40)	M2g4	W2g6
+41)	S1f3	P1g8
+42)	S1g4	O2b4
+43)	TxT+	DxT
+44)	P2e4	H2f6
+45)	W2a3	O2b6
+46)	GxW	UxG
+47)	E3h5	E3g5
+48)	ExE	HxE
+49)	W2a4	O2j8
+50)	D3f3	G1g2
+51)	O2a3	U2h5
+52)	S1h5	O2j4
+53)	M2f3	GxM
+54)	DxG	U2f6
+55)	U2l3	O2j5
+56)	W2g3	P1g7
+57)	W2a5	O2a6
+58)	O2a4	P2g5
+59)	D2f4	P2f3+
+60)	K2f1	H2d7
+61)	U2c3	H2c6
+62)	C2e2	P3h3
+63)	O2a3	UxW2e4
+64)	D3g2	PxD
+65)	C2f3	UxU
+66)	W2b2xU	W2c4
+67)	D2e4	O2j5xW2a5
+68)	OxO	OxO
+69)	K2g2	P3g3
+70)	U2j4	P1g4+
+71)	K2h3	HxD
+72)	C2e3	P2g2+ mate in three
+If 73) K2g4 then O2g5 mate
+
+If 73) K2i4 then O2i5+ then if 74) K1i4 then S1i4 mate, or if 74) K3i4 then D3j6, 75) any D3j5 mate
+
+If 73)K1h3 then S1i5, 74)any S1h4 mate
+
+If 73)K3h3 then H2f5, then if 74)W2g4 then Hxg4 mate, or if 74)anything other than W2g4 then P3g4 mate

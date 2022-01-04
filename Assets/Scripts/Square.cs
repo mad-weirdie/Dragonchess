@@ -6,7 +6,7 @@ namespace Dragonchess
 {
     public class Square
     {
-        static string[] Letters = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l" };
+        static public string[] Letters = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l" };
 
         public GameObject cubeObject;
         public Material properMaterial;
@@ -72,7 +72,8 @@ namespace Dragonchess
 
         public static void SetColor(Square s, Material m)
         {
-            s.cubeObject.GetComponent<Renderer>().material = m;
+            GameObject sObj = s.piece.pos.dot;
+            sObj.GetComponent<Renderer>().material = m;
         }
 
         public bool IsOccupied()

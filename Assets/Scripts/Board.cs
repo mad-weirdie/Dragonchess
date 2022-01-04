@@ -81,6 +81,11 @@ namespace Dragonchess
             pieceScript.board = this;
             pieceScript.color = color;
 
+            if (color == Color.White)
+                pieceScript.player = GameController.P1;
+            else
+                pieceScript.player = GameController.P2;
+
             // Set the basilisk's freezy-square danger-zone!
             if (pieceScript.type == PieceType.Basilisk)
                 obj.GetComponent<Basilisk>().danger_square = m_squares[r, c];

@@ -12,6 +12,10 @@ namespace Dragonchess
         public bool inCheck = false;
         public Move prevMove;
 
+        void Start()
+		{
+        }
+
         // Initialize player with color c
         public Player(Color c, PlayerType t)
         {
@@ -24,6 +28,11 @@ namespace Dragonchess
         {
             pieces.Add(p);
         }
+
+        virtual public Move GetMove()
+		{
+            return null;
+		}
 
         public Color color
         {

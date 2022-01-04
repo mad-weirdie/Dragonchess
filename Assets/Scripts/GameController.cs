@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 namespace Dragonchess
 {
@@ -25,7 +26,7 @@ namespace Dragonchess
 
         public TextAsset board_init;
         public MoveController moveController;
-        public AIController AI;
+        public AI AIController;
 
         public List<GameObject> boardObj;
         public List<GameObject> piecePrefabs;
@@ -43,45 +44,30 @@ namespace Dragonchess
         static int moveNum = 0;
         static public List<string> moveLog = new List<string>();
 
+        public bool GameFromFileEnabled;
+        public GameFromFile GFF;
         // --------------------------------------------------------------------
+
+        public delegate Move getMoveDelegate(Player p);
+        //public event getMoveDelegate getMoveEvent;
 
         // Start is called before the first frame update
         void Start()
         {
-            NewGame();
-            hightlightedSquares = new List<(Square, Move.MoveType)>();
-        }
-
-        static void LogMove(Player player, bool isCheck)
-		{
-            // Uppercase char - indicate the name of the piece
-            Move move = player.prevMove;
-
-            string moveText = move.piece.nameChar;
-            // If the move was a capture, indicate with an 'x'
-            if (move.type == Move.MoveType.Capture)
-                moveText += "x";
-            // If the move was a remote capture, indicate with an '-'
-            if (move.type == Move.MoveType.Swoop)
-                moveText += "-";
-            // Coordinates of the square the piece moved to
-            moveText += move.end.SquareName();
-            if (move.type == Move.MoveType.Capture)
-            // If the move put the opponent in check, indicate with a '+'
-            if (isCheck)
-                moveText += "+";
-
-            if (player.color == Color.White)
-			{
-                moveLog.Add(moveText);
-			}
+            if (P1_type == PlayerType.Human)
+                P1 = new Human(Color.White, PlayerType.Human);
             else
-			{
-                moveLog[moveNum] = moveLog[moveNum] + " " + moveText;
-                print((moveNum + 1) + ". " + moveLog[moveNum]);
-                moveNum++;
-			}
+                P1 = new AI(Color.White, PlayerType.AI);
 
+            if (P2_type == PlayerType.Human)
+                P2 = new Human(Color.Black, PlayerType.Human);
+            else
+                P2 = new AI(Color.Black, PlayerType.AI);
+
+            NewGame();
+            //getMoveEvent += GetNextMove;
+            hightlightedSquares = new List<(Square, Move.MoveType)>();
+            //getMoveEvent(P1);   // Start the game - get P1's first move
         }
 
         // Initialize new game
@@ -91,9 +77,6 @@ namespace Dragonchess
             Board MiddleBoard = new Board(boardObj[1], 7, materials[2], materials[3]);
             Board LowerBoard = new Board(boardObj[2], 8, materials[4], materials[5]);
             boards = new List<Board> { LowerBoard, MiddleBoard, UpperBoard };
-
-            P1 = new Player(Color.White, P1_type);
-            P2 = new Player(Color.Black, P2_type);
 
             turn = Color.White;
             ActivePlayer = P1;
@@ -159,43 +142,90 @@ namespace Dragonchess
             }
         }
 
-        void OnApplicationQuit()
-		{
-            string path = "Assets/Resources/game_out.txt";
-            StreamWriter w = new StreamWriter(path);
-
-            foreach (string line in moveLog)
-			{
-                w.WriteLine(line);
-			}
-
-            w.Close();
-        }
-
         void ResetGame()
 		{
-            foreach (Piece piece in P1.pieces)
-			{
-                Destroy(piece.pieceGameObject);
-			}
-            foreach (Piece piece in P2.pieces)
-			{
-                Destroy(piece.pieceGameObject);
-			}
-            NewGame();
+            Scene scene = SceneManager.GetActiveScene();
+            SceneManager.LoadScene(scene.name);
 		}
 
         void OnClick()
         {
-            Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-            RaycastHit hit;
-            // Check where we clicked
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
+            if (!GameFromFileEnabled)
             {
-                // Locate GameObject of whatever we clicked on (piece or square)
-                GameObject hitGameObject = hit.transform.gameObject;
-                moveController.DisplayMoves(hitGameObject);
+                Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+                RaycastHit hit;
+                // Check where we clicked
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
+                {
+                    // Locate GameObject of whatever we clicked on (piece or square)
+                    GameObject hitGameObject = hit.transform.gameObject;
+                    moveController.MoveSelect(hitGameObject);
+                }
             }
+            else
+                return;
+        }
+
+        void OnNext()
+		{
+            if (GameFromFileEnabled)
+                GFF.DoNext();
+		}
+
+        void OnPrev()
+		{
+            if (GameFromFileEnabled)
+                GFF.UndoPrev();
+        }
+
+        public Move GetNextMove(Player player)
+		{
+            return player.GetMove();
+		}
+
+        // Saves the game's move data to a file
+        static void LogMove(Player player, bool isCheck)
+        {
+            // Uppercase char - indicate the name of the piece
+            Move move = player.prevMove;
+
+            string moveText = move.piece.nameChar;
+            // If the move was a capture, indicate with an 'x'
+            if (move.type == Move.MoveType.Capture)
+                moveText += "x";
+            // If the move was a remote capture, indicate with an '-'
+            if (move.type == Move.MoveType.Swoop)
+                moveText += "#";
+            // Coordinates of the square the piece moved to
+            moveText += move.end.SquareName();
+            // If the move put the opponent in check, indicate with a '+'
+            if (isCheck)
+                moveText += "+";
+
+            if (player.color == Color.White)
+            {
+                moveLog.Add(moveText);
+            }
+            else
+            {
+                moveLog[moveNum] = moveLog[moveNum] + " " + moveText;
+                print((moveNum + 1) + ". " + moveLog[moveNum]);
+                moveNum++;
+            }
+
+        }
+
+        void OnApplicationQuit()
+        {
+            string path = "Assets/Resources/game_out.txt";
+            StreamWriter w = new StreamWriter(path);
+
+            foreach (string line in moveLog)
+            {
+                w.WriteLine(line);
+            }
+
+            w.Close();
         }
 
         public Color CurrentTurn()
@@ -263,12 +293,12 @@ namespace Dragonchess
 
             if (ActivePlayer.type == PlayerType.AI)
             {
-                Move next = AI.GetNextMove(ActivePlayer);
+                Move next = ActivePlayer.GetMove();
                 ActivePlayer.prevMove = new Move(next.piece, next.start, next.end, next.type);
                 Piece piece = next.start.piece;
 
-                moveController.DisplayMoves(piece.pieceGameObject);
-                moveController.DisplayMoves(next.end.cubeObject);
+                moveController.MoveSelect(piece.pieceGameObject);
+                moveController.MoveSelect(next.end.cubeObject);
             }
         }
 

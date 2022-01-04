@@ -4,15 +4,15 @@ using UnityEngine;
 
 namespace Dragonchess
 {
-    
     public class Move
     {
-        MoveType m_type;
+        public Piece piece;
         Square m_start;
         Square m_end;
-        public Piece piece;
+        MoveType m_type;
+        public Piece captured;
 
-        public enum MoveType { Regular, Capture, MoveOrCapture, Swoop };
+        public enum MoveType { Regular, Capture, MoveOrCapture, Swoop, NULL};
 
         public Move (Square start, Square end, MoveType type)
         {
@@ -89,41 +89,6 @@ namespace Dragonchess
             }
         }
 
-        public void DoMove(Piece piece, Square goal)
-		{
-
-		}
-
-        // Checks whether or not moving the king to a goal square would put
-        // the king in check (an invalid move).
-        public static bool WouldCheck(Piece piece, Square goal)
-        {
-            Piece prev_owner = null;
-            bool was_occupied = goal.occupied;
-            if (was_occupied)
-                prev_owner = goal.piece;
-
-            Square current = piece.pos;
-            bool isbadmove = false;
-            piece.MoveTo(goal);
-
-            if (piece.color == Color.White)
-            {
-                if (GameController.IsCheck(GameController.P1))
-                    isbadmove = true;
-            }
-            else
-            {
-                if (GameController.IsCheck(GameController.P2))
-                    isbadmove = true;
-            }
-
-            piece.MoveTo(current);
-            if (was_occupied)
-                prev_owner.MoveTo(goal);
-            return isbadmove;
-        }
-
         // Returns whether or not a move is valid based on the movetype
         public static bool IsValidMove (Move m)
         {
@@ -154,6 +119,18 @@ namespace Dragonchess
 
             return true;
         }
+
+        public string MoveToString()
+		{
+            string ret = (piece.type).ToString() + ": " + start.SquareName() + "-> " + end.SquareName();
+
+            if (type == MoveType.Capture || type == MoveType.Swoop)
+			{
+                ret += " , captured " + (end.piece.type).ToString();
+			}
+
+            return ret;
+		}
     }
 }
 

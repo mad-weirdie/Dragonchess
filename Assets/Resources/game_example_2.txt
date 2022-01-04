@@ -1,0 +1,15 @@
+1)	R1d4	G1i5
+2)	G1e4	GxS1g2
+3)	RxS1g7	RxR
+4)	GxR	P1h6
+5)	GxM	GxP
+6)	GxS	G1g2
+7)	M3f1	P2h4
+8)	D3f2-3e2	PxD
+9)	W2k3	E3g6
+10)	M3f2	E3g4
+11)	C3e1	E3g3
+12)	C3f1	ExE
+13)	CxE	P3i1
+14)	K1g1	G1a5
+15)	C3h1	G1d3 mate

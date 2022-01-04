@@ -414,7 +414,7 @@ GameObject:
   - component: {fileID: 49795096}
   - component: {fileID: 49795095}
   m_Layer: 5
-  m_Name: Button
+  m_Name: show upper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1139,7 +1139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &207167527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3864,7 +3864,7 @@ GameObject:
   - component: {fileID: 816037505}
   - component: {fileID: 816037504}
   m_Layer: 5
-  m_Name: Button (1)
+  m_Name: show middle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6488,7 +6488,7 @@ GameObject:
   - component: {fileID: 1337925266}
   - component: {fileID: 1337925268}
   - component: {fileID: 1337925267}
-  - component: {fileID: 1337925270}
+  - component: {fileID: 1337925269}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -6524,10 +6524,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   P1_type: 0
-  P2_type: 1
+  P2_type: 0
   board_init: {fileID: 4900000, guid: 002777df588e11b4e9930b96c3fbae74, type: 3}
   moveController: {fileID: 1337925267}
-  AI: {fileID: 1337925270}
   boardObj:
   - {fileID: 4291257091324896527}
   - {fileID: 4291257091966554185}
@@ -6564,6 +6563,8 @@ MonoBehaviour:
   black_text: {fileID: 2021992725}
   white_text: {fileID: 884197968}
   invisible: {fileID: 2100000, guid: 86a04a136c254964cb4c96be36fb1edc, type: 2}
+  GameFromFileEnabled: 1
+  GFF: {fileID: 1337925269}
 --- !u!114 &1337925267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6576,13 +6577,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ccee23f325b833469ac4010b06c037b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedPiece: {fileID: 0}
+  selectedObj: {fileID: 0}
   eventSystem: {fileID: 842679379}
-  gameController: {fileID: 1337925266}
+  G: {fileID: 1337925266}
   highlight_1: {fileID: 2100000, guid: c0c0a5ba9b758f641b572a03f99b4ce7, type: 2}
   highlight_2: {fileID: 2100000, guid: a94bb69e4b6847c4aab7189dc7f6d9dc, type: 2}
   highlight_3: {fileID: 2100000, guid: c5bb68ee21d674c43977e6022914e1c0, type: 2}
   invisible: {fileID: 2100000, guid: 86a04a136c254964cb4c96be36fb1edc, type: 2}
+  hero: {fileID: 5806972766582656371, guid: 79b3514927e9ecf40802977bddfd45dd, type: 3}
   frozen: {fileID: 2100000, guid: db9e6141cedb03648aaa266ba31fc4aa, type: 2}
 --- !u!114 &1337925268
 MonoBehaviour:
@@ -6614,7 +6616,7 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &1337925270
+--- !u!114 &1337925269
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6623,11 +6625,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1337925264}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8be332fdea6360b4c8dd12e15df478d2, type: 3}
+  m_Script: {fileID: 11500000, guid: 39d6d833491e4fe468cff8f3b40c1c23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveController: {fileID: 1337925267}
-  waiting: 1
+  MC: {fileID: 1337925267}
+  G: {fileID: 1337925266}
 --- !u!1001 &1353241038
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8853,7 +8855,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1687258581}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: be76e5f14cfee674cb30b491fb72b09b, type: 3}
   m_Name: 
@@ -9355,6 +9357,10 @@ PrefabInstance:
       value: Button (1)
       objectReference: {fileID: 0}
     - target: {fileID: 3211908727328495351, guid: 687e62f666e5752408399846584905b4, type: 3}
+      propertyPath: GC
+      value: 
+      objectReference: {fileID: 1337925266}
+    - target: {fileID: 3211908727328495351, guid: 687e62f666e5752408399846584905b4, type: 3}
       propertyPath: mController
       value: 
       objectReference: {fileID: 1337925267}
@@ -9392,7 +9398,7 @@ GameObject:
   - component: {fileID: 1812544177}
   - component: {fileID: 1812544176}
   m_Layer: 5
-  m_Name: Button (2)
+  m_Name: show lower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

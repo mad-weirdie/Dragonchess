@@ -9,7 +9,7 @@ namespace Dragonchess
     {
         Sylph, Griffon, Dragon, Warrior, Oliphant,
         Unicorn, Hero, Thief, Cleric, Mage, King,
-        Paladin, Dwarf, Basilisk, Elemental
+        Paladin, Dwarf, Basilisk, Elemental, NULL
     };
 
     public class Piece : MonoBehaviour
@@ -18,17 +18,17 @@ namespace Dragonchess
         public static Move.MoveType regular = Move.MoveType.Regular;
         public static Move.MoveType move_cap = Move.MoveType.MoveOrCapture;
         public static Move.MoveType swoop = Move.MoveType.Swoop;
-
-        Color m_color;
-        public PieceType m_type;
-        public GameObject pieceGameObject;
         public bool frozen = false;
-        bool isActive;
 
-        Square m_pos;
-        Board m_board;
+        public List<Move> availableMoves = new List<Move>();
+        public PieceType m_type;
+        public Player player;
+        public GameObject pieceGameObject;
+        Color m_color;
 
         public string nameChar;
+        Square m_pos;
+        Board m_board;
 
         public Piece() { }
 
@@ -40,47 +40,24 @@ namespace Dragonchess
         // GetMoves to be overridden by child classes
         virtual public List<Move> GetMoves() { return null; }
 
-        public bool RemoteCapture(Piece enemy)
-        {
-            if (enemy.color == Color.White)
-                GameController.P1.pieces.Remove(enemy);
-            else
-                GameController.P2.pieces.Remove(enemy);
+        public bool IsAvailableMove(Move move)
+		{
+            foreach (Move m in availableMoves)
+			{
+                if (move == m)
+                    return true;
+			}
+            return false;
+		}
 
-            enemy.pos.occupied = false;
-            Destroy(enemy.pieceGameObject);
-            Destroy(enemy);
-            return true;
-        }
-
-        public bool Capture(Piece enemy)
+        public bool CanMoveTo(Square move)
         {
-            Square s = enemy.pos;
-            if (enemy.type == PieceType.Basilisk)
+            foreach (Move m in availableMoves)
             {
-                if (GameController.getMiddleBoard().squares[enemy.row, enemy.col].occupied)
-                {
-                    Square basilisk = GameController.getLowerBoard().squares[enemy.row, enemy.col];
-                    Square above = GameController.getMiddleBoard().squares[enemy.row, enemy.col];
-
-                    print("captured basilisk. unfreezing square.");
-                    basilisk.piece.pieceGameObject.GetComponent<Basilisk>().UnfreezeSquare(above);
-                    above.piece.frozen = false;
-                }
+                if (m.end == move)
+                    return true;
             }
-            if (enemy.color == Color.White)
-                GameController.P1.pieces.Remove(enemy);
-            else
-                GameController.P2.pieces.Remove(enemy);
-
-            this.pos.dot.GetComponent<Renderer>().material = this.pos.invisible;
-            enemy.pos.piece = this;
-            this.pos.occupied = false;
-            this.pos = enemy.pos;
-            Destroy(enemy.pieceGameObject);
-            Destroy(enemy);
-
-            return true;
+            return false;
         }
 
         virtual public void MoveTo(Square s)
@@ -115,6 +92,66 @@ namespace Dragonchess
                 }
             }
         }
+
+        public bool Capture(Piece enemy)
+        {
+            Square s = enemy.pos;
+            if (enemy.type == PieceType.Basilisk)
+            {
+                if (GameController.getMiddleBoard().squares[enemy.row, enemy.col].occupied)
+                {
+                    Square basilisk = GameController.getLowerBoard().squares[enemy.row, enemy.col];
+                    Square above = GameController.getMiddleBoard().squares[enemy.row, enemy.col];
+
+                    print("captured basilisk. unfreezing square.");
+                    basilisk.piece.pieceGameObject.GetComponent<Basilisk>().UnfreezeSquare(above);
+                    above.piece.frozen = false;
+                }
+            }
+            if (enemy.color == Color.White)
+                GameController.P1.pieces.Remove(enemy);
+            else
+                GameController.P2.pieces.Remove(enemy);
+
+            this.pos.dot.GetComponent<Renderer>().material = this.pos.invisible;
+            enemy.pos.piece = this;
+            this.pos.occupied = false;
+            this.pos = enemy.pos;
+            Destroy(enemy.pieceGameObject);
+            Destroy(enemy);
+
+            return true;
+        }
+
+        public bool RemoteCapture(Piece enemy)
+        {
+            if (enemy.color == Color.White)
+                GameController.P1.pieces.Remove(enemy);
+            else
+                GameController.P2.pieces.Remove(enemy);
+
+            enemy.pos.occupied = false;
+            Destroy(enemy.pieceGameObject);
+            Destroy(enemy);
+            return true;
+        }
+
+        public static Piece ObjToPiece(GameObject obj)
+		{
+            return obj.GetComponent<Piece>();
+        }
+
+        public Move GetMoveWithGoal(Square s)
+		{
+            if (s == null)
+                print("error: s is null");
+            foreach (Move m in availableMoves)
+			{
+                if (m.end == s)
+                    return m;
+			}
+            return null;
+		}
 
         public Square pos
         {
