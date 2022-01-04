@@ -297,8 +297,7 @@ namespace Dragonchess
                 ActivePlayer.prevMove = new Move(next.piece, next.start, next.end, next.type);
                 Piece piece = next.start.piece;
 
-                moveController.MoveSelect(piece.pieceGameObject);
-                moveController.MoveSelect(next.end.cubeObject);
+                moveController.DoMove(piece, next);
             }
         }
 

@@ -1,0 +1,674 @@
+Using pre-set license
+Built from '2020.3/release' branch; Version is '2020.3.1f1 (77a89f25062f) revision 7841951'; Using compiler version '192528614'; Build Type 'Release'
+OS: 'Windows 10 Home; OS build 19042.1415; Version 2009; 64bit' Language: 'en' Physical Memory: 16245 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 0
+
+ COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Editor\Unity.exe
+-adb2
+-batchMode
+-noUpm
+-name
+AssetImportWorker0
+-projectPath
+C:/Users/meera/Documents/GitHub/Dragonchess
+-logFile
+Logs/AssetImportWorker0.log
+-srvPort
+55291
+Successfully changed project path to: C:/Users/meera/Documents/GitHub/Dragonchess
+C:/Users/meera/Documents/GitHub/Dragonchess
+Using Asset Import Pipeline V2.
+Refreshing native plugins compatible for Editor in 48.91 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 2020.3.1f1 (77a89f25062f)
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path C:/Users/meera/Documents/GitHub/Dragonchess/Assets
+GfxDevice: creating device client; threaded=0
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: NVIDIA GeForce RTX 2060 (ID=0x1f15)
+    Vendor:   
+    VRAM:     5980 MB
+    Driver:   30.0.14.7151
+Shader 'Universal Render Pipeline/Particles/Lit': fallback shader 'Universal Render Pipeline/Particles/SimpleLit' not found
+Initialize mono
+Mono path[0] = 'C:/Program Files/Unity/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Editor/Data/MonoBleedingEdge/lib/mono/unityjit'
+Mono config path = 'C:/Program Files/Unity/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56120
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Editor/Data/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll
+Register platform support module: C:/Program Files/Unity/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.002696 seconds.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 52.78 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.137 seconds
+Platform modules already initialized, skipping
+Registering precompiled user dll's ...
+Registered in 0.001154 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 57.66 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.996 seconds
+Platform modules already initialized, skipping
+========================================================================
+Worker process is ready to serve import requests
+Shader 'Universal Render Pipeline/Particles/Lit': fallback shader 'Universal Render Pipeline/Particles/SimpleLit' not found
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.04 seconds
+Refreshing native plugins compatible for Editor in 0.47 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3261 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 148.8 MB.
+System memory in use after: 149.0 MB.
+
+Unloading 14 unused Assets to reduce memory usage. Loaded Objects now: 3711.
+Total: 2.314600 ms (FindLiveObjects: 0.294400 ms CreateObjectMapping: 0.161300 ms MarkObjects: 1.782100 ms  DeleteObjects: 0.076100 ms)
+
+========================================================================
+Received Import Request.
+  path: Assets/Scripts/GameFromFile.cs
+  artifactKey: Guid(39d6d833491e4fe468cff8f3b40c1c23) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/GameFromFile.cs using Guid(39d6d833491e4fe468cff8f3b40c1c23) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a599595a61c539c98bc0c7b220510c2e') in 0.016463 seconds
+  Import took 0.020949 seconds .
+
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.001155 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 0.44 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.977 seconds
+Platform modules already initialized, skipping
+Shader 'Universal Render Pipeline/Particles/Lit': fallback shader 'Universal Render Pipeline/Particles/SimpleLit' not found
+Refreshing native plugins compatible for Editor in 0.48 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3114 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 140.1 MB.
+System memory in use after: 140.3 MB.
+
+Unloading 7 unused Assets to reduce memory usage. Loaded Objects now: 3714.
+Total: 2.851300 ms (FindLiveObjects: 0.466800 ms CreateObjectMapping: 0.237200 ms MarkObjects: 2.039300 ms  DeleteObjects: 0.106700 ms)
+
+========================================================================
+Received Import Request.
+  Time since last request: 10.548167 seconds.
+  path: Assets/Scripts/GameFromFile.cs
+  artifactKey: Guid(39d6d833491e4fe468cff8f3b40c1c23) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/GameFromFile.cs using Guid(39d6d833491e4fe468cff8f3b40c1c23) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e1629a87f05f66d1bb3febf23bdb6e97') in 0.005105 seconds
+  Import took 0.009756 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 1.073263 seconds.
+  path: Assets/Scripts/GameFromFile.cs
+  artifactKey: Guid(39d6d833491e4fe468cff8f3b40c1c23) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/GameFromFile.cs using Guid(39d6d833491e4fe468cff8f3b40c1c23) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e1629a87f05f66d1bb3febf23bdb6e97') in 0.002091 seconds
+  Import took 0.006683 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 15.557962 seconds.
+  path: Assets/Resources/game_example_1.txt
+  artifactKey: Guid(3c521ba667f1ab3468f315478dce1c90) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_example_1.txt using Guid(3c521ba667f1ab3468f315478dce1c90) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '55e2d96b3b605d818e37b36456f95228') in 0.016743 seconds
+  Import took 0.021274 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.889395 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000845 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.005124 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.026394 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000531 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.004847 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.022258 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000614 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.004682 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.022028 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000836 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.004984 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.020922 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000614 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.004971 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.022716 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000649 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.004902 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.025590 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000556 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.004195 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.021765 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000653 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.004966 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.023232 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000569 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.004512 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.021783 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000607 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.004891 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.022893 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000625 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.004849 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.024968 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000634 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.004419 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.021430 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000632 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.005070 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.022042 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000653 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.005069 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.021660 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000570 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.004945 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.020747 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000561 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.004403 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.022627 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000562 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.004664 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.022258 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000684 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.004715 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.021985 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000589 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.005257 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.021712 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000615 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.005389 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.025118 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000691 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.004564 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.023359 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000611 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.005083 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.022084 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000556 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.005482 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.023421 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000614 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.005016 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.022876 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000725 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.005123 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.022533 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000563 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.004616 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.022043 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000547 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.004405 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.022589 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000565 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.004178 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.021504 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000588 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.004781 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.021670 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000699 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.005070 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.025919 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000602 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.004921 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.024577 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000556 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.004620 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.022019 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000560 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.004200 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.021186 seconds.
+  path: Assets/Resources/game_out.txt
+  artifactKey: Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/game_out.txt using Guid(3562fa481401da64299481aadf4504e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00000000000000000000000000000000') in 0.000577 seconds
+  ERROR: Build asset version error: assets/resources/game_out.txt in SourceAssetDB has modification time of '2022-01-04T07:53:45.3612257Z' while content on disk has modification time of '2022-01-04T07:55:38.0977588Z'
+  Import took 0.004991 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.027783 seconds.
+  path: Assets/Resources/error_game_out.txt
+  artifactKey: Guid(060bf2e4858c4da4c9bf8ff60dbb07e9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/error_game_out.txt using Guid(060bf2e4858c4da4c9bf8ff60dbb07e9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0a0d83eb936bf5956d8fbda24eba5886') in 0.006629 seconds
+  Import took 0.011770 seconds .
+
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.001186 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 0.45 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.788 seconds
+Platform modules already initialized, skipping
+Shader 'Universal Render Pipeline/Particles/Lit': fallback shader 'Universal Render Pipeline/Particles/SimpleLit' not found
+Refreshing native plugins compatible for Editor in 0.47 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3114 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 140.2 MB.
+System memory in use after: 140.4 MB.
+
+Unloading 7 unused Assets to reduce memory usage. Loaded Objects now: 3717.
+Total: 2.213200 ms (FindLiveObjects: 0.279600 ms CreateObjectMapping: 0.135800 ms MarkObjects: 1.729800 ms  DeleteObjects: 0.067100 ms)
+
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.001271 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 0.64 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.044 seconds
+Platform modules already initialized, skipping
+Shader 'Universal Render Pipeline/Particles/Lit': fallback shader 'Universal Render Pipeline/Particles/SimpleLit' not found
+Refreshing native plugins compatible for Editor in 0.57 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3114 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 140.2 MB.
+System memory in use after: 140.4 MB.
+
+Unloading 7 unused Assets to reduce memory usage. Loaded Objects now: 3720.
+Total: 4.704100 ms (FindLiveObjects: 0.406600 ms CreateObjectMapping: 0.213400 ms MarkObjects: 3.952100 ms  DeleteObjects: 0.130200 ms)
+
+========================================================================
+Received Import Request.
+  Time since last request: 174.878995 seconds.
+  path: Assets/Scenes/Game.unity
+  artifactKey: Guid(d1c3109bdb54ad54c8a2b2838528e640) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scenes/Game.unity using Guid(d1c3109bdb54ad54c8a2b2838528e640) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'acaaabd07f3d8fd1ac794990a8e81636') in 0.016865 seconds
+  Import took 0.021668 seconds .
+
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.001305 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 0.43 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.861 seconds
+Platform modules already initialized, skipping
+Shader 'Universal Render Pipeline/Particles/Lit': fallback shader 'Universal Render Pipeline/Particles/SimpleLit' not found
+Refreshing native plugins compatible for Editor in 0.46 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3114 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 140.2 MB.
+System memory in use after: 140.5 MB.
+
+Unloading 7 unused Assets to reduce memory usage. Loaded Objects now: 3723.
+Total: 2.751300 ms (FindLiveObjects: 0.472600 ms CreateObjectMapping: 0.223600 ms MarkObjects: 1.944200 ms  DeleteObjects: 0.109900 ms)
+
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.001499 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 0.82 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.074 seconds
+Platform modules already initialized, skipping
+Shader 'Universal Render Pipeline/Particles/Lit': fallback shader 'Universal Render Pipeline/Particles/SimpleLit' not found
+Refreshing native plugins compatible for Editor in 0.62 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3114 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 140.3 MB.
+System memory in use after: 140.5 MB.
+
+Unloading 7 unused Assets to reduce memory usage. Loaded Objects now: 3726.
+Total: 2.970100 ms (FindLiveObjects: 0.420000 ms CreateObjectMapping: 0.177600 ms MarkObjects: 2.283100 ms  DeleteObjects: 0.087700 ms)
+
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.001980 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 0.47 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.003 seconds
+Platform modules already initialized, skipping
+Shader 'Universal Render Pipeline/Particles/Lit': fallback shader 'Universal Render Pipeline/Particles/SimpleLit' not found
+Refreshing native plugins compatible for Editor in 0.46 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3114 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 140.3 MB.
+System memory in use after: 140.5 MB.
+
+Unloading 7 unused Assets to reduce memory usage. Loaded Objects now: 3729.
+Total: 2.504200 ms (FindLiveObjects: 0.415100 ms CreateObjectMapping: 0.168300 ms MarkObjects: 1.814500 ms  DeleteObjects: 0.104500 ms)
+
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.001490 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 0.43 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.811 seconds
+Platform modules already initialized, skipping
+Shader 'Universal Render Pipeline/Particles/Lit': fallback shader 'Universal Render Pipeline/Particles/SimpleLit' not found
+Refreshing native plugins compatible for Editor in 0.46 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3114 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 140.3 MB.
+System memory in use after: 140.5 MB.
+
+Unloading 7 unused Assets to reduce memory usage. Loaded Objects now: 3732.
+Total: 3.568500 ms (FindLiveObjects: 0.417100 ms CreateObjectMapping: 0.146800 ms MarkObjects: 2.932300 ms  DeleteObjects: 0.071400 ms)
+
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.001175 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 0.48 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.829 seconds
+Platform modules already initialized, skipping
+Shader 'Universal Render Pipeline/Particles/Lit': fallback shader 'Universal Render Pipeline/Particles/SimpleLit' not found
+Refreshing native plugins compatible for Editor in 0.46 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3114 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 140.3 MB.
+System memory in use after: 140.5 MB.
+
+Unloading 7 unused Assets to reduce memory usage. Loaded Objects now: 3735.
+Total: 2.763000 ms (FindLiveObjects: 0.305700 ms CreateObjectMapping: 0.147600 ms MarkObjects: 2.247400 ms  DeleteObjects: 0.061300 ms)
+
+========================================================================
+Received Import Request.
+  Time since last request: 933.994526 seconds.
+  path: Assets/Scripts/GameController.cs
+  artifactKey: Guid(cee9ac3a19142014d9d2e7edeebbb464) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/GameController.cs using Guid(cee9ac3a19142014d9d2e7edeebbb464) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0665d63c7aa9086dd9cd2c4e65ef67aa') in 0.008597 seconds
+  Import took 0.013551 seconds .
+
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.001184 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 0.47 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.867 seconds
+Platform modules already initialized, skipping
+Shader 'Universal Render Pipeline/Particles/Lit': fallback shader 'Universal Render Pipeline/Particles/SimpleLit' not found
+Refreshing native plugins compatible for Editor in 0.46 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3114 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 140.3 MB.
+System memory in use after: 140.5 MB.
+
+Unloading 7 unused Assets to reduce memory usage. Loaded Objects now: 3738.
+Total: 2.435800 ms (FindLiveObjects: 0.333300 ms CreateObjectMapping: 0.135400 ms MarkObjects: 1.854100 ms  DeleteObjects: 0.111900 ms)
+
+========================================================================
+Received Import Request.
+  Time since last request: 61.492690 seconds.
+  path: Assets/Scripts/GameController.cs
+  artifactKey: Guid(cee9ac3a19142014d9d2e7edeebbb464) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/GameController.cs using Guid(cee9ac3a19142014d9d2e7edeebbb464) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '961451ab3a8942385cb027e6f29c9c88') in 0.006034 seconds
+  Import took 0.010457 seconds .
+

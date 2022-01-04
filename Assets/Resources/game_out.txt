@@ -1,7 +1,4 @@
-Rd4 Ph6
-Ge4 Rj5
-Sh3 Pg6
-Hh3 Sf6
-Rd5 Ri5
-Pi3 We6
-Pxi5 Gxi5
+Sd3 Dg7
+Se4 Gf6
+Sf5 Uc6
+Sxf6 Hi7

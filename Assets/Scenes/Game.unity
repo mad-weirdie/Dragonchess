@@ -6524,7 +6524,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   P1_type: 0
-  P2_type: 0
+  P2_type: 1
   board_init: {fileID: 4900000, guid: 002777df588e11b4e9930b96c3fbae74, type: 3}
   moveController: {fileID: 1337925267}
   boardObj:
@@ -6563,7 +6563,7 @@ MonoBehaviour:
   black_text: {fileID: 2021992725}
   white_text: {fileID: 884197968}
   invisible: {fileID: 2100000, guid: 86a04a136c254964cb4c96be36fb1edc, type: 2}
-  GameFromFileEnabled: 1
+  GameFromFileEnabled: 0
   GFF: {fileID: 1337925269}
 --- !u!114 &1337925267
 MonoBehaviour:
