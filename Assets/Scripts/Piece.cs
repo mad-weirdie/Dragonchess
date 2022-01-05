@@ -18,9 +18,9 @@ namespace Dragonchess
         public static Move.MoveType regular = Move.MoveType.Regular;
         public static Move.MoveType move_cap = Move.MoveType.MoveOrCapture;
         public static Move.MoveType swoop = Move.MoveType.Swoop;
-        public bool frozen = false;
+        public bool frozen;
 
-        public List<Move> availableMoves = new List<Move>();
+        public List<Move> availableMoves;
         public PieceType m_type;
         public Player player;
         public GameObject pieceGameObject;
@@ -29,6 +29,12 @@ namespace Dragonchess
         public string nameChar;
         Square m_pos;
         Board m_board;
+
+        void Start()
+		{
+            availableMoves = new List<Move>();
+            frozen = false;
+        }
 
         public Piece() { }
 
@@ -117,8 +123,7 @@ namespace Dragonchess
             enemy.pos.piece = this;
             this.pos.occupied = false;
             this.pos = enemy.pos;
-            Destroy(enemy.pieceGameObject);
-            Destroy(enemy);
+            (enemy.pieceGameObject).SetActive(false);
 
             return true;
         }
@@ -131,8 +136,7 @@ namespace Dragonchess
                 GameController.P2.pieces.Remove(enemy);
 
             enemy.pos.occupied = false;
-            Destroy(enemy.pieceGameObject);
-            Destroy(enemy);
+            (enemy.pieceGameObject).SetActive(false);
             return true;
         }
 

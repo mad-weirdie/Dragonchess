@@ -13,14 +13,18 @@ namespace Dragonchess
         public MoveController MC;
         public GameController G;
         static public List<Move> moveLog;
-        static int currentLine = 0;
-        static int currentMove = 0;
+        static int linesRead;
+        static int moveIndex;
+        static int movesParsed;
         static public bool isWhitesTurn;
         static public string[] lines;
         
         // Start is called before the first frame update
         void Start()
         {
+            linesRead = 0;
+            moveIndex = 0;
+            movesParsed = 0;
             moveLog = new List<Move>();
             isWhitesTurn = true;
             // Read in starting board state from the board_init text file
@@ -29,7 +33,7 @@ namespace Dragonchess
 
         static Move ReadLine()
         {
-            string line = lines[currentLine];
+            string line = lines[linesRead];
 
             string[] vals = line.Split('\t');
             string move_num = vals[0];
@@ -46,13 +50,10 @@ namespace Dragonchess
             {
                 m = ParseMove(P2_move, GC.P2);
                 isWhitesTurn = true;
+                linesRead++;
             }
-
+            movesParsed++;
             moveLog.Add(m);
-            if (isWhitesTurn)
-            {
-                currentLine++;
-            }
             return m;
         }
 
@@ -239,34 +240,58 @@ namespace Dragonchess
 
         public void DoNext()
 		{
-            if (currentMove+1 > currentLine*2)
+            if (moveIndex >= movesParsed)
 			{
                 Move m = ReadLine();
+
                 MC.DoMove(m.piece, m);
             }
             else
 			{
-                MC.DoMove(moveLog[currentMove].piece, moveLog[currentMove]);
+                MC.DoMove(moveLog[moveIndex].piece, moveLog[moveIndex]);
 			}
-            currentMove++;
+            moveLog[moveIndex].piece.player.prevMove = moveLog[moveIndex];
+            moveIndex++;
         }
 
         public void UndoPrev()
         {
-            if (currentMove == 0)
+            if (moveIndex == 0)
 			{
                 print("No moves to undo!");
                 return;
 			}
-            currentMove--;
-            Move prev = moveLog[currentMove];
+
+            moveIndex--;
+            Move prev = moveLog[moveIndex];
+            prev.piece.player.prevMove = prev;
 
             if (prev.type == Move.MoveType.Capture ||
                 prev.type == Move.MoveType.Swoop)
 			{
+                // Add the captured piece back
                 Piece cap = prev.captured;
+                cap.pieceGameObject.SetActive(true);
+                cap.player.pieces.Add(cap);
 
-			}
+                // Move the captured piece back
+                Move undoCap = new Move(cap, prev.end, prev.end, Move.MoveType.Regular);
+                MC.DoMove(cap, undoCap);
+
+                // Move the capturing piece back
+                Move undoMove = new Move(prev.piece, prev.start, prev.start, Move.MoveType.Regular);
+                MC.DoMove(prev.piece, undoMove);
+            }
+            else
+			{
+                prev.start.piece = prev.piece;
+                prev.start.occupied = true;
+                prev.end.occupied = false;
+                prev.piece.pos = prev.start;
+                prev.piece.MoveTo(prev.start);
+            }
+            G.DeletePrevLogEntry(prev.piece.player);
+            G.SwitchTurn();
         }
     }
 }

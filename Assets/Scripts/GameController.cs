@@ -15,7 +15,7 @@ namespace Dragonchess
 
     public class GameController : MonoBehaviour
     {
-        public static int layerMask = ~0;
+        public static int layerMask;
         public static Player ActivePlayer;
         public static Player P1;
         public static Player P2;
@@ -41,10 +41,11 @@ namespace Dragonchess
 
         GameObject selectedPiece;
 
-        static int moveNum = 0;
-        static public List<string> moveLog = new List<string>();
+        static int moveNum;
+        static public List<string> moveLog;
 
         public bool GameFromFileEnabled;
+        public bool gameOver;
         public GameFromFile GFF;
         // --------------------------------------------------------------------
 
@@ -54,6 +55,12 @@ namespace Dragonchess
         // Start is called before the first frame update
         void Start()
         {
+            gameOver = false;
+            layerMask = ~0;
+            moveNum = -1;
+            moveLog = new List<string>();
+            hightlightedSquares = new List<(Square, Move.MoveType)>();
+
             if (P1_type == PlayerType.Human)
                 P1 = new Human(Color.White, PlayerType.Human);
             else
@@ -65,9 +72,6 @@ namespace Dragonchess
                 P2 = new AI(Color.Black, PlayerType.AI);
 
             NewGame();
-            //getMoveEvent += GetNextMove;
-            hightlightedSquares = new List<(Square, Move.MoveType)>();
-            //getMoveEvent(P1);   // Start the game - get P1's first move
         }
 
         // Initialize new game
@@ -144,12 +148,15 @@ namespace Dragonchess
 
         void ResetGame()
 		{
-            Scene scene = SceneManager.GetActiveScene();
-            SceneManager.LoadScene(scene.name);
-		}
+            OnApplicationQuit();
+            SceneManager.LoadScene("Game", LoadSceneMode.Single);
+        }
 
         void OnClick()
         {
+            if (gameOver)
+                ResetGame();
+
             if (!GameFromFileEnabled)
             {
                 Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
@@ -184,12 +191,12 @@ namespace Dragonchess
 		}
 
         // Saves the game's move data to a file
-        static void LogMove(Player player, bool isCheck)
+        public static void LogMove(Player player, bool isCheck)
         {
             // Uppercase char - indicate the name of the piece
             Move move = player.prevMove;
 
-            string moveText = move.piece.nameChar;
+            string moveText = moveNum + ")\t" + move.piece.nameChar;
             // If the move was a capture, indicate with an 'x'
             if (move.type == Move.MoveType.Capture)
                 moveText += "x";
@@ -203,16 +210,16 @@ namespace Dragonchess
                 moveText += "+";
 
             if (player.color == Color.White)
-            {
-                moveLog.Add(moveText);
-            }
+                moveLog.Add((1+moveNum) + ")\t" + moveText);
             else
-            {
-                moveLog[moveNum] = moveLog[moveNum] + " " + moveText;
-                print((moveNum + 1) + ". " + moveLog[moveNum]);
-                moveNum++;
-            }
+                moveLog.Add('\t' + moveText + '\n');
+            moveNum++;
+        }
 
+        public void DeletePrevLogEntry(Player player)
+		{
+            moveLog.RemoveAt(moveNum);
+            moveNum--;
         }
 
         void OnApplicationQuit()
@@ -222,7 +229,7 @@ namespace Dragonchess
 
             foreach (string line in moveLog)
             {
-                w.WriteLine(line);
+                w.Write(line);
             }
 
             w.Close();
@@ -244,7 +251,7 @@ namespace Dragonchess
                 if (IsCheckmate(P2))
                 {
                     print("GAME OVER: CHECKMATE. PLAYER 1 WINS.");
-                    ResetGame();
+                    gameOver = true;
                     return;
                 }
             }
@@ -262,7 +269,7 @@ namespace Dragonchess
                 if (IsCheckmate(P1))
                 {
                     print("GAME OVER: CHECKMATE. PLAYER 2 WINS.");
-                    ResetGame();
+                    gameOver = true;
                     return;
                 }
             }
@@ -271,9 +278,6 @@ namespace Dragonchess
                 P1.inCheck = false;
                 Square.SetColor(GetKing(P1).pos, GetKing(P1).pos.properMaterial);
             }
-
-            // Log the move, including the check state
-            LogMove(ActivePlayer, GetEnemy(ActivePlayer).inCheck);
 
             // Switch the currently active player
             if (ActivePlayer == P1)
@@ -291,7 +295,7 @@ namespace Dragonchess
                 ActivePlayer = P1;
             }
 
-            if (ActivePlayer.type == PlayerType.AI)
+            if (!GameFromFileEnabled && ActivePlayer.type == PlayerType.AI)
             {
                 Move next = ActivePlayer.GetMove();
                 ActivePlayer.prevMove = new Move(next.piece, next.start, next.end, next.type);

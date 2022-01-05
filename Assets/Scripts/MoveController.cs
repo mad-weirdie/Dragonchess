@@ -12,7 +12,7 @@ namespace Dragonchess
         public GameObject selectedObj;
         public EventSystem eventSystem;
         public GameController G;
-        public static List<(Square, Move.MoveType)> highlightedSquares = new List<(Square, Move.MoveType)>();
+        public static List<(Square, Move.MoveType)> highlightedSquares;
 
         public Material highlight_1;
         public Material highlight_2;
@@ -28,6 +28,7 @@ namespace Dragonchess
 
         public void Start()
         {
+            highlightedSquares = new List<(Square, Move.MoveType)>();
             UpperBoard = GC.getUpperBoard();
             MiddleBoard = GC.getMiddleBoard();
             LowerBoard = GC.getLowerBoard();
@@ -57,7 +58,7 @@ namespace Dragonchess
             {
                 if (s.row == 7)
                 {
-                    Destroy(piece.pieceGameObject);
+                    (piece.pieceGameObject).SetActive(false);
                     GameObject newHero = G.piecePrefabs[6];
                     MiddleBoard.AddPieceAt(newHero, G.materials[9], Color.White, 7, s.col);
                     piece.pieceGameObject = newHero;
@@ -68,7 +69,7 @@ namespace Dragonchess
             {
                 if (s.row == 0)
                 {
-                    Destroy(piece.pieceGameObject);
+                    (piece.pieceGameObject).SetActive(false);
                     GameObject newHero = G.piecePrefabs[6];
                     MiddleBoard.AddPieceAt(newHero, G.materials[10], Color.Black, 0, s.col);
                     piece.pieceGameObject = newHero;
@@ -251,7 +252,6 @@ namespace Dragonchess
 
             if (IsPiece(clickedObj) && selectedObj == null)
             {
-                print("wow");
                 // Generate list of possible moves
                 selectedObj = clickedObj;
                 piece = selectedObj.GetComponent<Piece>();
@@ -284,6 +284,8 @@ namespace Dragonchess
 
         public void DoMove(Piece p, Move m)
         {
+            if (p == null)
+                print("???");
             m.piece = p;
             GC.ActivePlayer.prevMove = m;
 
@@ -296,7 +298,6 @@ namespace Dragonchess
 			{
                 m.captured = m.end.piece;
                 p.Capture(m.end.piece);
-                print(m.captured);
                 p.MoveTo(m.end);
             }
             else    // m == Move.MoveType.Regular
@@ -310,6 +311,8 @@ namespace Dragonchess
             if (p.type == PieceType.Warrior)
                 PromoteWarrior(m.end, p);
 
+            // Log the move, including the check state
+            GC.LogMove(GC.ActivePlayer, GC.GetEnemy(GC.ActivePlayer).inCheck);
             G.SwitchTurn();
         }
     }
