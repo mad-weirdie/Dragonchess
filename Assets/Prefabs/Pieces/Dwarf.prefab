@@ -129,6 +129,7 @@ MonoBehaviour:
   frozen: 0
   m_type: 12
   pieceGameObject: {fileID: 2590143004542639904}
+  value: 2
   nameChar: D
 --- !u!1 &8710976373769048462
 GameObject:

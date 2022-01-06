@@ -1,0 +1,16 @@
+King : 900
+Dragon : 90
+Paladin : 50
+Mage : 40
+Cleric : 30
+Griffin : 20
+Oliphant : 15
+Hero : 10
+Thief : 5
+Elemental : 4 
+Basilisk : 3
+Unicorn : 3
+Dwarf : 2
+Sylph : 1
+Warrior : 1
+

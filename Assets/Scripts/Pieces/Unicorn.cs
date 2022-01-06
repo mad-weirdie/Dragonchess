@@ -9,7 +9,7 @@ namespace Dragonchess
      */
     public class Unicorn : Piece
     {
-        public Unicorn() : base(PieceType.Unicorn) { nameChar = "U"; }
+        public Unicorn() : base(PieceType.Unicorn) { nameChar = "U"; value = 3; }
 
         public override List<Move> GetMoves()
         {

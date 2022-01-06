@@ -205,7 +205,6 @@ namespace Dragonchess
                     m.start.piece = moving_piece;
                     moving_piece.pos = m.start;
                     m.end.piece = null;
-
                 }
                 else
                 {
@@ -284,8 +283,6 @@ namespace Dragonchess
 
         public void DoMove(Piece p, Move m)
         {
-            if (p == null)
-                print("???");
             m.piece = p;
             GC.ActivePlayer.prevMove = m;
 
@@ -302,8 +299,6 @@ namespace Dragonchess
             }
             else    // m == Move.MoveType.Regular
 			{
-                if (p == null)
-                    print("error: piece is null");
                 p.MoveTo(m.end);
             }
 
@@ -313,6 +308,37 @@ namespace Dragonchess
 
             // Log the move, including the check state
             GC.LogMove(GC.ActivePlayer, GC.GetEnemy(GC.ActivePlayer).inCheck);
+            G.SwitchTurn();
+        }
+
+        public void UndoMove(Piece p, Move m)
+        {
+            m.piece.player.prevMove = m;
+
+            if (m.type == Move.MoveType.Capture ||
+                m.type == Move.MoveType.Swoop)
+            {
+                // Add the captured piece back
+                Piece cap = m.captured;
+                cap.pieceGameObject.SetActive(true);
+                cap.player.pieces.Add(cap);
+
+                // Move the captured piece back
+                Move undoCap = new Move(cap, m.end, m.end, Move.MoveType.Regular);
+                DoMove(cap, undoCap);
+
+                // Move the capturing piece back
+                Move undoMove = new Move(m.piece, m.start, m.start, Move.MoveType.Regular);
+                DoMove(m.piece, undoMove);
+            }
+            else
+            {
+                m.start.piece = m.piece;
+                m.start.occupied = true;
+                m.end.occupied = false;
+                m.piece.pos = m.start;
+                m.piece.MoveTo(m.start);
+            }
             G.SwitchTurn();
         }
     }

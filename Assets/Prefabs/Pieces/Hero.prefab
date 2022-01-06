@@ -298,4 +298,5 @@ MonoBehaviour:
   frozen: 0
   m_type: 6
   pieceGameObject: {fileID: 5806972766582656371}
+  value: 10
   nameChar: H

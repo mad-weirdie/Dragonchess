@@ -9,7 +9,7 @@ namespace Dragonchess
      */
     public class Dwarf : Piece
     {
-        public Dwarf() : base(PieceType.Dwarf) { nameChar = "D"; }
+        public Dwarf() : base(PieceType.Dwarf) { nameChar = "D"; value = 2; }
         public override List<Move> GetMoves()
         {
             List<Move> moves = new List<Move>();

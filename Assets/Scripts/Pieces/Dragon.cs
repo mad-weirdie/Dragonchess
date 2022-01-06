@@ -7,7 +7,7 @@ namespace Dragonchess
     /* ----------- Dragon ------------*/
     public class Dragon : Piece
     {
-        public Dragon() : base(PieceType.Dragon) { nameChar = "R"; }
+        public Dragon() : base(PieceType.Dragon) { nameChar = "R"; value = 80; }
         public override List<Move> GetMoves()
         {
             List<Move> moves = new List<Move>();

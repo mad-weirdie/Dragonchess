@@ -26,6 +26,8 @@ namespace Dragonchess
         public GameObject pieceGameObject;
         Color m_color;
 
+        public int value;
+
         public string nameChar;
         Square m_pos;
         Board m_board;
@@ -72,7 +74,7 @@ namespace Dragonchess
             Vector3 pos = s.cubeObject.transform.position;
             pos.y += 1.0f / Board.square_scale;
             this.pieceGameObject.transform.position = pos;
-            this.pos.dot.GetComponent<Renderer>().material = this.pos.properMaterial;
+            this.pos.dot.GetComponent<Renderer>().material = this.pos.invisible;
 
             // Link piece and square to each other
             this.pos.occupied = false;

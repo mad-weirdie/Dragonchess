@@ -10,7 +10,7 @@ namespace Dragonchess
      */
     public class Paladin : Piece
     {
-        public Paladin() : base(PieceType.Paladin) { nameChar = "P"; }
+        public Paladin() : base(PieceType.Paladin) { nameChar = "P"; value = 50; }
         public override List<Move> GetMoves()
         {
             List<Move> moves = new List<Move>();

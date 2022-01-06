@@ -16,7 +16,7 @@ namespace Dragonchess
          */
     public class Sylph : Piece
     {
-        public Sylph() : base(PieceType.Sylph) { nameChar = "S"; }
+        public Sylph() : base(PieceType.Sylph) { nameChar = "S"; value = 1; }
 
         public override List<Move> GetMoves()
         {

@@ -9,7 +9,7 @@ namespace Dragonchess
      */
     public class Thief : Piece
     {
-        public Thief() : base(PieceType.Thief) { nameChar = "T"; }
+        public Thief() : base(PieceType.Thief) { nameChar = "T"; value = 5; }
 
         public override List<Move> GetMoves()
         {

@@ -9,7 +9,7 @@ namespace Dragonchess
      */
     public class Warrior : Piece
     {
-        public Warrior() : base(PieceType.Warrior) { nameChar = "W"; }
+        public Warrior() : base(PieceType.Warrior) { nameChar = "W"; value = 1; }
 
         public override List<Move> GetMoves()
         {

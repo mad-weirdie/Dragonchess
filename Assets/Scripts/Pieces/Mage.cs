@@ -9,7 +9,7 @@ namespace Dragonchess
      */
     public class Mage : Piece
     {
-        public Mage() : base(PieceType.Mage) { nameChar = "M"; }
+        public Mage() : base(PieceType.Mage) { nameChar = "M"; value = 40; }
         public override List<Move> GetMoves()
         {
             List<Move> moves = new List<Move>();

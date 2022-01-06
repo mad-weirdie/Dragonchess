@@ -57,20 +57,29 @@ namespace Dragonchess
         {
             gameOver = false;
             layerMask = ~0;
-            moveNum = -1;
+            moveNum = 0;
             moveLog = new List<string>();
             hightlightedSquares = new List<(Square, Move.MoveType)>();
 
-            if (P1_type == PlayerType.Human)
+            // If reading game data from a file (for debugging mostly)
+            if (GameFromFileEnabled)
+            {
                 P1 = new Human(Color.White, PlayerType.Human);
-            else
-                P1 = new AI(Color.White, PlayerType.AI);
-
-            if (P2_type == PlayerType.Human)
                 P2 = new Human(Color.Black, PlayerType.Human);
+            }
+            // If accepting moves from Human/AI input
             else
-                P2 = new AI(Color.Black, PlayerType.AI);
+            {
+                if (P1_type == PlayerType.Human)
+                    P1 = new Human(Color.White, PlayerType.Human);
+                else
+                    P1 = new AI(Color.White, PlayerType.AI);
 
+                if (P2_type == PlayerType.Human)
+                    P2 = new Human(Color.Black, PlayerType.Human);
+                else
+                    P2 = new AI(Color.Black, PlayerType.AI);
+            }
             NewGame();
         }
 
@@ -159,14 +168,26 @@ namespace Dragonchess
 
             if (!GameFromFileEnabled)
             {
-                Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-                RaycastHit hit;
-                // Check where we clicked
-                if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
+                // Get next AI move
+                if (ActivePlayer.type == PlayerType.AI)
                 {
-                    // Locate GameObject of whatever we clicked on (piece or square)
-                    GameObject hitGameObject = hit.transform.gameObject;
-                    moveController.MoveSelect(hitGameObject);
+                    Move next = ActivePlayer.GetMove();
+                    ActivePlayer.prevMove = new Move(next.piece, next.start, next.end, next.type);
+                    Piece piece = next.start.piece;
+                    moveController.DoMove(piece, next);
+                }
+                // Or get next human move
+                else
+                {
+                    Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+                    RaycastHit hit;
+                    // Check where we clicked
+                    if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
+                    {
+                        // Locate GameObject of whatever we clicked on (piece or square)
+                        GameObject hitGameObject = hit.transform.gameObject;
+                        moveController.MoveSelect(hitGameObject);
+                    }
                 }
             }
             else
@@ -177,6 +198,8 @@ namespace Dragonchess
 		{
             if (GameFromFileEnabled)
                 GFF.DoNext();
+            else
+                OnClick();
 		}
 
         void OnPrev()
@@ -196,13 +219,14 @@ namespace Dragonchess
             // Uppercase char - indicate the name of the piece
             Move move = player.prevMove;
 
-            string moveText = moveNum + ")\t" + move.piece.nameChar;
+            string moveText = move.piece.nameChar;
             // If the move was a capture, indicate with an 'x'
             if (move.type == Move.MoveType.Capture)
                 moveText += "x";
             // If the move was a remote capture, indicate with an '-'
             if (move.type == Move.MoveType.Swoop)
                 moveText += "#";
+            moveText += (move.end.board.m_layer - 5);
             // Coordinates of the square the piece moved to
             moveText += move.end.SquareName();
             // If the move put the opponent in check, indicate with a '+'
@@ -210,10 +234,12 @@ namespace Dragonchess
                 moveText += "+";
 
             if (player.color == Color.White)
-                moveLog.Add((1+moveNum) + ")\t" + moveText);
+                moveLog.Add((1 + moveNum) + ")\t" + moveText);
             else
+            {
                 moveLog.Add('\t' + moveText + '\n');
-            moveNum++;
+                moveNum++;
+            }
         }
 
         public void DeletePrevLogEntry(Player player)
@@ -295,14 +321,6 @@ namespace Dragonchess
                 ActivePlayer = P1;
             }
 
-            if (!GameFromFileEnabled && ActivePlayer.type == PlayerType.AI)
-            {
-                Move next = ActivePlayer.GetMove();
-                ActivePlayer.prevMove = new Move(next.piece, next.start, next.end, next.type);
-                Piece piece = next.start.piece;
-
-                moveController.DoMove(piece, next);
-            }
         }
 
         // Evaluate whether or not player p's king is in check
