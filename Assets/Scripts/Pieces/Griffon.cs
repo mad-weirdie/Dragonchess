@@ -18,7 +18,7 @@ namespace Dragonchess
     public class Griffon : Piece
     {
         public Griffon() : base(PieceType.Griffon) { nameChar = "G"; value = 20; }
-        public override List<Move> GetMoves()
+        public override List<Move> GetMoves(Gamestate state)
         {
             List<Move> moves = new List<Move>();
             Square current_square = this.pos;
@@ -38,55 +38,55 @@ namespace Dragonchess
                 // Move or capture: two steps diagonally + one step OUTWARDS
                 // ------------------------------------------------------------
                 // diag forward-right x2, then forward
-                Move.moveAttempt(moves, current_square, dir, 3, 2, 3, regular);
-                Move.moveAttempt(moves, current_square, dir, 3, 2, 3, capture);
+                Move.moveAttempt(state, moves, current_square, dir, 3, 2, 3, regular);
+                Move.moveAttempt(state, moves, current_square, dir, 3, 2, 3, capture);
 
                 // diag forward-right x2, then right
-                Move.moveAttempt(moves, current_square, dir, 2, 3, 3, regular);
-                Move.moveAttempt(moves, current_square, dir, 2, 3, 3, capture);
+                Move.moveAttempt(state, moves, current_square, dir, 2, 3, 3, regular);
+                Move.moveAttempt(state, moves, current_square, dir, 2, 3, 3, capture);
 
                 // diag forward-left x2, then forward
-                Move.moveAttempt(moves, current_square, dir, 3, -2, 3, regular);
-                Move.moveAttempt(moves, current_square, dir, 3, -2, 3, capture);
+                Move.moveAttempt(state, moves, current_square, dir, 3, -2, 3, regular);
+                Move.moveAttempt(state, moves, current_square, dir, 3, -2, 3, capture);
 
                 // diag forward-left x2, then left
-                Move.moveAttempt(moves, current_square, dir, 2, -3, 3, regular);
-                Move.moveAttempt(moves, current_square, dir, 2, -3, 3, capture);
+                Move.moveAttempt(state, moves, current_square, dir, 2, -3, 3, regular);
+                Move.moveAttempt(state, moves, current_square, dir, 2, -3, 3, capture);
 
                 // diag backward-right x2, then backward
-                Move.moveAttempt(moves, current_square, dir, -3, 2, 3, regular);
-                Move.moveAttempt(moves, current_square, dir, -3, 2, 3, capture);
+                Move.moveAttempt(state, moves, current_square, dir, -3, 2, 3, regular);
+                Move.moveAttempt(state, moves, current_square, dir, -3, 2, 3, capture);
 
                 // diag backward-right x2, then right
-                Move.moveAttempt(moves, current_square, dir, -2, 3, 3, regular);
-                Move.moveAttempt(moves, current_square, dir, -2, 3, 3, capture);
+                Move.moveAttempt(state, moves, current_square, dir, -2, 3, 3, regular);
+                Move.moveAttempt(state, moves, current_square, dir, -2, 3, 3, capture);
 
                 // diag backward-left x2, then backward
-                Move.moveAttempt(moves, current_square, dir, -3, -2, 3, regular);
-                Move.moveAttempt(moves, current_square, dir, -3, -2, 3, capture);
+                Move.moveAttempt(state, moves, current_square, dir, -3, -2, 3, regular);
+                Move.moveAttempt(state, moves, current_square, dir, -3, -2, 3, capture);
 
                 // diag backward-left x2, then left
-                Move.moveAttempt(moves, current_square, dir, -2, -3, 3, regular);
-                Move.moveAttempt(moves, current_square, dir, -2, -3, 3, capture);
+                Move.moveAttempt(state, moves, current_square, dir, -2, -3, 3, regular);
+                Move.moveAttempt(state, moves, current_square, dir, -2, -3, 3, capture);
 
                 // ------------------------------------------------------------
                 // Move or capture one square triagonally
                 // ------------------------------------------------------------
                 // triag forward-right
-                Move.moveAttempt(moves, current_square, dir, 1, 1, 2, regular);
-                Move.moveAttempt(moves, current_square, dir, 1, 1, 2, capture);
+                Move.moveAttempt(state, moves, current_square, dir, 1, 1, 2, regular);
+                Move.moveAttempt(state, moves, current_square, dir, 1, 1, 2, capture);
 
                 // triag forward-left
-                Move.moveAttempt(moves, current_square, dir, 1, -1, 2, regular);
-                Move.moveAttempt(moves, current_square, dir, 1, -1, 2, capture);
+                Move.moveAttempt(state, moves, current_square, dir, 1, -1, 2, regular);
+                Move.moveAttempt(state, moves, current_square, dir, 1, -1, 2, capture);
 
                 // triag backward-right
-                Move.moveAttempt(moves, current_square, dir, -1, 1, 2, regular);
-                Move.moveAttempt(moves, current_square, dir, -1, 1, 2, capture);
+                Move.moveAttempt(state, moves, current_square, dir, -1, 1, 2, regular);
+                Move.moveAttempt(state, moves, current_square, dir, -1, 1, 2, capture);
 
                 // triag backward-left
-                Move.moveAttempt(moves, current_square, dir, -1, -1, 2, regular);
-                Move.moveAttempt(moves, current_square, dir, -1, -1, 2, capture);
+                Move.moveAttempt(state, moves, current_square, dir, -1, -1, 2, regular);
+                Move.moveAttempt(state, moves, current_square, dir, -1, -1, 2, capture);
 
             }
             // Level 2 moves
@@ -94,37 +94,37 @@ namespace Dragonchess
             {
                 // can move and capture one step diagonally;
                 // diag forward-right
-                Move.moveAttempt(moves, current_square, dir, 1, 1, 2, regular);
-                Move.moveAttempt(moves, current_square, dir, 1, 1, 2, capture);
+                Move.moveAttempt(state, moves, current_square, dir, 1, 1, 2, regular);
+                Move.moveAttempt(state, moves, current_square, dir, 1, 1, 2, capture);
 
                 // diag forward-left
-                Move.moveAttempt(moves, current_square, dir, 1, -1, 2, regular);
-                Move.moveAttempt(moves, current_square, dir, 1, -1, 2, capture);
+                Move.moveAttempt(state, moves, current_square, dir, 1, -1, 2, regular);
+                Move.moveAttempt(state, moves, current_square, dir, 1, -1, 2, capture);
 
                 // diag backward-right
-                Move.moveAttempt(moves, current_square, dir, -1, 1, 2, regular);
-                Move.moveAttempt(moves, current_square, dir, -1, 1, 2, capture);
+                Move.moveAttempt(state, moves, current_square, dir, -1, 1, 2, regular);
+                Move.moveAttempt(state, moves, current_square, dir, -1, 1, 2, capture);
 
                 // diag backward-left
-                Move.moveAttempt(moves, current_square, dir, -1, -1, 2, regular);
-                Move.moveAttempt(moves, current_square, dir, -1, -1, 2, capture);
+                Move.moveAttempt(state, moves, current_square, dir, -1, -1, 2, regular);
+                Move.moveAttempt(state, moves, current_square, dir, -1, -1, 2, capture);
 
                 // can move and capture one step triagonally to level 3.
                 // triag forward-right
-                Move.moveAttempt(moves, current_square, dir, 1, 1, 3, regular);
-                Move.moveAttempt(moves, current_square, dir, 1, 1, 3, capture);
+                Move.moveAttempt(state, moves, current_square, dir, 1, 1, 3, regular);
+                Move.moveAttempt(state, moves, current_square, dir, 1, 1, 3, capture);
 
                 // triag forward-left
-                Move.moveAttempt(moves, current_square, dir, 1, -1, 3, regular);
-                Move.moveAttempt(moves, current_square, dir, 1, -1, 3, capture);
+                Move.moveAttempt(state, moves, current_square, dir, 1, -1, 3, regular);
+                Move.moveAttempt(state, moves, current_square, dir, 1, -1, 3, capture);
 
                 // triag backward-right
-                Move.moveAttempt(moves, current_square, dir, -1, 1, 3, regular);
-                Move.moveAttempt(moves, current_square, dir, -1, 1, 3, capture);
+                Move.moveAttempt(state, moves, current_square, dir, -1, 1, 3, regular);
+                Move.moveAttempt(state, moves, current_square, dir, -1, 1, 3, capture);
 
                 // triag backward-left
-                Move.moveAttempt(moves, current_square, dir, -1, -1, 3, regular);
-                Move.moveAttempt(moves, current_square, dir, -1, -1, 3, capture);
+                Move.moveAttempt(state, moves, current_square, dir, -1, -1, 3, regular);
+                Move.moveAttempt(state, moves, current_square, dir, -1, -1, 3, capture);
             }
 
             return moves;

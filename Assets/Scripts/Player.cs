@@ -12,26 +12,43 @@ namespace Dragonchess
         public bool inCheck = false;
         public Move prevMove;
 
-        void Start()
-		{
-        }
-
         // Initialize player with color c
         public Player(Color c, PlayerType t)
         {
+            pieces = new List<Piece>();
             m_color = c;
             m_type = t;
-            pieces = new List<Piece>();
         }
 
-        public void AddPiece(Piece p)
+        public void AddPiece(Piece p, Square s)
         {
             pieces.Add(p);
+            p.pos = s;
+            s.piece = p;
         }
 
-        virtual public Move GetMove()
+        void Update()
 		{
-            return null;
+
+		}
+
+        virtual public void GetMove(Gamestate state) { return; }
+
+        virtual public void OnClick(Gamestate state) { }
+
+        public List<Move> GetPossibleMoves(Gamestate state)
+		{
+            List<Move> moves = new List<Move>();
+            foreach (Piece p in pieces)
+			{
+                foreach (Move m in p.GetMoves(state))
+				{
+                    m.piece = p;
+                    moves.Add(m);
+				}
+			}
+			//MoveController.RemoveIllegal(state, this, ref moves);
+			return moves;
 		}
 
         public Color color

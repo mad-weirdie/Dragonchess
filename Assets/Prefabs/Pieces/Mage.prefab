@@ -182,7 +182,7 @@ GameObject:
   - component: {fileID: 996366669915993121}
   - component: {fileID: 996366669915993120}
   - component: {fileID: -8321323982343927230}
-  - component: {fileID: -5573685046678394940}
+  - component: {fileID: 7288343139387148417}
   m_Layer: 10
   m_Name: Mage
   m_TagString: Untagged
@@ -232,7 +232,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 272188fd1d04b124084e7e0cd5a64ae3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -283,7 +283,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-5573685046678394940
+--- !u!114 &7288343139387148417
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -292,11 +292,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 996366669915993123}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 326990df8736c4b4c99a286838156335, type: 3}
+  m_Script: {fileID: 11500000, guid: 69aebd44b19327e499f3eed29dc0c083, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frozen: 0
-  m_type: 9
-  pieceGameObject: {fileID: 996366669915993123}
-  value: 40
-  nameChar: M
+  pos: {fileID: 0}
+  type: 9
+  board: 0
+  row: 0
+  col: 0

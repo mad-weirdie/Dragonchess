@@ -11,7 +11,7 @@ namespace Dragonchess
     {
         public Unicorn() : base(PieceType.Unicorn) { nameChar = "U"; value = 3; }
 
-        public override List<Move> GetMoves()
+        public override List<Move> GetMoves(Gamestate state)
         {
             List<Move> moves = new List<Move>();
             Square current_square = this.pos;
@@ -25,29 +25,29 @@ namespace Dragonchess
                 dir = -1;
             
             // forward-right L
-            Move.moveAttempt(moves, current_square, dir, 2, 1, 2, regular);
-            Move.moveAttempt(moves, current_square, dir, 2, 1, 2, capture);
+            Move.moveAttempt(state, moves, current_square, dir, 2, 1, 2, regular);
+            Move.moveAttempt(state, moves, current_square, dir, 2, 1, 2, capture);
             // right-forward L
-            Move.moveAttempt(moves, current_square, dir, 1, 2, 2, regular);
-            Move.moveAttempt(moves, current_square, dir, 1, 2, 2, capture);
+            Move.moveAttempt(state, moves, current_square, dir, 1, 2, 2, regular);
+            Move.moveAttempt(state, moves, current_square, dir, 1, 2, 2, capture);
             // forward-left L
-            Move.moveAttempt(moves, current_square, dir, 2, -1, 2, regular);
-            Move.moveAttempt(moves, current_square, dir, 2, -1, 2, capture);
+            Move.moveAttempt(state, moves, current_square, dir, 2, -1, 2, regular);
+            Move.moveAttempt(state, moves, current_square, dir, 2, -1, 2, capture);
             // left-forward L
-            Move.moveAttempt(moves, current_square, dir, 1, -2, 2, regular);
-            Move.moveAttempt(moves, current_square, dir, 1, -2, 2, capture);
+            Move.moveAttempt(state, moves, current_square, dir, 1, -2, 2, regular);
+            Move.moveAttempt(state, moves, current_square, dir, 1, -2, 2, capture);
             // backward-right L
-            Move.moveAttempt(moves, current_square, dir, -2, 1, 2, regular);
-            Move.moveAttempt(moves, current_square, dir, -2, 1, 2, capture);
+            Move.moveAttempt(state, moves, current_square, dir, -2, 1, 2, regular);
+            Move.moveAttempt(state, moves, current_square, dir, -2, 1, 2, capture);
             // right-backward L
-            Move.moveAttempt(moves, current_square, dir, -1, 2, 2, regular);
-            Move.moveAttempt(moves, current_square, dir, -1, 2, 2, capture);
+            Move.moveAttempt(state, moves, current_square, dir, -1, 2, 2, regular);
+            Move.moveAttempt(state, moves, current_square, dir, -1, 2, 2, capture);
             // backward-left L
-            Move.moveAttempt(moves, current_square, dir, -2, -1, 2, regular);
-            Move.moveAttempt(moves, current_square, dir, -2, -1, 2, capture);
+            Move.moveAttempt(state, moves, current_square, dir, -2, -1, 2, regular);
+            Move.moveAttempt(state, moves, current_square, dir, -2, -1, 2, capture);
             // left-backward L
-            Move.moveAttempt(moves, current_square, dir, -1, -2, 2, regular);
-            Move.moveAttempt(moves, current_square, dir, -1, -2, 2, capture);
+            Move.moveAttempt(state, moves, current_square, dir, -1, -2, 2, regular);
+            Move.moveAttempt(state, moves, current_square, dir, -1, -2, 2, capture);
 
             return moves;
         }

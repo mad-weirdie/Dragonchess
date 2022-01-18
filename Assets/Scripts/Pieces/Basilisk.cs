@@ -14,6 +14,7 @@ namespace Dragonchess
 
         public void FreezeSquare(Square s)
         {
+            /*
             if (s.occupied)
             {
                 GameObject p = s.piece.pieceGameObject;
@@ -23,11 +24,12 @@ namespace Dragonchess
                     original_mat = p.GetComponent<Renderer>().material;
                     p.GetComponent<Renderer>().material = frozen_mat;
                 }
-            }
+            }*/
         }
 
         public void UnfreezeSquare(Square s)
         {
+            /*
             if (s.occupied)
             {
                 GameObject p = s.piece.pieceGameObject;
@@ -36,14 +38,15 @@ namespace Dragonchess
                     p.GetComponent<Piece>().frozen = false;
                     p.GetComponent<Renderer>().material = original_mat;
                 }
-            }
+            }*/
         }
 
-        public override void MoveTo(Square s)
+        public override void MoveTo(Gamestate state, Square s)
         {
+            /*
             // Set new position of the piece's GameObject on the board
             Vector3 pos = s.cubeObject.transform.position;
-            pos.y += 1.0f / Board.square_scale;
+            pos.y += 1.0f / GameUI.square_scale;
             this.pieceGameObject.transform.position = pos;
             GameObject sObj = this.pos.cubeObject;
             sObj.GetComponent<Renderer>().material = this.pos.properMaterial;
@@ -56,15 +59,15 @@ namespace Dragonchess
 
             // Set proper rendering layer (for the overhead cameras)
             this.pieceGameObject.layer = s.board.m_layer + 3;
-            foreach (Transform child in this.transform)
+            foreach (Transform child in this.pieceGameObject.transform)
                 child.gameObject.layer = s.board.m_layer + 3;
 
             UnfreezeSquare(danger_square);
-            danger_square = GameController.getMiddleBoard().squares[s.row, s.col];
-            FreezeSquare(danger_square);
+            danger_square = state.middleBoard.squares[s.row, s.col];
+            FreezeSquare(danger_square); */
         }
 
-        public override List<Move> GetMoves()
+        public override List<Move> GetMoves(Gamestate state)
         {
             List<Move> moves = new List<Move>();
             Square current_square = this.pos;
@@ -78,19 +81,19 @@ namespace Dragonchess
                 dir = -1;
 
             // One step forward (move or capture)
-            Move.moveAttempt(moves, current_square, dir, 1, 0, 1, regular);
-            Move.moveAttempt(moves, current_square, dir, 1, 0, 1, capture);
+            Move.moveAttempt(state, moves, current_square, dir, 1, 0, 1, regular);
+            Move.moveAttempt(state, moves, current_square, dir, 1, 0, 1, capture);
 
             // One step backwards (move only)
-            Move.moveAttempt(moves, current_square, dir, -1, 0, 1, regular);
+            Move.moveAttempt(state, moves, current_square, dir, -1, 0, 1, regular);
 
             // Right forward diagonal (move or capture)
-            Move.moveAttempt(moves, current_square, dir, 1, 1, 1, regular);
-            Move.moveAttempt(moves, current_square, dir, 1, 1, 1, capture);
+            Move.moveAttempt(state, moves, current_square, dir, 1, 1, 1, regular);
+            Move.moveAttempt(state, moves, current_square, dir, 1, 1, 1, capture);
 
             // Left forward diagonal (move or capture)
-            Move.moveAttempt(moves, current_square, dir, 1, -1, 1, regular);
-            Move.moveAttempt(moves, current_square, dir, 1, -1, 1, capture);
+            Move.moveAttempt(state, moves, current_square, dir, 1, -1, 1, regular);
+            Move.moveAttempt(state, moves, current_square, dir, 1, -1, 1, capture);
 
             return moves;
         }

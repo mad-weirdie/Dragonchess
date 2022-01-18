@@ -8,6 +8,10 @@ using UnityEditor;
 namespace Dragonchess
 {
     using GC = GameController;
+    using static Gamestate;
+    using static GameController;
+    using static MoveController;
+
     public class GameFromFile : MonoBehaviour
     {
         public MoveController MC;
@@ -31,7 +35,7 @@ namespace Dragonchess
             lines = File.ReadAllLines("Assets/Resources/game_example_1.txt");
         }
 
-        static Move ReadLine()
+        static Move ReadLine(Gamestate state)
         {
             string line = lines[linesRead];
 
@@ -43,12 +47,12 @@ namespace Dragonchess
             Move m;
 
             if (isWhitesTurn) {
-                m = ParseMove(P1_move, GC.P1);
+                m = ParseMove(state, P1_move, state.P1, state.P2);
                 isWhitesTurn = false;
             }
             else
             {
-                m = ParseMove(P2_move, GC.P2);
+                m = ParseMove(state, P2_move, state.P2, state.P1);
                 isWhitesTurn = true;
                 linesRead++;
             }
@@ -57,20 +61,16 @@ namespace Dragonchess
             return m;
         }
 
-        static public Move ParseMove(string line, Player pNum)
+        static public Move ParseMove(Gamestate state, string line, Player P1, Player P2)
 		{
-            Player P1 = pNum;
-            Player P2 = GameController.GetEnemy(pNum);
-
             Square start = null;
             Square end = null;
             Piece piece = null;
-            Move.MoveType moveType = Move.MoveType.NULL;
+            MoveType moveType = MoveType.NULL;
 
             // Remove the checkmate indicator
             if (line.Contains("+"))
             {
-                print("check");
                 line = line.Replace("+", "");
             }
 
@@ -87,34 +87,34 @@ namespace Dragonchess
             // Figure out the type of move
             if (line.Contains("x"))
 			{
-                moveType = Move.MoveType.Capture;
+                moveType = MoveType.Capture;
                 string[] moveInfo = line.Split('x');
                 PieceType attacker_type = CharToType(P1, moveInfo[0].ToString());
                 PieceType captured_type = CharToType(P2, moveInfo[1].ToString());
 
                 if (moveInfo[0].Length > 1)
                 {
-                    start = StringToSquare(moveInfo[0].Substring(1));
+                    start = StringToSquare(state, moveInfo[0].Substring(1));
                     piece = start.piece;
                     // Case 1: We are given disambiguated pos for both pieces
                     if (moveInfo[1].Length > 1)
                     {
-                        end = StringToSquare(moveInfo[1].Substring(1));                    
+                        end = StringToSquare(state, moveInfo[1].Substring(1));                    
                     }
                     // Case 2: We are given a disambiguated pos for the attacking
 					// piece but not for the captured piece
                     else
                     {
-                        foreach (Move m in piece.GetMoves())
+                        foreach (Move m in piece.GetMoves(state))
                         {
-                            if (m.type == Move.MoveType.Capture && m.end.piece.type == captured_type)
+                            if (m.type == MoveType.Capture && m.end.piece.type == captured_type)
                             {
                                 end = m.end;
                                 break;
                             }
-                            else if (m.type == Move.MoveType.Swoop && m.end.piece.type == captured_type)
+                            else if (m.type == MoveType.Swoop && m.end.piece.type == captured_type)
                             {
-                                moveType = Move.MoveType.Swoop;
+                                moveType = MoveType.Swoop;
                                 end = m.end;
                                 break;
                             }
@@ -127,10 +127,10 @@ namespace Dragonchess
                     // piece but not for the attacking piece
                     if (moveInfo[1].Length > 1)
                     {
-                        end = StringToSquare(moveInfo[1].Substring(1));
+                        end = StringToSquare(state, moveInfo[1].Substring(1));
                         foreach (Piece p in potentialPieces)
 						{
-                            foreach (Move m in p.GetMoves())
+                            foreach (Move m in p.GetMoves(state))
 							{
                                 if (m.end == end) {
                                     start = m.start;
@@ -144,18 +144,17 @@ namespace Dragonchess
 					{
                         foreach (Piece p in potentialPieces)
 						{
-                            foreach (Move m in p.GetMoves())
+                            foreach (Move m in p.GetMoves(state))
 							{
-                                //print("Potential move: " + m.type + " " + m.start.SquareName() + " " + m.end.SquareName());
-                                if (m.type == Move.MoveType.Capture && m.end.piece.type == captured_type)
+                                if (m.type == MoveType.Capture && m.end.piece.type == captured_type)
 								{
                                     start = m.start;
                                     end = m.end;
                                     piece = p;
 								}
-                                else if (m.type == Move.MoveType.Swoop && m.end.piece.type == captured_type)
+                                else if (m.type == MoveType.Swoop && m.end.piece.type == captured_type)
                                 {
-                                    moveType = Move.MoveType.Swoop;
+                                    moveType = MoveType.Swoop;
                                     start = m.start;
                                     end = m.end;
                                     piece = p;
@@ -165,31 +164,25 @@ namespace Dragonchess
 					}
                 }
             }
-
-            /*else if (P1_move.Contains("#"))
-			{
-                moveType = Move.MoveType.Swoop;
-                string[] moveInfo = P1_move.Split('#');
-            }*/
             else
 			{
-                moveType = Move.MoveType.Regular;
+                moveType = MoveType.Regular;
 
                 // If a character was included to differentiate an ambiguous move
                 if (line.Contains("-"))
                 {
                     string[] pos = line.Substring(1).Split('-');
-                    start = StringToSquare(pos[0]);
-                    end = StringToSquare(pos[1]);
+                    start = StringToSquare(state, pos[0]);
+                    end = StringToSquare(state, pos[1]);
                     piece = start.piece;
                 }
                 // If we're only given the piece's letter followed by where it moves to
                 else
 				{
-                    end = StringToSquare(line.Substring(1));
+                    end = StringToSquare(state, line.Substring(1));
                     foreach (Piece p in potentialPieces)
                     {
-                        foreach (Move m in p.GetMoves())
+                        foreach (Move m in p.GetMoves(state))
                         {
                             if (m.end == end)
 							{
@@ -205,7 +198,7 @@ namespace Dragonchess
             return (new Move(piece, start, end, moveType));
         }
 
-        static public Square StringToSquare(string s)
+        static public Square StringToSquare(Gamestate state, string s)
 		{
             int b = (int)char.GetNumericValue(s[0]);
             int c = Array.FindIndex(Square.Letters, l => l == (s[1]).ToString());
@@ -214,18 +207,18 @@ namespace Dragonchess
             Board board;
 
             if (b == 1)
-                board = GC.getUpperBoard();
+                board = state.upperBoard;
             else if (b == 2)
-                board = GC.getMiddleBoard();
+                board = state.middleBoard;
             else
-                board = GC.getLowerBoard();
+                board = state.lowerBoard;
 
-            return board.GetSquare(r, c);
+            return board.squares[r, c];
 		}
 
         static public PieceType CharToType(Player player, string c)
 		{
-            PieceType t = PieceType.NULL;
+            PieceType t = PieceType.EMPTY;
 
             foreach (Piece p in player.pieces)
             {
@@ -238,23 +231,23 @@ namespace Dragonchess
             return t;
         }
 
-        public void DoNext()
+        public void DoNext(Gamestate state)
 		{
             if (moveIndex >= movesParsed)
 			{
-                Move m = ReadLine();
+                Move m = ReadLine(state);
 
-                MC.DoMove(m.piece, m);
+                DoMove(state, m, true);
             }
             else
 			{
-                MC.DoMove(moveLog[moveIndex].piece, moveLog[moveIndex]);
+                DoMove(state, moveLog[moveIndex], true);
 			}
             moveLog[moveIndex].piece.player.prevMove = moveLog[moveIndex];
             moveIndex++;
         }
 
-        public void UndoPrev()
+        public void UndoPrev(Gamestate state)
         {
             if (moveIndex == 0)
 			{
@@ -266,21 +259,20 @@ namespace Dragonchess
             Move prev = moveLog[moveIndex];
             prev.piece.player.prevMove = prev;
 
-            if (prev.type == Move.MoveType.Capture ||
-                prev.type == Move.MoveType.Swoop)
+            if (prev.type == MoveType.Capture ||
+                prev.type == MoveType.Swoop)
 			{
                 // Add the captured piece back
                 Piece cap = prev.captured;
-                cap.pieceGameObject.SetActive(true);
                 cap.player.pieces.Add(cap);
 
                 // Move the captured piece back
-                Move undoCap = new Move(cap, prev.end, prev.end, Move.MoveType.Regular);
-                MC.DoMove(cap, undoCap);
+                Move undoCap = new Move(cap, prev.end, prev.end, MoveType.Regular);
+                DoMove(state, undoCap, true);
 
                 // Move the capturing piece back
-                Move undoMove = new Move(prev.piece, prev.start, prev.start, Move.MoveType.Regular);
-                MC.DoMove(prev.piece, undoMove);
+                Move undoMove = new Move(prev.piece, prev.start, prev.start, MoveType.Regular);
+                DoMove(state, undoMove, true);
             }
             else
 			{
@@ -288,10 +280,8 @@ namespace Dragonchess
                 prev.start.occupied = true;
                 prev.end.occupied = false;
                 prev.piece.pos = prev.start;
-                prev.piece.MoveTo(prev.start);
+                prev.piece.MoveTo(state, prev.start);
             }
-            G.DeletePrevLogEntry(prev.piece.player);
-            G.SwitchTurn();
         }
     }
 }

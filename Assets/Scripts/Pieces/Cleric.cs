@@ -10,7 +10,7 @@ namespace Dragonchess
     public class Cleric : Piece
     {
         public Cleric() : base(PieceType.Cleric) { nameChar = "C"; value = 30; }
-        public override List<Move> GetMoves()
+        public override List<Move> GetMoves(Gamestate state)
         {
             List<Move> moves = new List<Move>();
             Square current_square = this.pos;
@@ -32,26 +32,26 @@ namespace Dragonchess
                 layer_num = 1;
 
             // ANY LEVEL: King-esque moves
-            Move.moveAttempt(moves, current_square, dir, 1, 0, layer_num, move_cap);
-            Move.moveAttempt(moves, current_square, dir, 1, 1, layer_num, move_cap);
-            Move.moveAttempt(moves, current_square, dir, 0, 1, layer_num, move_cap);
-            Move.moveAttempt(moves, current_square, dir, -1, 1, layer_num, move_cap);
-            Move.moveAttempt(moves, current_square, dir, -1, 0, layer_num, move_cap);
-            Move.moveAttempt(moves, current_square, dir, -1, -1, layer_num, move_cap);
-            Move.moveAttempt(moves, current_square, dir, 0, -1, layer_num, move_cap);
-            Move.moveAttempt(moves, current_square, dir, 1, -1, layer_num, move_cap);
+            Move.moveAttempt(state, moves, current_square, dir, 1, 0, layer_num, move_cap);
+            Move.moveAttempt(state, moves, current_square, dir, 1, 1, layer_num, move_cap);
+            Move.moveAttempt(state, moves, current_square, dir, 0, 1, layer_num, move_cap);
+            Move.moveAttempt(state, moves, current_square, dir, -1, 1, layer_num, move_cap);
+            Move.moveAttempt(state, moves, current_square, dir, -1, 0, layer_num, move_cap);
+            Move.moveAttempt(state, moves, current_square, dir, -1, -1, layer_num, move_cap);
+            Move.moveAttempt(state, moves, current_square, dir, 0, -1, layer_num, move_cap);
+            Move.moveAttempt(state, moves, current_square, dir, 1, -1, layer_num, move_cap);
 
             if (layer == Layer.Middle)
             {
                 // Move up
-                Move.moveAttempt(moves, current_square, dir, 0, 0, 3, move_cap);
+                Move.moveAttempt(state, moves, current_square, dir, 0, 0, 3, move_cap);
                 // Move down
-                Move.moveAttempt(moves, current_square, dir, 0, 0, 1, move_cap);
+                Move.moveAttempt(state, moves, current_square, dir, 0, 0, 1, move_cap);
             }
             else
             {
                 // Move back to middle layer
-                Move.moveAttempt(moves, current_square, dir, 0, 0, 2, move_cap);
+                Move.moveAttempt(state, moves, current_square, dir, 0, 0, 2, move_cap);
             }
 
             return moves;

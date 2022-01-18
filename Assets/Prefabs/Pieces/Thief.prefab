@@ -182,7 +182,7 @@ GameObject:
   - component: {fileID: 9220590188164863282}
   - component: {fileID: 9220590188164863283}
   - component: {fileID: -6288275612411473683}
-  - component: {fileID: -344391259167864759}
+  - component: {fileID: 5654380045772298900}
   m_Layer: 10
   m_Name: Thief
   m_TagString: Untagged
@@ -232,7 +232,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 272188fd1d04b124084e7e0cd5a64ae3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -283,7 +283,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-344391259167864759
+--- !u!114 &5654380045772298900
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -292,11 +292,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 9220590188164863280}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8487ba5392f91c64d95c10f6d27c5fb7, type: 3}
+  m_Script: {fileID: 11500000, guid: 69aebd44b19327e499f3eed29dc0c083, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frozen: 0
-  m_type: 7
-  pieceGameObject: {fileID: 9220590188164863280}
-  value: 5
-  nameChar: T
+  pos: {fileID: 0}
+  type: 7
+  board: 0
+  row: 0
+  col: 0

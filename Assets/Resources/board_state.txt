@@ -1,0 +1,78 @@
+public Piece Copy(Player p)
+		{
+            Piece newPiece = (Piece)this.MemberwiseClone();
+            newPiece.player = p;
+            return newPiece;
+		}
+
+public Player Copy()
+		{
+            Player playerCopy = (Player)this.MemberwiseClone();
+            playerCopy.pieces = new List<Piece>();
+
+            foreach (Piece p in this.pieces)
+			{
+                Piece pieceCopy = p.Copy(playerCopy);
+                playerCopy.pieces.Add(pieceCopy);
+			}
+            return playerCopy;
+        }
+
+public Square Copy(Board boardCopy)
+		{
+            Square newSquare = new Square(this.row, this.col, boardCopy);
+            newSquare.board = boardCopy;
+            newSquare.occupied = this.occupied;
+            return newSquare;
+		}
+
+
+
+
+public void OnCopyBoard()
+		{
+            MonoBehaviour.print("-------------------- Printing GameState ------------------");
+            state.PrintState();
+		}
+
+        public void OnCallGetState()
+        {
+            print("Updating gamestate data");
+            this.state = GetGameState();
+        }
+
+        public GameState GetGameState()
+		{
+            return new GameState(this);
+		}
+
+
+
+
+
+
+public class GameState
+    {
+        public Board Upper, Middle, Lower;
+        public static Player P1;
+        public static Player P2;
+        public static Player ActivePlayer;
+
+        public bool gameOver;
+
+        public GameState(GameController GC)
+        {
+            P1 = GameController.P1.Copy();
+            P2 = GameController.P2.Copy();
+
+            Upper = GameController.getUpperBoard().Copy(P1, P2);
+            Middle = GameController.getMiddleBoard().Copy(P1, P2);
+            Lower = GameController.getLowerBoard().Copy(P1, P2);
+
+            if (GameController.ActivePlayer.color == Color.White)
+                ActivePlayer = P1;
+            else
+                ActivePlayer = P2;
+
+            gameOver = GC.gameOver;
+        }

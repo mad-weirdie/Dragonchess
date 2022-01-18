@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3114343201326126341}
   - component: {fileID: 3114343201326126342}
   - component: {fileID: 5356254200610855664}
-  - component: {fileID: -2278099741694364922}
+  - component: {fileID: 2408510981156740522}
   m_Layer: 10
   m_Name: Cleric
   m_TagString: Untagged
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 272188fd1d04b124084e7e0cd5a64ae3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -114,7 +114,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-2278099741694364922
+--- !u!114 &2408510981156740522
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -123,14 +123,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 3114343201326126343}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ba30fa5efb48ea4a9a893ee905791f6, type: 3}
+  m_Script: {fileID: 11500000, guid: 69aebd44b19327e499f3eed29dc0c083, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frozen: 0
-  m_type: 8
-  pieceGameObject: {fileID: 3114343201326126343}
-  value: 30
-  nameChar: C
+  pos: {fileID: 0}
+  type: 8
+  board: 0
+  row: 0
+  col: 0
 --- !u!1 &7920503088337558307
 GameObject:
   m_ObjectHideFlags: 0

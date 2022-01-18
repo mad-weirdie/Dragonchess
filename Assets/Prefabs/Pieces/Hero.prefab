@@ -182,7 +182,7 @@ GameObject:
   - component: {fileID: 5806972766582656373}
   - component: {fileID: 5806972766582656372}
   - component: {fileID: -4106520799484076736}
-  - component: {fileID: 4309771582335353143}
+  - component: {fileID: 3120507399318973170}
   m_Layer: 10
   m_Name: Hero
   m_TagString: Untagged
@@ -232,7 +232,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 272188fd1d04b124084e7e0cd5a64ae3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -283,7 +283,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &4309771582335353143
+--- !u!114 &3120507399318973170
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -292,11 +292,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5806972766582656371}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b9a524ffae3fcc4cbe0c3de9f0b4dde, type: 3}
+  m_Script: {fileID: 11500000, guid: 69aebd44b19327e499f3eed29dc0c083, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frozen: 0
-  m_type: 6
-  pieceGameObject: {fileID: 5806972766582656371}
-  value: 10
-  nameChar: H
+  pos: {fileID: 0}
+  type: 6
+  board: 0
+  row: 0
+  col: 0

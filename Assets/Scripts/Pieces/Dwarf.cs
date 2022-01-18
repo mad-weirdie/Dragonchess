@@ -10,7 +10,7 @@ namespace Dragonchess
     public class Dwarf : Piece
     {
         public Dwarf() : base(PieceType.Dwarf) { nameChar = "D"; value = 2; }
-        public override List<Move> GetMoves()
+        public override List<Move> GetMoves(Gamestate state)
         {
             List<Move> moves = new List<Move>();
             Square current_square = this.pos;
@@ -35,22 +35,22 @@ namespace Dragonchess
             // Can CAPTURE one step diagonally forward (layers 1 and 2)
             if (layer == Layer.Lower || layer == Layer.Middle)
             {
-                Move.moveAttempt(moves, current_square, dir, 1, 0, layer_num, regular);
-                Move.moveAttempt(moves, current_square, dir, 0, 1, layer_num, regular);
-                Move.moveAttempt(moves, current_square, dir, 0, -1, layer_num, regular);
+                Move.moveAttempt(state, moves, current_square, dir, 1, 0, layer_num, regular);
+                Move.moveAttempt(state, moves, current_square, dir, 0, 1, layer_num, regular);
+                Move.moveAttempt(state, moves, current_square, dir, 0, -1, layer_num, regular);
 
-                Move.moveAttempt(moves, current_square, dir, 1, 1, layer_num, capture);
-                Move.moveAttempt(moves, current_square, dir, 1, -1, layer_num, capture);
+                Move.moveAttempt(state, moves, current_square, dir, 1, 1, layer_num, capture);
+                Move.moveAttempt(state, moves, current_square, dir, 1, -1, layer_num, capture);
             }
             // Level 1: - can CAPTURE on the square directly above on level 2.
             if (layer == Layer.Lower)
             {
-                Move.moveAttempt(moves, current_square, dir, 0, 0, 2, capture);
+                Move.moveAttempt(state, moves, current_square, dir, 0, 0, 2, capture);
             }
             // Level 2: - can MOVE TO the square directly below on level 1
             if (layer == Layer.Middle)
             {
-                Move.moveAttempt(moves, current_square, dir, 0, 0, 1, regular);
+                Move.moveAttempt(state, moves, current_square, dir, 0, 0, 1, regular);
             }
             return moves;
         }

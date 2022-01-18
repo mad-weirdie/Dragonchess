@@ -8,11 +8,6 @@ namespace Dragonchess
     {
         static public string[] Letters = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l" };
 
-        public GameObject cubeObject;
-        public Material properMaterial;
-        public Material invisible;
-        public GameObject dot;
-
         public int row;
         public int col;
         public Board board;
@@ -40,9 +35,9 @@ namespace Dragonchess
             board = b;
             occupied = false;
 
-            if (b.m_layer == 6)
+            if (b.layer_int_val == 3)
                 layer = Layer.Upper;
-            else if (b.m_layer == 7)
+            else if (b.layer_int_val == 2)
                 layer = Layer.Middle;
             else
                 layer = Layer.Lower;
@@ -62,18 +57,12 @@ namespace Dragonchess
 
         public string SquareName()
         {
-            return GetColChar() + (row+1);
+            return (board.layer_int_val) + GetColChar() + (row+1);
         }
 
         public string GetColChar()
         {
             return Letters[col];
-        }
-
-        public static void SetColor(Square s, Material m)
-        {
-            GameObject sObj = s.piece.pos.dot;
-            sObj.GetComponent<Renderer>().material = m;
         }
 
         public bool IsOccupied()
@@ -92,12 +81,6 @@ namespace Dragonchess
                 return false;
             if (row < 0 || row >= Board.height)
                 return false;
-
-            /*
-            if (m_type == MoveType.Capture && !m_end.IsOccupied())
-                return false;
-            */
-
             return true;
         }
     }

@@ -8,22 +8,25 @@ namespace Dragonchess
     {
         public MoveController mController;
         public GameController GC;
+        public SquareObject square;
+
         Board m_board;
-        Square m_square;
 
         public void ClickSquare()
         {
+            Gamestate state = GameController.state;
             if (GC.GameFromFileEnabled)
                 return;
-            m_square = square.board.GetSquare(square.row, square.col);
 
-            if (m_square.IsOccupied())
-                mController.MoveSelect(m_square.piece.pieceGameObject);
-            else
+            if (state.ActivePlayer.type == PlayerType.Human)
             {
-                mController.MoveSelect(m_square.cubeObject);
+                GameObject selected = square.gameObject;
+                if (square.board.squares[square.row, square.col].occupied)
+                {
+                    selected = square.piece.gameObject;
+                }
+                ((Human)state.ActivePlayer).MoveSelect(state, selected);
             }
-
         }
 
         public Board board
@@ -35,18 +38,6 @@ namespace Dragonchess
             set
             {
                 m_board = value;
-            }
-        }
-
-        public Square square
-        {
-            get
-            {
-                return m_square;
-            }
-            set
-            {
-                m_square = value;
             }
         }
     }

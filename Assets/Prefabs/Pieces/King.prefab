@@ -182,7 +182,7 @@ GameObject:
   - component: {fileID: 8478019693841842055}
   - component: {fileID: 8478019693841842054}
   - component: {fileID: -6116756971424485504}
-  - component: {fileID: -3611016567887068007}
+  - component: {fileID: -5422298970487121265}
   m_Layer: 10
   m_Name: King
   m_TagString: Untagged
@@ -232,7 +232,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 272188fd1d04b124084e7e0cd5a64ae3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -283,7 +283,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-3611016567887068007
+--- !u!114 &-5422298970487121265
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -292,11 +292,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8478019693841842053}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0182fd80bfa88c448952c4f0c6aab160, type: 3}
+  m_Script: {fileID: 11500000, guid: 69aebd44b19327e499f3eed29dc0c083, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frozen: 0
-  m_type: 10
-  pieceGameObject: {fileID: 8478019693841842053}
-  value: 900
-  nameChar: K
+  pos: {fileID: 0}
+  type: 10
+  board: 0
+  row: 0
+  col: 0

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 namespace Dragonchess
 {
+    using static GameUI;
     public class ClickySquareController : MonoBehaviour
     {
         public Piece pieceScript;
@@ -18,9 +19,9 @@ namespace Dragonchess
         // Start is called before the first frame update
         void Start()
         {
-            Board UpperBoard = GameController.getUpperBoard();
-            Board MiddleBoard = GameController.getMiddleBoard();
-            Board LowerBoard = GameController.getLowerBoard();
+            Board UpperBoard = GameController.state.upperBoard;
+            Board MiddleBoard = GameController.state.middleBoard;
+            Board LowerBoard = GameController.state.lowerBoard;
 
             RectTransform upperR = Upper.GetComponent<RectTransform>();
             float xCoord, yCoord;
@@ -39,13 +40,14 @@ namespace Dragonchess
                     AddClickyAt(LowerBoard, Lower, pos, r, c);
                 }
             }
+            
         }
 
         public void AddClickyAt(Board board, GameObject boardObj, Vector3 pos, int row, int col)
         {
             GameObject newButton = Instantiate(clickySquarePrefab, boardObj.transform, false);
             newButton.GetComponent<RectTransform>().anchoredPosition = pos;
-            newButton.GetComponent<ClickySquare>().square = board.squares[row, col];
+            newButton.GetComponent<ClickySquare>().square = GameUI.GetSquareAt(board, row, col);
             newButton.GetComponent<ClickySquare>().board = board;
         }
     }

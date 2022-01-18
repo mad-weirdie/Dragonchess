@@ -11,7 +11,7 @@ namespace Dragonchess
     {
         public Warrior() : base(PieceType.Warrior) { nameChar = "W"; value = 1; }
 
-        public override List<Move> GetMoves()
+        public override List<Move> GetMoves(Gamestate state)
         {
             List<Move> moves = new List<Move>();
             Square current_square = this.pos;
@@ -28,11 +28,11 @@ namespace Dragonchess
             if (layer == Layer.Middle)
             {
                 // Move only: forward
-                Move.moveAttempt(moves, current_square, dir, 1, 0, 2, regular);
+                Move.moveAttempt(state, moves, current_square, dir, 1, 0, 2, regular);
                 // Capture only: forward-left
-                Move.moveAttempt(moves, current_square, dir, 1, -1, 2, capture);
+                Move.moveAttempt(state, moves, current_square, dir, 1, -1, 2, capture);
                 // Capture only: forward-right
-                Move.moveAttempt(moves, current_square, dir, 1, 1, 2, capture);
+                Move.moveAttempt(state, moves, current_square, dir, 1, 1, 2, capture);
             }
             return moves;
         }

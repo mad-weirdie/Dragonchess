@@ -184,7 +184,7 @@ GameObject:
   - component: {fileID: 5150302628352122939}
   - component: {fileID: 5150302628352122938}
   - component: {fileID: 6507000280192443539}
-  - component: {fileID: -9184576997771174692}
+  - component: {fileID: -853214907967872533}
   m_Layer: 10
   m_Name: Unicorn
   m_TagString: Untagged
@@ -234,7 +234,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 272188fd1d04b124084e7e0cd5a64ae3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -285,7 +285,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-9184576997771174692
+--- !u!114 &-853214907967872533
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -294,11 +294,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5150302628352122941}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ebed78d6d010724fa156c0b8e78cb59, type: 3}
+  m_Script: {fileID: 11500000, guid: 69aebd44b19327e499f3eed29dc0c083, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frozen: 0
-  m_type: 5
-  pieceGameObject: {fileID: 5150302628352122941}
-  value: 3
-  nameChar: U
+  pos: {fileID: 0}
+  type: 5
+  board: 0
+  row: 0
+  col: 0

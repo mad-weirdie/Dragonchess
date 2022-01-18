@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4552675645360974904}
   - component: {fileID: 4552675645360974905}
   - component: {fileID: -6615563681080318611}
-  - component: {fileID: 6270478138532467575}
+  - component: {fileID: -6949489040669782928}
   m_Layer: 11
   m_Name: Basilisk
   m_TagString: Untagged
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 272188fd1d04b124084e7e0cd5a64ae3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -114,7 +114,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &6270478138532467575
+--- !u!114 &-6949489040669782928
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -123,15 +123,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 4552675645360974910}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cbe292c43da397a46900f66221e56540, type: 3}
+  m_Script: {fileID: 11500000, guid: 69aebd44b19327e499f3eed29dc0c083, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frozen: 0
-  m_type: 13
-  pieceGameObject: {fileID: 4552675645360974910}
-  value: 3
-  nameChar: B
-  frozen_mat: {fileID: 2100000, guid: db9e6141cedb03648aaa266ba31fc4aa, type: 2}
+  pos: {fileID: 0}
+  type: 13
+  board: 0
+  row: 0
+  col: 0
 --- !u!1 &9078758696515367797
 GameObject:
   m_ObjectHideFlags: 0
