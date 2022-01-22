@@ -4,45 +4,37 @@ using UnityEngine;
 
 namespace Dragonchess
 {
-    /* ----------- King ------------
+	using static Move;
+	using static MoveDict;
+	/* ----------- King ------------
      * 
      */
-    public class King : Piece
+	public class King : Piece
     {
         public King() : base(PieceType.King) { nameChar = "K"; value = 900; }
         public override List<Move> GetMoves(Gamestate state)
         {
-            List<Move> moves = new List<Move>();
-            Square current_square = this.pos;
-            Layer layer = current_square.layer;
-            int dir = 1;
+			List<Move> moves = new List<Move>();
+			List<(int, int, int)> dictMoves;
+			Square current = this.pos;
 
-            // Level 2 moves
-            if (layer == Layer.Middle)
-            {
-                // Regular King moves
-                Move.moveAttempt(state, moves, current_square, dir, 1, 0, 2, move_cap);
-                Move.moveAttempt(state, moves, current_square, dir, 1, 1, 2, move_cap);
-                Move.moveAttempt(state, moves, current_square, dir, 0, 1, 2, move_cap);
-                Move.moveAttempt(state, moves, current_square, dir, -1, 1, 2, move_cap);
-                Move.moveAttempt(state, moves, current_square, dir, -1, 0, 2, move_cap);
-                Move.moveAttempt(state, moves, current_square, dir, -1, -1, 2, move_cap);
-                Move.moveAttempt(state, moves, current_square, dir, 0, -1, 2, move_cap);
-                Move.moveAttempt(state, moves, current_square, dir, 1, -1, 2, move_cap);
-
-                // Straight down
-                Move.moveAttempt(state, moves, current_square, dir, 0, 0, 1, move_cap);
-                // Straight up
-                Move.moveAttempt(state, moves, current_square, dir, 0, 0, 3, move_cap);
-            }
-            // Levels 1 and 3 moves (only back to level 2)
-            else
-            {
-                Move.moveAttempt(state, moves, current_square, dir, 0, 0, 2, regular);
-            }
-
-            return moves;
-        }
+			if (current.board == 3)
+			{
+				dictMoves = MoveDictionary["TopKing"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, move_cap);
+			}
+			else if (current.board == 2)
+			{
+				dictMoves = MoveDictionary["MidKing"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, move_cap);
+			}
+			else
+			{
+				dictMoves = MoveDictionary["BotKing"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, move_cap);
+			}
+			return moves;
+		}
     }
 }
 

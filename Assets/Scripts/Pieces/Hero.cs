@@ -4,79 +4,37 @@ using UnityEngine;
 
 namespace Dragonchess
 {
-    /* ----------- Hero ------------
+	using static Move;
+	using static MoveDict;
+	/* ----------- Hero ------------
      * 
      */
-    public class Hero : Piece
+	public class Hero : Piece
     {
         public Hero() : base(PieceType.Hero) { nameChar = "H"; value = 10; }
         public override List<Move> GetMoves(Gamestate state)
         {
-            List<Move> moves = new List<Move>();
-            Square current_square = this.pos;
-            Layer layer = current_square.layer;
-            int dir;
+			List<Move> moves = new List<Move>();
+			List<(int, int, int)> dictMoves;
+			Square current = this.pos;
 
-            // Definition of "forward, left, right" changes based on piece color
-            if (this.color == Color.White)
-                dir = 1;
-            else
-                dir = 1;
-
-            // Level 2 moves
-            if (layer == Layer.Middle)
-            {
-                // Middle-board diagonal moves (1 or 2 diags)
-                // diag forward-right
-                Move.moveAttempt(state, moves, current_square, dir, 1, 1, 2, move_cap);
-                Move.moveAttempt(state, moves, current_square, dir, 2, 2, 2, move_cap);
-
-                // diag forward-left
-                Move.moveAttempt(state, moves, current_square, dir, 1, -1, 2, move_cap);
-                Move.moveAttempt(state, moves, current_square, dir, 2, -2, 2, move_cap);
-
-                // diag backward-right 
-                Move.moveAttempt(state, moves, current_square, dir, -1, 1, 2, move_cap);
-                Move.moveAttempt(state, moves, current_square, dir, -2, 2, 2, move_cap);
-
-                // diag backward-left
-                Move.moveAttempt(state, moves, current_square, dir, -1, -1, 2, move_cap);
-                Move.moveAttempt(state, moves, current_square, dir, -2, -2, 2, move_cap);
-
-                // Inter-board triagonal moves
-                // triag forward-right and down
-                Move.moveAttempt(state, moves, current_square, dir, 1, 1, 1, move_cap);
-                // triag forward-left and down 
-                Move.moveAttempt(state, moves, current_square, dir, 1, -1, 1, move_cap);
-                // triag backward-right and down 
-                Move.moveAttempt(state, moves, current_square, dir, -1, 1, 1, move_cap);
-                // triag backward-left and down
-                Move.moveAttempt(state, moves, current_square, dir, -1, -1, 1, move_cap);
-
-                // triag forward-right and up
-                Move.moveAttempt(state, moves, current_square, dir, 1, 1, 3, move_cap);
-                // triag forward-left and up 
-                Move.moveAttempt(state, moves, current_square, dir, 1, -1, 3, move_cap);
-                // triag backward-right and up 
-                Move.moveAttempt(state, moves, current_square, dir, -1, 1, 3, move_cap);
-                // triag backward-left and up
-                Move.moveAttempt(state, moves, current_square, dir, -1, -1, 3, move_cap);
-            }
-
-            // Level 1 or 3 moves
-            if (layer == Layer.Upper || layer == Layer.Lower)
-            {
-                // triag forward-right
-                Move.moveAttempt(state, moves, current_square, dir, 1, 1, 2, move_cap);
-                // triag forward-left
-                Move.moveAttempt(state, moves, current_square, dir, 1, -1, 2, move_cap);
-                // triag backward-right
-                Move.moveAttempt(state, moves, current_square, dir, -1, 1, 2, move_cap);
-                // triag backward-left
-                Move.moveAttempt(state, moves, current_square, dir, -1, -1, 2, move_cap);
-            }
-            return moves;
-        }
+			if (current.board == 3)
+			{
+				dictMoves = MoveDictionary["TopHero"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, move_cap);
+			}
+			else if (current.board == 2)
+			{
+				dictMoves = MoveDictionary["MidHero"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, move_cap);
+			}
+			else
+			{
+				dictMoves = MoveDictionary["BotHero"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, move_cap);
+			}
+			return moves;
+		}
     }
 }
 

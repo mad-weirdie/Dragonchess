@@ -4,58 +4,37 @@ using UnityEngine;
 
 namespace Dragonchess
 {
-    /* ----------- Cleric ------------
+	using static Move;
+	using static MoveDict;
+	/* ----------- Cleric ------------
      * 
      */
-    public class Cleric : Piece
+	public class Cleric : Piece
     {
         public Cleric() : base(PieceType.Cleric) { nameChar = "C"; value = 30; }
         public override List<Move> GetMoves(Gamestate state)
         {
-            List<Move> moves = new List<Move>();
-            Square current_square = this.pos;
-            Layer layer = current_square.layer;
-            int dir;
+			List<Move> moves = new List<Move>();
+			List<(int, int, int)> dictMoves;
+			Square current = this.pos;
 
-            // Definition of "forward, left, right" changes based on piece color
-            if (this.color == Color.White)
-                dir = 1;
-            else
-                dir = 1;
-
-            int layer_num;
-            if (layer == Layer.Upper)
-                layer_num = 3;
-            else if (layer == Layer.Middle)
-                layer_num = 2;
-            else
-                layer_num = 1;
-
-            // ANY LEVEL: King-esque moves
-            Move.moveAttempt(state, moves, current_square, dir, 1, 0, layer_num, move_cap);
-            Move.moveAttempt(state, moves, current_square, dir, 1, 1, layer_num, move_cap);
-            Move.moveAttempt(state, moves, current_square, dir, 0, 1, layer_num, move_cap);
-            Move.moveAttempt(state, moves, current_square, dir, -1, 1, layer_num, move_cap);
-            Move.moveAttempt(state, moves, current_square, dir, -1, 0, layer_num, move_cap);
-            Move.moveAttempt(state, moves, current_square, dir, -1, -1, layer_num, move_cap);
-            Move.moveAttempt(state, moves, current_square, dir, 0, -1, layer_num, move_cap);
-            Move.moveAttempt(state, moves, current_square, dir, 1, -1, layer_num, move_cap);
-
-            if (layer == Layer.Middle)
-            {
-                // Move up
-                Move.moveAttempt(state, moves, current_square, dir, 0, 0, 3, move_cap);
-                // Move down
-                Move.moveAttempt(state, moves, current_square, dir, 0, 0, 1, move_cap);
-            }
-            else
-            {
-                // Move back to middle layer
-                Move.moveAttempt(state, moves, current_square, dir, 0, 0, 2, move_cap);
-            }
-
-            return moves;
-        }
+			if (current.board == 3)
+			{
+				dictMoves = MoveDictionary["TopCleric"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, move_cap);
+			}
+			else if (current.board == 2)
+			{
+				dictMoves = MoveDictionary["MidCleric"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, move_cap);
+			}
+			else
+			{
+				dictMoves = MoveDictionary["BotCleric"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, move_cap);
+			}
+			return moves;
+		}
     }
 }
 

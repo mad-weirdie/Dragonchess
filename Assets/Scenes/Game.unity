@@ -2648,6 +2648,7 @@ GameObject:
   - component: {fileID: 1337925268}
   - component: {fileID: 1337925267}
   - component: {fileID: 1337925269}
+  - component: {fileID: 1337925270}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -2748,6 +2749,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MC: {fileID: 1337925267}
   G: {fileID: 1337925266}
+--- !u!114 &1337925270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1337925264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e79bfd47f17936f479f07aabdbe7c7e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1355679486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3337,9 +3350,9 @@ MonoBehaviour:
   - {fileID: 2100000, guid: bae7065e98722fc44a13a9a301057767, type: 2}
   - {fileID: 2100000, guid: 4ab08147704f3634aac65ab8b2d6f13c, type: 2}
   - {fileID: 2100000, guid: 6e12877ba7149c94d8e3852f0d2868e4, type: 2}
-  - {fileID: 2100000, guid: 0009f848a5d047e4da6d2ebfe777863d, type: 2}
-  - {fileID: 2100000, guid: 9c499cc27a677fb4d9bc059f228be1bb, type: 2}
-  - {fileID: 2100000, guid: 2c6ad1b17fb85ee40ba3095794b5aff1, type: 2}
+  - {fileID: 2100000, guid: c0c0a5ba9b758f641b572a03f99b4ce7, type: 2}
+  - {fileID: 2100000, guid: a94bb69e4b6847c4aab7189dc7f6d9dc, type: 2}
+  - {fileID: 2100000, guid: c5bb68ee21d674c43977e6022914e1c0, type: 2}
   - {fileID: 2100000, guid: 86a04a136c254964cb4c96be36fb1edc, type: 2}
   - {fileID: 2100000, guid: 272188fd1d04b124084e7e0cd5a64ae3, type: 2}
   - {fileID: 2100000, guid: 888e5a0ff11c67240a22a7c3b98f2197, type: 2}

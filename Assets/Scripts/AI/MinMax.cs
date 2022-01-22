@@ -105,7 +105,6 @@ namespace Dragonchess
 				isMaximizing = false;
 
 			int best = minimax(minimaxTree.root, 0, 2, isMaximizing, int.MinValue, int.MaxValue);
-			MonoBehaviour.print("Best: " + best + "root: " + minimaxTree.root.value);
 
 			foreach (Node child in minimaxTree.root.children)
 			{

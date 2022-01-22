@@ -5,6 +5,7 @@ using System.IO;
 
 namespace Dragonchess
 {
+	using static MoveDict;
 	public enum PieceType
 	{
 		Sylph, Griffon, Dragon, Warrior, Oliphant,
@@ -18,6 +19,7 @@ namespace Dragonchess
 		public static MoveType regular = MoveType.Regular;
 		public static MoveType move_cap = MoveType.MoveOrCapture;
 		public static MoveType swoop = MoveType.Swoop;
+
 
 		public bool frozen;     // is frozen by the basilisk
 		public int value;       // piece value (worth)
@@ -100,7 +102,7 @@ namespace Dragonchess
 			this.pos.occupied = true;
 			s.piece = this;
 
-			if (s.board == state.middleBoard)
+			if (s.board == state.middleBoard.layer_int_val)
 			{
 				if (state.lowerBoard.squares[s.row, s.col].occupied)
 				{

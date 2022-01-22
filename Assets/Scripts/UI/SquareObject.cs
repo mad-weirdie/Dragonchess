@@ -10,7 +10,7 @@ namespace Dragonchess
         public Material properMaterial;
         public PieceObject piece;
         public GameObject dot;
-        public Board board;
+        public int board;
         public int row;
         public int col;
     }

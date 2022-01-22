@@ -96,6 +96,8 @@ namespace Dragonchess
 				GFF.DoNext(state);
 			else
 				state.ActivePlayer.GetMove(state);
+			SimpleState s = new SimpleState(state);
+			SimpleState.PrintState(state);
 		}
 
 		// User hits left arrow key: undo move
@@ -111,7 +113,6 @@ namespace Dragonchess
 				UnlogMove(prev.piece.player);
 				SwitchTurn(state);
 			}
-			PrintState(state, 99);
 		}
 
 		public static void OnMoveReceived(Gamestate state, Player player, Move move)
@@ -127,6 +128,9 @@ namespace Dragonchess
 				player.prevMove = move;
 				LogMove(player, IsCheck(state, state.EnemyPlayer));
 				SwitchTurn(state);
+				if (state.ActivePlayer.type == PlayerType.AI &&
+					state.EnemyPlayer.type == PlayerType.Human)
+					state.ActivePlayer.GetMove(state);
 			}
 		}
 

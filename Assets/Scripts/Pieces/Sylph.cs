@@ -4,7 +4,9 @@ using UnityEngine;
 
 namespace Dragonchess
 {
-    /* ----------- Sylph ------------
+	using static Move;
+	using static MoveDict;
+	/* ----------- Sylph ------------
          * On level 3:
          *  i)  can move one step diagonally forward or capture one step
          *      straight forward
@@ -14,55 +16,43 @@ namespace Dragonchess
          *  i)  can move to the square directly above (on level 3) or to one of the player's
          *      six Sylph starting squares
          */
-    public class Sylph : Piece
+	public class Sylph : Piece
     {
         public Sylph() : base(PieceType.Sylph) { nameChar = "S"; value = 1; }
 
         public override List<Move> GetMoves(Gamestate state)
         {
-            List<Move> moves = new List<Move>();
-            Square current_square = this.pos;
-            Layer layer = current_square.layer;
-            int dir;
+			List<Move> moves = new List<Move>();
+			List<(int, int, int)> dictMoves;
+			Square current = this.pos;
 
-            // Definition of "forward, left, right" changes based on piece color
-            if (this.color == Color.White)
-                dir = 1;
-            else
-                dir = -1;
+			if (this.color == Color.White && current.board == 3)
+			{
+				dictMoves = MoveDictionary["TopWSylph"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, regular);
+				dictMoves = MoveDictionary["TopWSylphTake"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, capture);
+			}
+			else if (this.color == Color.Black && current.board == 3)
+			{
+				dictMoves = MoveDictionary["TopBSylph"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, regular);
+				dictMoves = MoveDictionary["TopBSylphTake"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, capture);
+			}
+			else if (this.color == Color.White && current.board == 2)
+			{
+				dictMoves = MoveDictionary["MidWSylph"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, regular);
+			}
+			else if (this.color == Color.Black && current.board == 2)
+			{
+				dictMoves = MoveDictionary["MidBSylph"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, regular);
+			}
 
-            // Level 3 moves
-            if (layer == Layer.Upper)
-            {
-                // Move only: left forward diagonal
-                Move.moveAttempt(state, moves, current_square, dir, 1, -1, 3, regular);
-                // Move only: right forward diagonal
-                Move.moveAttempt(state, moves, current_square, dir, 1, 1, 3, regular);
-                // Capture: one forward
-                Move.moveAttempt(state, moves, current_square, dir, 1, 0, 3, capture);
-                // Capture: one down
-                Move.moveAttempt(state, moves, current_square, dir, 0, 0, 2, capture);
-            }
-            else if (layer == Layer.Middle)
-            {
-                // Move directly up
-                Move.moveAttempt(state, moves, current_square, dir, 0, 0, 3, regular);
-
-                // Move to any of the starting Sylph locations
-                for (int i = 0; i < Board.width; i += 2)
-                {
-                    int col_diff = i - current_square.col;
-                    int row_diff;
-                    if (this.color == Color.White)
-                        row_diff = 1 - current_square.row;
-                    else
-                        row_diff = 7 - current_square.row;
-                    Move.moveAttempt(state, moves, current_square, 1, row_diff, col_diff, 3, regular);
-                }
-            }
-
-            return moves;
-        }
+			return moves;
+		}
     }
 }
 

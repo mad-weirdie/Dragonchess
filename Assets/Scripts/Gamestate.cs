@@ -96,12 +96,12 @@ namespace Dragonchess
 			// Copy the pieces over for P1
 			foreach (Piece p in state.P1.pieces)
 			{
-				Piece piece = Piece.NewPiece(copy, (int)p.type, copy.P1, p.pos.board.layer_int_val, p.pos.row, p.pos.col);
+				Piece piece = Piece.NewPiece(copy, (int)p.type, copy.P1, p.pos.board, p.pos.row, p.pos.col);
 			}
 			// Copy the pieces over for P2
 			foreach (Piece p in state.P2.pieces)
 			{
-				Piece piece = Piece.NewPiece(copy, (int)p.type, copy.P2, p.pos.board.layer_int_val, p.pos.row, p.pos.col);
+				Piece piece = Piece.NewPiece(copy, (int)p.type, copy.P2, p.pos.board, p.pos.row, p.pos.col);
 			}
 
 			foreach (Piece p in state.P1.pieces)
@@ -159,9 +159,9 @@ namespace Dragonchess
 						}
 						else
 						{
-							row += "-";
+							row += ".";
 						}
-						row += String.Format("  ");
+						row += String.Format(" ");
 					}
 					row += String.Format("\n");
 					file.WriteLine(row);

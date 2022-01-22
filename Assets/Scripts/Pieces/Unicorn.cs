@@ -4,53 +4,26 @@ using UnityEngine;
 
 namespace Dragonchess
 {
-    /* ----------- Unicorn ------------
+	using static Move;
+	using static MoveDict;
+	/* ----------- Unicorn ------------
      * Moves and captures like a chess Knight - level 2 only
      */
-    public class Unicorn : Piece
+	public class Unicorn : Piece
     {
         public Unicorn() : base(PieceType.Unicorn) { nameChar = "U"; value = 3; }
 
         public override List<Move> GetMoves(Gamestate state)
         {
-            List<Move> moves = new List<Move>();
-            Square current_square = this.pos;
-            Layer layer = current_square.layer;
-            int dir;
+			List<Move> moves = new List<Move>();
+			List<(int, int, int)> dictMoves;
+			Square current = this.pos;
 
-            // Definition of "forward, left, right" changes based on piece color
-            if (this.color == Color.White)
-                dir = 1;
-            else
-                dir = -1;
-            
-            // forward-right L
-            Move.moveAttempt(state, moves, current_square, dir, 2, 1, 2, regular);
-            Move.moveAttempt(state, moves, current_square, dir, 2, 1, 2, capture);
-            // right-forward L
-            Move.moveAttempt(state, moves, current_square, dir, 1, 2, 2, regular);
-            Move.moveAttempt(state, moves, current_square, dir, 1, 2, 2, capture);
-            // forward-left L
-            Move.moveAttempt(state, moves, current_square, dir, 2, -1, 2, regular);
-            Move.moveAttempt(state, moves, current_square, dir, 2, -1, 2, capture);
-            // left-forward L
-            Move.moveAttempt(state, moves, current_square, dir, 1, -2, 2, regular);
-            Move.moveAttempt(state, moves, current_square, dir, 1, -2, 2, capture);
-            // backward-right L
-            Move.moveAttempt(state, moves, current_square, dir, -2, 1, 2, regular);
-            Move.moveAttempt(state, moves, current_square, dir, -2, 1, 2, capture);
-            // right-backward L
-            Move.moveAttempt(state, moves, current_square, dir, -1, 2, 2, regular);
-            Move.moveAttempt(state, moves, current_square, dir, -1, 2, 2, capture);
-            // backward-left L
-            Move.moveAttempt(state, moves, current_square, dir, -2, -1, 2, regular);
-            Move.moveAttempt(state, moves, current_square, dir, -2, -1, 2, capture);
-            // left-backward L
-            Move.moveAttempt(state, moves, current_square, dir, -1, -2, 2, regular);
-            Move.moveAttempt(state, moves, current_square, dir, -1, -2, 2, capture);
+			dictMoves = MoveDictionary["Unicorn"][current.board, current.row, current.col];
+			AddMoves(state, dictMoves, moves, current, regular);
 
-            return moves;
-        }
+			return moves;
+		}
     }
 }
 

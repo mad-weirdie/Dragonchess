@@ -5,7 +5,9 @@ using UnityEngine;
 
 namespace Dragonchess
 {
-    /* ----------- Elemental ------------
+	using static Move;
+	using static MoveDict;
+	/* ----------- Elemental ------------
      * On level 1:
         - can move and capture one or two steps orthogonally
         - can move one step diagonally;
@@ -16,81 +18,36 @@ namespace Dragonchess
         - can move and capture in the following pattern: the square directly
           below on level 1 followed by one step orthogonally.
      */
-    public class Elemental : Piece
+	public class Elemental : Piece
     {
         public Elemental() : base(PieceType.Elemental) { nameChar = "E"; value = 4; }
         public override List<Move> GetMoves(Gamestate state)
         {
-            List<Move> moves = new List<Move>();
-            Square current_square = this.pos;
-            Layer layer = current_square.layer;
-            int dir;
+			List<Move> moves = new List<Move>();
+			List<(int, int, int)> dictMoves;
+			Square current = this.pos;
 
-            // Definition of "forward, left, right" changes based on piece color
-            if (this.color == Color.White)
-                dir = 1;
-            else
-                dir = -1;
+			if (current.board == 1)
+			{
+				List<string> slideTypes = new List<string> { "forward", "backward", "left", "right" };
 
-            int[] orthog_shift = { 1, 2, -1, -2 };
+				dictMoves = MoveDictionary["BotElemental"][current.board, current.row, current.col];
+				List<(int, int, int)> blocked = GetBlocked(state, dictMoves, slideTypes, current);
+				AddMoves(state, dictMoves, moves, current, move_cap);
+				RemoveBlocked(state, blocked, moves);
 
-            if (layer == Layer.Lower)
-            {
-                // Move and capture one or two steps orthogonally
-                foreach (int shift in orthog_shift)
-                {
-                    if (Math.Abs(shift) == 2)
-                    {
-                        if (!Move.IsBlocked(state, current_square, dir, 0, shift / 2, 1, this.color))
-                        {
-                            Move.moveAttempt(state, moves, current_square, dir, 0, shift, 1, regular);
-                            Move.moveAttempt(state, moves, current_square, dir, 0, shift, 1, capture);
-                        }
-                        if (!Move.IsBlocked(state, current_square, dir, shift / 2, 0, 1, this.color))
-                        {
-                            Move.moveAttempt(state, moves, current_square, dir, shift, 0, 1, regular);
-                            Move.moveAttempt(state, moves, current_square, dir, shift, 0, 1, capture);
-                        }
-                    }
-                    else
-                    {
-                        Move.moveAttempt(state, moves, current_square, dir, shift, 0, 1, regular);
-                        Move.moveAttempt(state, moves, current_square, dir, shift, 0, 1, capture);
-                        Move.moveAttempt(state, moves, current_square, dir, 0, shift, 1, regular);
-                        Move.moveAttempt(state, moves, current_square, dir, 0, shift, 1, capture);
-                    }
+				dictMoves = MoveDictionary["BotElementalSlide"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, regular);
+			}
+			else if (current.board == 2)
+			{
+				dictMoves = MoveDictionary["MidElemental"][current.board, current.row, current.col];
+				if (!state.lowerBoard.squares[current.row, current.col].occupied)
+					AddMoves(state, dictMoves, moves, current, move_cap);
+			}
 
-                    // Capture in the following pattern: one step orthogonally
-                    // followed by the square directly above on level 2.
-                    if (Math.Abs(shift) == 1)
-                    {
-                        Move.moveAttempt(state, moves, current_square, dir, shift, 0, 2, capture);
-                        Move.moveAttempt(state, moves, current_square, dir, 0, shift, 2, capture);
-                    }
-                }
-                // Can MOVE one step diagonally
-                Move.moveAttempt(state, moves, current_square, dir, 1, 1, 1, regular);
-                Move.moveAttempt(state, moves, current_square, dir, 1, -1, 1, regular);
-                Move.moveAttempt(state, moves, current_square, dir, -1, 1, 1, regular);
-                Move.moveAttempt(state, moves, current_square, dir, -1, -1, 1, regular);
-            }
-            // On level 2:
-            // - can move and capture in the following pattern: the square directly
-            //   below on level 1 followed by one step orthogonally.
-            if (layer == Layer.Middle)
-            {
-                Move.moveAttempt(state, moves, current_square, dir, 1, 0, 1, regular);
-                Move.moveAttempt(state, moves, current_square, dir, 0, 1, 1, regular);
-                Move.moveAttempt(state, moves, current_square, dir, -1, 0, 1, regular);
-                Move.moveAttempt(state, moves, current_square, dir, 0, -1, 1, regular);
-
-                Move.moveAttempt(state, moves, current_square, dir, 1, 0, 1, capture);
-                Move.moveAttempt(state, moves, current_square, dir, 0, 1, 1, capture);
-                Move.moveAttempt(state, moves, current_square, dir, -1, 0, 1, capture);
-                Move.moveAttempt(state, moves, current_square, dir, 0, -1, 1, capture);
-            }
-            return moves;
-        }
+			return moves;
+		}
     }
 }
 

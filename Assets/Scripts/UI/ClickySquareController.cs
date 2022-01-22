@@ -35,15 +35,15 @@ namespace Dragonchess
                     yCoord = square_width * r;
                     Vector3 pos = new Vector2(xCoord, yCoord);
 
-                    AddClickyAt(UpperBoard, Upper, pos, r, c);
-                    AddClickyAt(MiddleBoard, Middle, pos, r, c);
-                    AddClickyAt(LowerBoard, Lower, pos, r, c);
+                    AddClickyAt(3, Upper, pos, r, c);
+                    AddClickyAt(2, Middle, pos, r, c);
+                    AddClickyAt(1, Lower, pos, r, c);
                 }
             }
             
         }
 
-        public void AddClickyAt(Board board, GameObject boardObj, Vector3 pos, int row, int col)
+        public void AddClickyAt(int board, GameObject boardObj, Vector3 pos, int row, int col)
         {
             GameObject newButton = Instantiate(clickySquarePrefab, boardObj.transform, false);
             newButton.GetComponent<RectTransform>().anchoredPosition = pos;

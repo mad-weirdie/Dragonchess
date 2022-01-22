@@ -10,7 +10,7 @@ namespace Dragonchess
 
         public int row;
         public int col;
-        public Board board;
+        public int board;
         public Layer layer;
 
         public Color color;
@@ -32,7 +32,7 @@ namespace Dragonchess
         {
             row = r;
             col = c;
-            board = b;
+            board = b.layer_int_val;
             occupied = false;
 
             if (b.layer_int_val == 3)
@@ -57,7 +57,7 @@ namespace Dragonchess
 
         public string SquareName()
         {
-            return (board.layer_int_val) + GetColChar() + (row+1);
+            return (board) + GetColChar() + (row+1);
         }
 
         public string GetColChar()

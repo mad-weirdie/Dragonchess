@@ -41,7 +41,7 @@ namespace Dragonchess
 				Player player = piece.player;
 				PieceObject warrior = square.piece;
 				Destroy(warrior.gameObject);
-				int level = s.board.layer_int_val;
+				int level = s.board;
 
 				// Add the new hero piece, linking it to a piece GameObject as well
 				Piece hero = NewPiece(state, (int)PieceType.Hero, player, level, s.row, s.col);

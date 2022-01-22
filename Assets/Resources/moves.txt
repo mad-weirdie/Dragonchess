@@ -1,0 +1,59 @@
+Sylph (2)
+
+TOP (3)
+- TopWSylph
+- TopBSylph
+- TopWSTake
+- TopVSTake
+	
+MIDDLE (2)
+- MidWSylph
+- MidBSylph
+
+Griffin (2)
+- TopGrif
+- MidGrif
+- Dragon
+- SwoopDragon
+
+- Oliphant
+
+- Unicorn
+
+- TopHero
+- MidHero
+- BotHero
+- Thief
+- TopCleric
+- MidCleric
+- BotCleric
+- TopMage
+- MidMage
+- BotMage
+- TopKing
+- MidKing
+- BotKing
+
+- TopPaladin
+- MidPaladin
+- BotPaladin
+- WWarrior
+- BWarrior
+- WBasilisk
+- BBasilisk
+
+Elemental (2)
+- BotElemental
+- BotElementalTake
+- MidElemental
+
+Dwarf (2)
+- BotWDwarf
+- BotWDwarfTake
+- BotBDwarf
+- BotBDwarfTake
+- MidWDwarf
+- MidWDwarfTake
+- MidBDwarf
+- MidBDwarfTake
+

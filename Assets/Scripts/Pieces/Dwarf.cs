@@ -4,56 +4,51 @@ using UnityEngine;
 
 namespace Dragonchess
 {
-    /* ----------- Dwarf ------------
+	using static Move;
+	using static MoveDict;
+	/* ----------- Dwarf ------------
      * 
      */
-    public class Dwarf : Piece
+	public class Dwarf : Piece
     {
         public Dwarf() : base(PieceType.Dwarf) { nameChar = "D"; value = 2; }
         public override List<Move> GetMoves(Gamestate state)
         {
-            List<Move> moves = new List<Move>();
-            Square current_square = this.pos;
-            Layer layer = current_square.layer;
-            int dir;
+			List<Move> moves = new List<Move>();
+			List<(int, int, int)> dictMoves;
+			Square current = this.pos;
 
-            // Definition of "forward, left, right" changes based on piece color
-            if (this.color == Color.White)
-                dir = 1;
-            else
-                dir = -1;
+			if (this.color == Color.White && current.board == 2)
+			{
+				dictMoves = MoveDictionary["TopWDwarf"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, regular);
+				dictMoves = MoveDictionary["TopWDwarfTake"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, capture);
+			}
+			else if (this.color == Color.Black && current.board == 2)
+			{
+				dictMoves = MoveDictionary["TopBDwarf"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, regular);
+				dictMoves = MoveDictionary["TopBDwarfTake"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, capture);
+			}
+			else if (this.color == Color.White && current.board == 1)
+			{
+				dictMoves = MoveDictionary["BotWDwarf"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, regular);
+				dictMoves = MoveDictionary["BotWDwarfTake"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, capture);
+			}
+			else if (this.color == Color.Black && current.board == 1)
+			{
+				dictMoves = MoveDictionary["BotBDwarf"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, regular);
+				dictMoves = MoveDictionary["BotBDwarfTake"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, capture);
+			}
 
-            int layer_num;
-            if (layer == Layer.Upper)
-                layer_num = 3;
-            else if (layer == Layer.Middle)
-                layer_num = 2;
-            else
-                layer_num = 1;
-
-            // Can move one step straight forward or sideways (layers 1 and 2)
-            // Can CAPTURE one step diagonally forward (layers 1 and 2)
-            if (layer == Layer.Lower || layer == Layer.Middle)
-            {
-                Move.moveAttempt(state, moves, current_square, dir, 1, 0, layer_num, regular);
-                Move.moveAttempt(state, moves, current_square, dir, 0, 1, layer_num, regular);
-                Move.moveAttempt(state, moves, current_square, dir, 0, -1, layer_num, regular);
-
-                Move.moveAttempt(state, moves, current_square, dir, 1, 1, layer_num, capture);
-                Move.moveAttempt(state, moves, current_square, dir, 1, -1, layer_num, capture);
-            }
-            // Level 1: - can CAPTURE on the square directly above on level 2.
-            if (layer == Layer.Lower)
-            {
-                Move.moveAttempt(state, moves, current_square, dir, 0, 0, 2, capture);
-            }
-            // Level 2: - can MOVE TO the square directly below on level 1
-            if (layer == Layer.Middle)
-            {
-                Move.moveAttempt(state, moves, current_square, dir, 0, 0, 1, regular);
-            }
-            return moves;
-        }
+			return moves;
+		}
     }
 }
 

@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Dragonchess
 {
+	using static MoveDict;
     public enum MoveType { Regular, Capture, MoveOrCapture, Swoop, NULL };
 
     public class Move
@@ -53,9 +54,75 @@ namespace Dragonchess
                 return state.lowerBoard;
         }
 
-        // Check whether or not we can move to a particular square.
+		public static void AddMoves(Gamestate state, List<(int,int,int)> possibleMoves, List<Move> moves, Square current, MoveType type)
+		{
+			if(type == MoveType.MoveOrCapture)
+			{
+				AddMoves(state, possibleMoves, moves, current, MoveType.Regular);
+				AddMoves(state, possibleMoves, moves, current, MoveType.Capture);
+				return;
+			}
+
+			foreach ((int b, int r, int c) in possibleMoves) {
+				Board newBoard = GetBoard(state, b);
+				Square end = newBoard.squares[r, c];
+				Move next_move = new Move(current.piece, current, end, type);
+
+				if (next_move.type == MoveType.Capture || next_move.type == MoveType.Swoop)
+					next_move.captured = next_move.end.piece;
+
+				if (IsValidMove(next_move))
+				{
+					moves.Add(next_move);
+				}
+			}
+		}
+
+		public static List<(int,int,int)> GetBlocked(Gamestate state, List<(int,int,int)> moves, List<string> slideTypes, Square current)
+		{
+			List<(int, int, int)> illegal = new List<(int, int, int)>();
+
+			foreach (string t in slideTypes)
+			{
+				bool blocked = false;
+				foreach (var x in MoveDictionary[t][current.board, current.row, current.col])
+				{
+					if (blocked)
+					{
+						illegal.Add(x);
+					}
+					else
+					{
+						int b = x.Item1;
+						int r = x.Item2;
+						int c = x.Item3;
+						Board board = GetBoard(state, b);
+						if (board.squares[r, c].occupied)
+						{
+							blocked = true;
+						}
+					}
+				}
+			}
+			return illegal;
+		}
+
+		public static void RemoveBlocked(Gamestate state, List<(int,int,int)> blocked, List<Move> moves)
+		{
+			List<Move> toRemove = new List<Move>();
+			foreach(Move move in moves)
+			{
+				var tup = (move.end.board, move.end.row, move.end.col);
+				if (blocked.Contains(tup))
+					toRemove.Add(move);
+			}
+			foreach (Move illegal in toRemove)
+				moves.Remove(illegal);
+		}
+
+		// Check whether or not we can move to a particular square.
 		// If so, add the move to the argument "moves" passed in.
-        public static void moveAttempt(Gamestate state, List<Move> moves, Square current,
+		public static void moveAttempt(Gamestate state, List<Move> moves, Square current,
         int dir, int rowShift, int colShift, int board, MoveType type)
         {
             if (type == MoveType.MoveOrCapture)
@@ -155,16 +222,16 @@ namespace Dragonchess
 			Board startBoard;
 			Board endBoard;
 
-			if (move.start.board.layer_int_val == 3)
+			if (move.start.board == 3)
 				startBoard = state.upperBoard;
-			else if (move.start.board.layer_int_val == 2)
+			else if (move.start.board == 2)
 				startBoard = state.middleBoard;
 			else
 				startBoard = state.lowerBoard;
 
-			if (move.end.board.layer_int_val == 3)
+			if (move.end.board == 3)
 				endBoard = state.upperBoard;
-			else if (move.end.board.layer_int_val == 2)
+			else if (move.end.board == 2)
 				endBoard = state.middleBoard;
 			else
 				endBoard = state.lowerBoard;
@@ -179,9 +246,9 @@ namespace Dragonchess
 			{
 				Board capturedBoard;
 
-				if (move.end.board.layer_int_val == 3)
+				if (move.end.board == 3)
 					capturedBoard = state.upperBoard;
-				else if (move.end.board.layer_int_val == 2)
+				else if (move.end.board == 2)
 					capturedBoard = state.middleBoard;
 				else
 					capturedBoard = state.lowerBoard;

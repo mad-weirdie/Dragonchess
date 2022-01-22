@@ -4,38 +4,37 @@ using UnityEngine;
 
 namespace Dragonchess
 {
-    /* ----------- Warrior ------------
+	using static Move;
+	using static MoveDict;
+	/* ----------- Warrior ------------
      * 
      */
-    public class Warrior : Piece
+	public class Warrior : Piece
     {
         public Warrior() : base(PieceType.Warrior) { nameChar = "W"; value = 1; }
 
         public override List<Move> GetMoves(Gamestate state)
         {
-            List<Move> moves = new List<Move>();
-            Square current_square = this.pos;
-            Layer layer = current_square.layer;
-            int dir;
+			List<Move> moves = new List<Move>();
+			List<(int, int, int)> dictMoves;
+			Square current = this.pos;
 
-            // Definition of "forward, left, right" changes based on piece color
-            if (this.color == Color.White)
-                dir = 1;
-            else
-                dir = -1;
-
-            // Level 2 moves
-            if (layer == Layer.Middle)
-            {
-                // Move only: forward
-                Move.moveAttempt(state, moves, current_square, dir, 1, 0, 2, regular);
-                // Capture only: forward-left
-                Move.moveAttempt(state, moves, current_square, dir, 1, -1, 2, capture);
-                // Capture only: forward-right
-                Move.moveAttempt(state, moves, current_square, dir, 1, 1, 2, capture);
-            }
-            return moves;
-        }
+			if (this.color == Color.White)
+			{
+				dictMoves = MoveDictionary["WWarrior"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, regular);
+				dictMoves = MoveDictionary["WWarriorTake"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, capture);
+			}
+			else
+			{
+				dictMoves = MoveDictionary["BWarrior"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, regular);
+				dictMoves = MoveDictionary["BWarriorTake"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, capture);
+			}
+			return moves;
+		}
     }
 }
 

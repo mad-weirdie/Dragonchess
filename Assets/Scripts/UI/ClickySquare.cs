@@ -10,7 +10,7 @@ namespace Dragonchess
         public GameController GC;
         public SquareObject square;
 
-        Board m_board;
+        int m_board;
 
         public void ClickSquare()
         {
@@ -21,7 +21,15 @@ namespace Dragonchess
             if (state.ActivePlayer.type == PlayerType.Human)
             {
                 GameObject selected = square.gameObject;
-                if (square.board.squares[square.row, square.col].occupied)
+				Board board;
+				if (square.board == 3)
+					board = state.upperBoard;
+				else if (square.board == 2)
+					board = state.middleBoard;
+				else
+					board = state.lowerBoard;
+
+                if (board.squares[square.row, square.col].occupied)
                 {
                     selected = square.piece.gameObject;
                 }
@@ -29,7 +37,7 @@ namespace Dragonchess
             }
         }
 
-        public Board board
+        public int board
         {
             get
             {

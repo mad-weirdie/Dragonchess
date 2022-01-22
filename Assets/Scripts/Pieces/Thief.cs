@@ -4,82 +4,28 @@ using UnityEngine;
 
 namespace Dragonchess
 {
-    /* ----------- Thief ------------
+	using static Move;
+	using static MoveDict;
+	/* ----------- Thief ------------
      * 
      */
-    public class Thief : Piece
+	public class Thief : Piece
     {
         public Thief() : base(PieceType.Thief) { nameChar = "T"; value = 5; }
 
         public override List<Move> GetMoves(Gamestate state)
         {
-            List<Move> moves = new List<Move>();
-            Square current_square = this.pos;
-            Layer layer = current_square.layer;
-            int dir = 1;
+			List<Move> moves = new List<Move>();
+			List<(int, int, int)> dictMoves;
+			Square current = this.pos;
 
-            // Bisop-esque moves ------------(CANNOT JUMP) --------------------
+			List<string> slideTypes = new List<string> { "diagUR", "diagUL", "diagDR", "diagDL" };
 
-            // Forward-right diags
-            int r = current_square.row + 1;
-            int c = current_square.col + 1;
-            while (r < Board.height && c < Board.width)
-            {
-                int row_diff = r - current_square.row;
-                int col_diff = c - current_square.col;
-                Move.moveAttempt(state, moves, current_square, dir, row_diff, col_diff, 2, capture);
-                if (Move.IsBlocked(state, current_square, dir, row_diff, col_diff, 2, this.color))
-                    break;
-                Move.moveAttempt(state, moves, current_square, dir, row_diff, col_diff, 2, regular);
-                r++;
-                c++;
-            }
-
-            // Forward-left diags
-            r = current_square.row + 1;
-            c = current_square.col - 1;
-            while (r < Board.height && c >= 0)
-            {
-                int row_diff = r - current_square.row;
-                int col_diff = c - current_square.col;
-                Move.moveAttempt(state, moves, current_square, dir, row_diff, col_diff, 2, capture);
-                if (Move.IsBlocked(state, current_square, dir, row_diff, col_diff, 2, this.color))
-                    break;
-                Move.moveAttempt(state, moves, current_square, dir, row_diff, col_diff, 2, regular);
-                r++;
-                c--;
-            }
-
-            // Backward-right diags
-            r = current_square.row - 1;
-            c = current_square.col + 1;
-            while (r >= 0 && c < Board.width)
-            {
-                int row_diff = r - current_square.row;
-                int col_diff = c - current_square.col;
-                Move.moveAttempt(state, moves, current_square, dir, row_diff, col_diff, 2, capture);
-                if (Move.IsBlocked(state, current_square, dir, row_diff, col_diff, 2, this.color))
-                    break;
-                Move.moveAttempt(state, moves, current_square, dir, row_diff, col_diff, 2, regular);
-                r--;
-                c++;
-            }
-            // backward-left diags
-            r = current_square.row - 1;
-            c = current_square.col - 1;
-            while (r >= 0 && c >= 0)
-            {
-                int row_diff = r - current_square.row;
-                int col_diff = c - current_square.col;
-                Move.moveAttempt(state, moves, current_square, dir, row_diff, col_diff, 2, capture);
-                if (Move.IsBlocked(state, current_square, dir, row_diff, col_diff, 2, this.color))
-                    break;
-                Move.moveAttempt(state, moves, current_square, dir, row_diff, col_diff, 2, regular);
-                r--;
-                c--;
-            }
-
-            return moves;
+			dictMoves = MoveDictionary["Thief"][current.board, current.row, current.col];
+			List<(int, int, int)> blocked = GetBlocked(state, dictMoves, slideTypes, current);
+			AddMoves(state, dictMoves, moves, current, move_cap);
+			RemoveBlocked(state, blocked, moves);
+			return moves;
         }
     }
 }

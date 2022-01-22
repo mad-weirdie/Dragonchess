@@ -137,12 +137,12 @@ namespace Dragonchess
 					else
 						mat = lower_mat;
 
-					AddSquareAt(board, mat, invisible, r, c);
+					AddSquareAt(board.layer_int_val, mat, invisible, r, c);
 				}
 			}
 		}
 
-		public static void AddSquareAt(Board board, Material mat, Material inv, int r, int c)
+		public static void AddSquareAt(int board, Material mat, Material inv, int r, int c)
 		{
 			SquareObject[,] squares = GetSquares(board);
 			GameObject boardObj = GetBoardObject(board);
@@ -166,7 +166,7 @@ namespace Dragonchess
 
 		public static void AddPieceUI(Piece piece)
 		{
-			Board board = piece.pos.board;
+			int board = piece.pos.board;
 			int r = piece.pos.row;
 			int c = piece.pos.col;
 			// New piece GameObject prefab to instantiate
@@ -224,27 +224,27 @@ namespace Dragonchess
 			square.dot = newDot;
 		}
 
-		public static GameObject GetBoardObject(Board board)
+		public static GameObject GetBoardObject(int board)
 		{
-			if (board.layer == Layer.Upper)
+			if (board == 3)
 				return upperBoard;
-			else if (board.layer == Layer.Middle)
+			else if (board == 2)
 				return middleBoard;
 			else
 				return lowerBoard;
 		}
 
-		public static SquareObject[,] GetSquares(Board board)
+		public static SquareObject[,] GetSquares(int board)
 		{
-			if (board.layer == Layer.Upper)
+			if (board == 3)
 				return upperSquares;
-			else if (board.layer == Layer.Middle)
+			else if (board == 2)
 				return middleSquares;
 			else
 				return lowerSquares;
 		}
 
-		public static SquareObject GetSquareAt(Board board, int r, int c)
+		public static SquareObject GetSquareAt(int board, int r, int c)
 		{
 			SquareObject[,] squares = GetSquares(board);
 			return squares[r, c];
@@ -379,7 +379,7 @@ namespace Dragonchess
 			// Highlight all the possible moves generated for a piece
 			foreach (Move move in moves)
 			{
-				Board board = move.end.board;
+				int board = move.end.board;
 				int r = move.end.row;
 				int c = move.end.col;
 
@@ -399,7 +399,7 @@ namespace Dragonchess
 		{
 			foreach (Move move in highlightedMoves)
 			{
-				Board board = move.end.board;
+				int board = move.end.board;
 				int r = move.end.row;
 				int c = move.end.col;
 

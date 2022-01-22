@@ -4,8 +4,10 @@ using UnityEngine;
 
 namespace Dragonchess
 {
-    /* ----------- Basilisk ------------*/
-    public class Basilisk : Piece
+	using static Move;
+	using static MoveDict;
+	/* ----------- Basilisk ------------*/
+	public class Basilisk : Piece
     {
         public Square danger_square;
         public Basilisk() : base(PieceType.Basilisk) { nameChar = "B"; value = 3; }
@@ -69,34 +71,28 @@ namespace Dragonchess
 
         public override List<Move> GetMoves(Gamestate state)
         {
-            List<Move> moves = new List<Move>();
-            Square current_square = this.pos;
-            Layer layer = current_square.layer;
-            int dir;
+			List<Move> moves = new List<Move>();
+			List<(int, int, int)> dictMoves;
+			Square current = this.pos;
 
-            // Definition of "forward, left, right" changes based on piece color
-            if (this.color == Color.White)
-                dir = 1;
-            else
-                dir = -1;
+			if (this.color == Color.White)
+			{
+				dictMoves = MoveDictionary["WBasilisk"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, move_cap);
+				dictMoves = MoveDictionary["WBackwardsBasilisk"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, regular);
+			}
+			else
+			{
+			
+				dictMoves = MoveDictionary["BBasilisk"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, move_cap);
+				dictMoves = MoveDictionary["BBackwardsBasilisk"][current.board, current.row, current.col];
+				AddMoves(state, dictMoves, moves, current, regular);
+			}
 
-            // One step forward (move or capture)
-            Move.moveAttempt(state, moves, current_square, dir, 1, 0, 1, regular);
-            Move.moveAttempt(state, moves, current_square, dir, 1, 0, 1, capture);
-
-            // One step backwards (move only)
-            Move.moveAttempt(state, moves, current_square, dir, -1, 0, 1, regular);
-
-            // Right forward diagonal (move or capture)
-            Move.moveAttempt(state, moves, current_square, dir, 1, 1, 1, regular);
-            Move.moveAttempt(state, moves, current_square, dir, 1, 1, 1, capture);
-
-            // Left forward diagonal (move or capture)
-            Move.moveAttempt(state, moves, current_square, dir, 1, -1, 1, regular);
-            Move.moveAttempt(state, moves, current_square, dir, 1, -1, 1, capture);
-
-            return moves;
-        }
+			return moves;
+		}
     }
 }
 
