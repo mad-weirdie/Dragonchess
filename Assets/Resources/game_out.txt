@@ -1,2 +1,5 @@
-1)	R3b6	RxS3a2
-2)	RxS3c7	R3a3
+1)	G3h3	G3h6
+2)	G3k5	G3e5
+3)	G3i8	RxS3a2
+4)	RxS3a7	R#2a2
+5)	R#2a7	R#2b2

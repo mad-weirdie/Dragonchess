@@ -52,94 +52,23 @@ namespace Dragonchess
 		public static void RemoveIllegal(Gamestate state, Player p, ref List<Move> moves)
 		{
 			List<Move> illegal = new List<Move>();
+			List<Piece> threats;
 
 			foreach (Move m in moves)
 			{
-				if (m.type == MoveType.Capture)
+				Gamestate copy = CopyGamestate(state);
+				DoMove(copy, m, false);
+				threats = ThreatsInRange(copy, p);
+				if (threats.Count != 0)
 				{
-					// Pretend to move attacking piece
-					Piece attacking_piece = m.start.piece;
-					Piece captured_piece = m.end.piece;
-					m.start.occupied = false;
-
-					// Pretend to capture attacked piece
-					attacking_piece.pos = m.end;
-					m.end.occupied = true;
-					m.end.piece = attacking_piece;
-
-					// Remove captured piece from enemy's list of pieces
-					GetEnemy(state, p).pieces.Remove(captured_piece);
-
-					if (IsCheck(state, p))
-					{
+					if (IsCheck(copy, p, threats))
 						illegal.Add(m);
-					}
-
-					// Move attacking piece back to original location
-					m.start.occupied = true;
-					m.start.piece = attacking_piece;
-					m.end.piece = captured_piece;
-					attacking_piece.pos = m.start;
-					captured_piece.pos = m.end;
-
-					// Re-add captured piece back to enemy's list of pieces
-					GetEnemy(state, p).pieces.Add(captured_piece);
 				}
-				else if (m.type == MoveType.Swoop)
-				{
-					// Pretend to capture the attacked piece
-					Piece attacking_piece = m.start.piece;
-					Piece captured_piece = m.end.piece;
-					m.end.occupied = false;
-
-					// Remove captured piece from enemy's list of pieces
-					GetEnemy(state, p).pieces.Remove(captured_piece);
-
-					if (IsCheck(state, p))
-					{
-						illegal.Add(m);
-					}
-					// Un-capture the attacked piece
-					m.end.occupied = true;
-					m.end.piece = captured_piece;
-
-					// Re-add captured piece back to enemy's list of pieces
-					GetEnemy(state, p).pieces.Add(captured_piece);
-				}
-				else if (m.type == MoveType.Regular)
-				{
-					Piece moving_piece = m.start.piece;
-					m.start.occupied = false;
-					m.end.occupied = true;
-					moving_piece.pos = m.end;
-					m.end.piece = moving_piece;
-
-					if (IsCheck(state, p))
-					{
-						illegal.Add(m);
-					}
-
-					m.start.occupied = true;
-					m.end.occupied = false;
-					m.start.piece = moving_piece;
-					moving_piece.pos = m.start;
-					m.end.piece = null;
-				}
-				else
-				{
-					print("ERROR: Unknown move type.");
-				}
+				UndoMove(copy, m, false);
 			}
+
 			foreach (Move illegal_move in illegal)
 				moves.Remove(illegal_move);
-		}
-
-		public bool WouldCheckmate(Gamestate state, Move m)
-		{
-			DoMove(state, m, false);
-			bool isMate = IsCheckmate(state, GetEnemy(state, m.piece.player));
-			UndoMove(state, m, false);
-			return isMate;
 		}
 
 		public static void DoMove(Gamestate state, Move move, bool updateUI)
@@ -166,14 +95,14 @@ namespace Dragonchess
 
 			// Update the Game UI if enabled
 			if (updateUI)
-				GameUI.OnMoveUpdateUI(move);
+				GameUI.OnMoveUpdateUI(state, move);
 
 			// Check for warrior piece promotion
 			if (p.type == PieceType.Warrior)
 				PromoteWarrior(state, move.end, p, updateUI);
 		}
 
-		public void UndoMove(Gamestate state, Move m, bool updateUI = false)
+		public static void UndoMove(Gamestate state, Move m, bool updateUI = false)
 		{
 			Piece p = m.piece;
 
@@ -181,7 +110,6 @@ namespace Dragonchess
 			{
 				// Add the captured piece back to the enemy player's list of pieces
 				Piece cap = m.captured;
-				print("captured: " + cap.type + ": " + cap.pos.SquareName());
 				cap.player.pieces.Add(cap);
 
 				// Move the capturing piece back
@@ -205,6 +133,7 @@ namespace Dragonchess
 				}
 
 				DoMove(state, undoCap, updateUI);
+
 			}
 			else
 			{

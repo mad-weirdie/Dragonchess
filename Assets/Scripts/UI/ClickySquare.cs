@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 using UnityEngine;
 
 namespace Dragonchess
@@ -35,9 +36,10 @@ namespace Dragonchess
                 }
                 ((Human)state.ActivePlayer).MoveSelect(state, selected);
             }
-        }
+			EventSystem.current.SetSelectedGameObject(null);
+		}
 
-        public int board
+		public int board
         {
             get
             {

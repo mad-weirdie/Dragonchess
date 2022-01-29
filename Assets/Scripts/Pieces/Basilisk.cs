@@ -14,60 +14,18 @@ namespace Dragonchess
         public Material frozen_mat;
         Material original_mat;
 
-        public void FreezeSquare(Square s)
-        {
-            /*
-            if (s.occupied)
-            {
-                GameObject p = s.piece.pieceGameObject;
-                if (p.GetComponent<Piece>().color != this.color)
-                {
-                    p.GetComponent<Piece>().frozen = true;
-                    original_mat = p.GetComponent<Renderer>().material;
-                    p.GetComponent<Renderer>().material = frozen_mat;
-                }
-            }*/
-        }
-
-        public void UnfreezeSquare(Square s)
-        {
-            /*
-            if (s.occupied)
-            {
-                GameObject p = s.piece.pieceGameObject;
-                if (p.GetComponent<Piece>().color != this.color)
-                {
-                    p.GetComponent<Piece>().frozen = false;
-                    p.GetComponent<Renderer>().material = original_mat;
-                }
-            }*/
-        }
-
-        public override void MoveTo(Gamestate state, Square s)
-        {
-            /*
-            // Set new position of the piece's GameObject on the board
-            Vector3 pos = s.cubeObject.transform.position;
-            pos.y += 1.0f / GameUI.square_scale;
-            this.pieceGameObject.transform.position = pos;
-            GameObject sObj = this.pos.cubeObject;
-            sObj.GetComponent<Renderer>().material = this.pos.properMaterial;
-
-            // Link piece and square to each other
-            this.pos.occupied = false;
-            this.pos = s;
-            this.pos.occupied = true;
-            s.piece = this;
-
-            // Set proper rendering layer (for the overhead cameras)
-            this.pieceGameObject.layer = s.board.m_layer + 3;
-            foreach (Transform child in this.pieceGameObject.transform)
-                child.gameObject.layer = s.board.m_layer + 3;
-
-            UnfreezeSquare(danger_square);
-            danger_square = state.middleBoard.squares[s.row, s.col];
-            FreezeSquare(danger_square); */
-        }
+		public static bool HasFrozen(Gamestate state, Piece basilisk, Square s)
+		{
+			if (basilisk == null)
+				return false;
+			if (state.boards[2].squares[s.row, s.col].occupied)
+			{
+				Piece p = state.boards[2].squares[s.row, s.col].piece;
+				if (basilisk.color != p.color)
+					return true;
+			}
+			return false;
+		}
 
         public override List<Move> GetMoves(Gamestate state)
         {

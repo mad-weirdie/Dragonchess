@@ -60,6 +60,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "PrintSState",
+                    "type": "Button",
+                    "id": "f4c8417f-fe30-421b-b93b-b5f29b107d84",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -324,6 +332,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "ShowState",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4f161b65-443a-497d-9db3-44d03ed97e74",
+                    "path": "<Keyboard>/#(P)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PrintSState",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

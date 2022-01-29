@@ -1,9 +1,0 @@
-sylph:
-
-
-
-starting positions (white):
-[1,0], [1,2], [1,4], [1,6], [1,8], [1,10]
-
-starting positions (black):
-[6,0], [6,2], [6,4], [6,6], [6,8], [6,10]

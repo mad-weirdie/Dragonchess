@@ -23,6 +23,7 @@ namespace Dragonchess
 		public static Material highlight_2;
 		public static Material highlight_3;
 		public static Material invisible;
+		public static Material frozenMat;
 		public static Material white_pieces;
 		public static Material black_pieces;
 
@@ -69,6 +70,7 @@ namespace Dragonchess
 			invisible = materials[9];
 			white_pieces = materials[10];
 			black_pieces = materials[11];
+			frozenMat = materials[13];
 
 			b_text = black_text;
 			w_text = white_text;
@@ -250,13 +252,13 @@ namespace Dragonchess
 			return squares[r, c];
 		}
 
-		public static void OnMoveUpdateUI(Move move)
+		public static void OnMoveUpdateUI(Gamestate state, Move move)
 		{
 			// Get the associated squares and pieces involved in the move
 			Square start = move.start;
 			Square end = move.end;
 			Piece piece = move.piece;
-			ResetColor(start);
+			ResetSquareColor(start);
 
 			// Get references to the associated GameObjects
 			SquareObject startSquare = GetSquareAt(start.board, start.row, start.col);
@@ -264,10 +266,21 @@ namespace Dragonchess
 			PieceObject pieceObject = startSquare.piece;
 
 			// Disable the captured piece's GameObject
-			if (move.type == MoveType.Capture ||
-				move.type == MoveType.Swoop)
+			if (move.type == MoveType.Capture || move.type == MoveType.Swoop)
 			{
 				PieceObject cap = endSquare.piece;
+				// If we're capturing a basilisk, check to see if we need to unfreeze someone
+				if (cap.type == PieceType.Basilisk)
+				{
+					if (Basilisk.HasFrozen(state, cap.piece, end))
+					{
+						// Get GameObject references for the associated frozen piece
+						SquareObject s = GetSquareAt(2, end.row, end.col);
+						Piece frozen = s.piece.piece;
+						ResetPieceColor(frozen);
+					}
+				}	
+
 				Destroy(cap.gameObject);
 				if (move.piece.player.color == Color.White)
 					P2_Pieces.Remove(cap);
@@ -292,6 +305,42 @@ namespace Dragonchess
 				// Reassign references for the associated PieceObject
 				endSquare.piece = pieceObject;
 				pieceObject.pos = endSquare;
+			}
+
+			// Check for basilisk side effects...
+			if (piece.type == PieceType.Basilisk)
+			{
+				// 1. check to see if we need to unfreeze someone
+				if (Basilisk.HasFrozen(state, piece, start))
+				{
+					// Get GameObject references for the associated frozen piece
+					SquareObject s = GetSquareAt(2, start.row, start.col);
+					Piece frozen = s.piece.piece;
+					ResetPieceColor(frozen);
+				}
+				// 2. check to see if we need to freeze someone new
+				if (Basilisk.HasFrozen(state, piece, end))
+				{
+					// Get GameObject references for the associated frozen piece
+					SquareObject s = GetSquareAt(2, end.row, end.col);
+					PieceObject frozen = s.piece;
+					frozen.GetComponent<Renderer>().material = frozenMat;
+				}
+			}
+			else
+			{
+				// 3. check to see if we're moving on top of the enemy basilisk
+				if (state.boards[1].squares[end.row, end.col].occupied)
+				{
+					Piece p = state.boards[1].squares[end.row, end.col].piece;
+					if (p.type == PieceType.Basilisk && Basilisk.HasFrozen(state, p, end))
+					{
+						// Get GameObject references for the associated frozen piece
+						SquareObject s = GetSquareAt(2, end.row, end.col);
+						PieceObject frozen = s.piece;
+						frozen.GetComponent<Renderer>().material = frozenMat;
+					}
+				}
 			}
 		}
 
@@ -436,7 +485,7 @@ namespace Dragonchess
 			UnhighlightMoves();
 			if (selectedPiece != null)
 			{
-				ResetColor(selectedPiece.pos);
+				ResetSquareColor(selectedPiece.pos);
 				selectedPiece = null;
 			}
 			EventSystem.current.SetSelectedGameObject(null);
@@ -451,10 +500,20 @@ namespace Dragonchess
 			square.dot.GetComponent<Renderer>().material = highlight_3;
 		}
 
-		public static void ResetColor(Square s)
+		public static void ResetSquareColor(Square s)
 		{
 			SquareObject square = GetSquares(s.board)[s.row, s.col];
 			square.dot.GetComponent<Renderer>().material = invisible;
+		}
+
+		public static void ResetPieceColor(Piece p)
+		{
+			SquareObject pos = GetSquareAt(p.pos.board, p.pos.row, p.pos.col);
+			PieceObject piece = pos.piece;
+			if (piece.piece.color == Color.White)
+				piece.GetComponent<Renderer>().material = white_pieces;
+			else
+				piece.GetComponent<Renderer>().material = black_pieces;
 		}
 
 		public static void SetActiveText(Player player)

@@ -13,6 +13,7 @@ namespace Dragonchess
 	using static GameUI;
 	using static Piece;
 	using static MoveController;
+	using static SimpleState;
 	public class GameController : MonoBehaviour
 	{
 		public delegate void OnClickDelegate(Gamestate state);
@@ -43,6 +44,12 @@ namespace Dragonchess
 			layerMask = ~0;
 
 			NewGame();
+		}
+
+		void OnPrintSState()
+		{
+			SimpleState sState = new SimpleState(state);
+			SimpleState.PrintState(sState, 22);
 		}
 
 		// Initialize new game
@@ -96,8 +103,7 @@ namespace Dragonchess
 				GFF.DoNext(state);
 			else
 				state.ActivePlayer.GetMove(state);
-			SimpleState s = new SimpleState(state);
-			SimpleState.PrintState(state);
+			//SimpleState s = new SimpleState(state);
 		}
 
 		// User hits left arrow key: undo move
@@ -109,7 +115,7 @@ namespace Dragonchess
 			{
 				(Move prev, bool b) = moveLog[moveLog.Count-1];
 				print("Undoing move: " + prev.MoveToString());
-				MC.UndoMove(state, prev, true);
+				UndoMove(state, prev, true);
 				UnlogMove(prev.piece.player);
 				SwitchTurn(state);
 			}
@@ -126,7 +132,9 @@ namespace Dragonchess
 			{
 				DoMove(state, move, true);
 				player.prevMove = move;
-				LogMove(player, IsCheck(state, state.EnemyPlayer));
+				List<Piece> threats = ThreatsInRange(state, state.EnemyPlayer);
+				LogMove(player, IsCheck(state, state.EnemyPlayer, threats));
+
 				SwitchTurn(state);
 				if (state.ActivePlayer.type == PlayerType.AI &&
 					state.EnemyPlayer.type == PlayerType.Human)
@@ -155,8 +163,16 @@ namespace Dragonchess
 			state.EnemyPlayer = GetEnemy(state, state.ActivePlayer);
 			GameUI.SetActiveText(state.ActivePlayer);
 
+			SimpleState sState = new SimpleState(state);
+			Piece k;
+			int[] king = new int[3];
+			k = GetKing(state, state.P2);
+			king[0] = k.pos.board;
+			king[1] = k.pos.row;
+			king[2] = k.pos.col;
+
 			// See if P1's move put P2 in check
-			if (IsCheck(state, state.P2))
+			if (IsSSCheck(sState, 1))
 			{
 				print("PLAYER 2'S KING IN CHECK.");
 				state.P2.inCheck = true;
@@ -172,10 +188,16 @@ namespace Dragonchess
 			else
 			{
 				state.P2.inCheck = false;
-				ResetColor(GetKing(state, state.P2).pos);
+				ResetSquareColor(GetKing(state, state.P2).pos);
 			}
+			
+			k = GetKing(state, state.P1);
+			king[0] = k.pos.board;
+			king[1] = k.pos.row;
+			king[2] = k.pos.col;
+
 			// See if P2's move put P1 in check
-			if (IsCheck(state, state.P1))
+			if (IsSSCheck(sState, 0))
 			{
 				state.P1.inCheck = true;
 				ShowKingInCheck(state.P1);
@@ -191,7 +213,7 @@ namespace Dragonchess
 			else
 			{
 				state.P1.inCheck = false;
-				ResetColor(GetKing(state, state.P1).pos);
+				ResetSquareColor(GetKing(state, state.P1).pos);
 			}
 		}
 

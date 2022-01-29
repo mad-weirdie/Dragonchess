@@ -20,16 +20,16 @@ namespace Dragonchess
 
 			if (this.color == Color.White && current.board == 2)
 			{
-				dictMoves = MoveDictionary["TopWDwarf"][current.board, current.row, current.col];
+				dictMoves = MoveDictionary["MidWDwarf"][current.board, current.row, current.col];
 				AddMoves(state, dictMoves, moves, current, regular);
-				dictMoves = MoveDictionary["TopWDwarfTake"][current.board, current.row, current.col];
+				dictMoves = MoveDictionary["MidWDwarfTake"][current.board, current.row, current.col];
 				AddMoves(state, dictMoves, moves, current, capture);
 			}
 			else if (this.color == Color.Black && current.board == 2)
 			{
-				dictMoves = MoveDictionary["TopBDwarf"][current.board, current.row, current.col];
+				dictMoves = MoveDictionary["MidBDwarf"][current.board, current.row, current.col];
 				AddMoves(state, dictMoves, moves, current, regular);
-				dictMoves = MoveDictionary["TopBDwarfTake"][current.board, current.row, current.col];
+				dictMoves = MoveDictionary["MidBDwarfTake"][current.board, current.row, current.col];
 				AddMoves(state, dictMoves, moves, current, capture);
 			}
 			else if (this.color == Color.White && current.board == 1)

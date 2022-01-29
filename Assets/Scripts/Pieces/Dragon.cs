@@ -6,6 +6,8 @@ namespace Dragonchess
 {
 	using static Move;
 	using static MoveDict;
+	using static SimpleState;
+
 	/* ----------- Dragon ------------*/
 	public class Dragon : Piece
     {
@@ -25,7 +27,16 @@ namespace Dragonchess
 
 			possibleMoves = MoveDictionary["SwoopDragon"][current.board, current.row, current.col];
 			AddMoves(state, possibleMoves, moves, current, swoop);
-            return moves;
+
+			SimpleState sState = new SimpleState(state);
+			foreach (Move move in moves)
+			{
+				//MonoBehaviour.print(move.MoveToString());
+			}
+
+			int index = current.row * 12 + current.col;
+			List<int> dMoves = DragonBitMoves(sState, (int)this.color, current.board, index);
+			return moves;
         }
     }
 }
