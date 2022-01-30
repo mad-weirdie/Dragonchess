@@ -20,7 +20,9 @@ namespace Dragonchess
 		public static OnClickDelegate clickDelegate;
 
 		public PlayerType P1_type;
+		public AIDifficulty AI_1;
 		public PlayerType P2_type;
+		public AIDifficulty AI_2;
 
 		public TextAsset board_init;
 		public MoveController MC;
@@ -55,7 +57,7 @@ namespace Dragonchess
 		// Initialize new game
 		void NewGame()
 		{
-			state = new Gamestate(GameFromFileEnabled, P1_type, P2_type);
+			state = new Gamestate(GameFromFileEnabled, P1_type, AI_1, P2_type, AI_2);
 
 			// Read in starting board state from the board_init text file
 			string[] lines = File.ReadAllLines("Assets/Files/board_init.txt");

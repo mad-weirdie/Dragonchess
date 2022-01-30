@@ -23,7 +23,9 @@ namespace Dragonchess
 		public Player EnemyPlayer;
 		
 		public Player P1;
+		public AIDifficulty A1;
 		public Player P2;
+		public AIDifficulty A2;
 
 		public Board upperBoard;
 		public Board middleBoard;
@@ -35,7 +37,7 @@ namespace Dragonchess
 		int moveNum;
 
 		// ----------------------------------------------------
-		public Gamestate (bool fromFile, PlayerType type1, PlayerType type2)
+		public Gamestate (bool fromFile, PlayerType type1, AIDifficulty A1, PlayerType type2, AIDifficulty A2)
 		{
 			// If reading game data from a file (for debugging mostly),
 			// make sure we have two "human" players (ie, manual players)
@@ -48,12 +50,12 @@ namespace Dragonchess
 			if (type1 == PlayerType.Human)
 					P1 = new Human(Color.White, PlayerType.Human);
 				else
-					P1 = new AI(Color.White, PlayerType.AI);
+					P1 = new AI(Color.White, PlayerType.AI, A1);
 
 				if (type2 == PlayerType.Human)
 					P2 = new Human(Color.Black, PlayerType.Human);
 				else
-					P2 = new AI(Color.Black, PlayerType.AI);
+					P2 = new AI(Color.Black, PlayerType.AI, A2);
 
 			boards = new Board[4];
 			upperBoard = new Board(3, Layer.Upper);
@@ -71,19 +73,22 @@ namespace Dragonchess
 		public static Gamestate CopyGamestate(Gamestate state)
 		{
 			PlayerType type1 = state.P1.type;
+			AIDifficulty A1 = state.A1;
 			PlayerType type2 = state.P2.type;
-			Gamestate copy = new Gamestate(false, type1, type2);
+			AIDifficulty A2 = state.A2;
+
+			Gamestate copy = new Gamestate(false, type1, A1, type2, A2);
 
 			// Set new player1's type
 			if (type1 == PlayerType.Human)
 				copy.P1 = new Human(Color.White, PlayerType.Human);
 			else
-				copy.P1 = new AI(Color.White, PlayerType.AI);
+				copy.P1 = new AI(Color.White, PlayerType.AI, A1);
 			// Set new player2's type
 			if (type2 == PlayerType.Human)
 				copy.P2 = new Human(Color.Black, PlayerType.Human);
 			else
-				copy.P2 = new AI(Color.Black, PlayerType.AI);
+				copy.P2 = new AI(Color.Black, PlayerType.AI, A2);
 
 			// Create new empty boards
 			copy.boards = new Board[4];

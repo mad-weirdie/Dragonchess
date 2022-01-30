@@ -12,19 +12,33 @@ namespace Dragonchess
 	using static MiniMax;
 	using static SimpleState;
 
+	public enum AIDifficulty { Trivial, Easy, Medium, Hard, Expert};
+
     public class AI : Player
     {
-        public AI(Color c, PlayerType t) : base(c, PlayerType.AI) { }
+		AIDifficulty difficulty;
+
+        public AI(Color c, PlayerType t, AIDifficulty d) : base(c, PlayerType.AI) { this.difficulty = d; }
 
         override public void GetMove(Gamestate state)
         {
 			SimpleState sState = new SimpleState(state);
-			List<int> possibleMoves = SimpleState.GetPossibleMoves(sState, this.color == Color.White);
+			List<Move> allMoves = GetPossibleMoves(state);
+			List<int> allBitMoves = SimpleState.GetPossibleMoves(sState, this.color == Color.White);
+			Move next;
 
-			//Move next = DumbRandom();
-			//Move next = SimpleEval(state, all_possible_moves);
 			int minmaxdepth = 3;
-			Move next = MinMaxEval(state, minmaxdepth, possibleMoves);
+
+			if (this.difficulty == AIDifficulty.Trivial)
+				next = DumbRandom(state, allMoves);
+			else if (this.difficulty == AIDifficulty.Easy)
+				next = SimpleEval(state, allMoves);
+			else if (this.difficulty == AIDifficulty.Medium)
+				next = MinMaxEval(state, minmaxdepth, allBitMoves);
+			else
+				next = DumbRandom(state, allMoves);
+
+			MonoBehaviour.print("AI difficulty: " + difficulty);
 			MonoBehaviour.print("The " + color + " AI has chosen " + next.MoveToString());
 			GameController.OnMoveReceived(state, state.ActivePlayer, next);
 		}
@@ -35,14 +49,7 @@ namespace Dragonchess
         // The Absolute Worst (TM) Chess AI imaginable - makes random moves
         public Move DumbRandom(Gamestate state, List<Move> moves)
         {
-            Piece piece = null;
-            int move = 0;
-
-            move = Random.Range(0, moves.Count);
-            Move AIMove = moves[move];
-            MonoBehaviour.print("The AI has chosen to move the " +
-                piece.type + " at " + piece.pos.SquareName() + " to " +
-                AIMove.end.SquareName() + ". MoveType: " + AIMove.type);
+            int move = Random.Range(0, moves.Count);
             return moves[move];
         }
 
