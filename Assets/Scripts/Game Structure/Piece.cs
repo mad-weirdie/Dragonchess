@@ -39,7 +39,7 @@ namespace Dragonchess
 			m_type = type;
 		}
 
-		public static Piece NewPiece(Gamestate state, int t, Player p, int b, int r, int c)
+		public static Piece NewPiece(Game state, int t, Player p, int b, int r, int c)
 		{
 			Piece piece;
 			if (t == 0)
@@ -73,13 +73,7 @@ namespace Dragonchess
 			else
 				piece = new Elemental();
 
-			Board board;
-			if (b == 3)
-				board = state.upperBoard;
-			else if (b == 2)
-				board = state.middleBoard;
-			else
-				board = state.lowerBoard;
+			Board board = state.boards[b];
 
 			piece.color = p.color;
 			piece.player = p;
@@ -92,14 +86,14 @@ namespace Dragonchess
 		}
 
 		// GetMoves to be overridden by child classes
-		virtual public List<Move> GetMoves(Gamestate state) { return null; }
+		virtual public List<Move> GetMoves(Game state) { return null; }
 
-		public static List<Move> GetMoves(Gamestate state, int type)
+		public static List<Move> GetMoves(Game state, int type)
 		{
 			return null;
 		}
 
-		virtual public void MoveTo(Gamestate state, Square s)
+		virtual public void MoveTo(Game state, Square s)
 		{
 			// Link piece and square to each other
 			this.pos.occupied = false;
@@ -108,28 +102,38 @@ namespace Dragonchess
 			this.pos.occupied = true;
 			s.piece = this;
 
-			if (s.board == state.middleBoard.layer_int_val)
+			if (s.board == state.boards[2].layer_int_val)
 			{
-				if (state.lowerBoard.squares[s.row, s.col].occupied)
+				if (state.boards[1].squares[s.row, s.col].occupied)
 				{
-					Piece checkB = state.lowerBoard.squares[s.row, s.col].piece;
+					Piece checkB = state.boards[1].squares[s.row, s.col].piece;
 				}
 			}
 		}
 
-		public bool Capture(Gamestate state, Piece enemy)
+		public string PieceToString()
+		{
+			string ret = "";
+			ret += this.color;
+			ret += " " + this.type;
+			ret += ": " + this.pos.SquareName();
+			return ret;
+		}
+
+		public bool Capture(Game state, Piece enemy)
 		{
 			Square s = enemy.pos;
 			if (enemy.type == PieceType.Basilisk)
 			{
-				MonoBehaviour.print("capturing basilisk");
-				if (state.middleBoard.squares[enemy.row, enemy.col].occupied)
+				if (state.boards[2].squares[enemy.row, enemy.col].occupied)
 				{
-					Square basilisk = state.lowerBoard.squares[enemy.row, enemy.col];
-					Square above = state.middleBoard.squares[enemy.row, enemy.col];
+					Square basilisk = state.boards[1].squares[enemy.row, enemy.col];
+					Square above = state.boards[2].squares[enemy.row, enemy.col];
 					above.piece.frozen = false;
 				}
 			}
+
+
 			if (enemy.color == Color.White)
 			{
 				state.P1.pieces.Remove(enemy);
@@ -145,14 +149,15 @@ namespace Dragonchess
 			return true;
 		}
 
-		public bool RemoteCapture(Gamestate state, Piece enemy)
+		public bool RemoteCapture(Game state, Piece enemy)
 		{
-			if (enemy.color == Color.White)
-				state.P1.pieces.Remove(enemy);
-			else
+			if (this.color == Color.White)
 				state.P2.pieces.Remove(enemy);
+			else
+				state.P1.pieces.Remove(enemy);
 
 			enemy.pos.occupied = false;
+			enemy.pos.piece = null;
 			return true;
 		}
 

@@ -23,8 +23,9 @@ namespace Dragonchess {
 		static (int, int, int)[] Valid((int, int, int)[] pos)
 		{
 			List<(int, int, int)> validPos = new List<(int, int, int)>();
-			foreach ((int b, int r, int c) in pos)
+			for (int p = 0; p < pos.Length; p++)
 			{
+				(int b, int r, int c) = pos[p];
 				if (1 <= b && b <= 3 &&
 					0 <= r && r < 8 &&
 					0 <= c && c < 12)
@@ -37,8 +38,9 @@ namespace Dragonchess {
 		{
 			List<(int, int, int)>[,,] ret = new List<(int, int, int)>[4, 8, 12];
 
-			foreach ((int b, int r, int c) in positions)
+			for (int p = 0; p < positions.Length; p++)
 			{
+				(int b, int r, int c) = positions[p];
 				int row = r + rshift;
 				int col = c + cshift;
 				ret[b, r, c] = new List<(int, int, int)>();
@@ -56,8 +58,9 @@ namespace Dragonchess {
 		{
 			List<(int, int, int)>[,,] ret = new List<(int, int, int)>[4, 8, 12];
 
-			foreach ((int b, int r, int c) in positions)
+			for (int p = 0; p < positions.Length; p++)
 			{
+				(int b, int r, int c) = positions[p];
 				int row = r + rshift;
 				int col = c + cshift;
 				ret[b, r, c] = new List<(int, int, int)>();
@@ -74,14 +77,15 @@ namespace Dragonchess {
 		static List<(int, int, int)>[,,] GenFromList(List<(int, int, int)> shifts, bool[] boards)
 		{
 			List<(int, int, int)>[,,] ret = new List<(int, int, int)>[4, 8, 12];
-
-			foreach ((int b, int r, int c) in positions)
+			for (int p = 0; p < positions.Length; p++)
 			{
+				(int b, int r, int c) = positions[p];
 				ret[b, r, c] = new List<(int, int, int)>();
 				if (boards[b])
 				{
-					foreach ((int board, int rshift, int cshift) in shifts)
+					for (int s = 0; s < shifts.Count; s++)
 					{
+						(int board, int rshift, int cshift) = shifts[s];
 						int row = r + rshift;
 						int col = c + cshift;
 						if (isValidPos(row, col))
@@ -97,13 +101,16 @@ namespace Dragonchess {
 		public static List<(int, int, int)>[,,] Combine(List<List<(int, int, int)>[,,]> rules)
 		{
 			List<(int, int, int)>[,,] ret = new List<(int, int, int)>[4, 8, 12];
-			foreach ((int b, int r, int c) in positions)
+			for (int p = 0; p < positions.Length; p++)
 			{
+				(int b, int r, int c) = positions[p];
 				ret[b, r, c] = new List<(int, int, int)>();
-				foreach (var rule in rules)
+				for (int i = 0; i < rules.Count; i++)
 				{
-					foreach (var x in rule[b, r, c])
+					var rule = rules[i];
+					for (int j = 0; j < rule[b,r,c].Count; j++)
 					{
+						var x = rule[b, r, c][j];
 						if (!ret[b, r, c].Contains(x))
 							ret[b, r, c].Add(x);
 					}
@@ -115,13 +122,17 @@ namespace Dragonchess {
 		public static List<(int, int, int)>[,,] Combine(List<List<(int, int, int)>[,,]> rules, bool[] boards)
 		{
 			List<(int, int, int)>[,,] ret = new List<(int, int, int)>[4, 8, 12];
-			foreach ((int b, int r, int c) in positions)
+
+			for (int p = 0; p < positions.Length; p++)
 			{
+				(int b, int r, int c) = positions[p];
 				ret[b, r, c] = new List<(int, int, int)>();
-				foreach (var rule in rules)
+				for (int i = 0; i < rules.Count; i++)
 				{
-					foreach (var x in rule[b, r, c])
+					var rule = rules[i];
+					for (int j = 0; j < rule[b, r, c].Count; j++)
 					{
+						var x = rule[b, r, c][j];
 						if (boards[b] && !ret[b, r, c].Contains(x))
 							ret[b, r, c].Add(x);
 					}
@@ -323,19 +334,27 @@ namespace Dragonchess {
 			// ----------------------------------------------------------------
 			
 			List<List<(int, int, int)>[,,]> toCombine = new List<List<(int, int, int)>[,,]>();
-			
-			foreach (string threat in TopThreats)
+
+			for (int i = 0; i < TopThreats.Length; i++)
+			{
+				string threat = TopThreats[i];
 				toCombine.Add(MoveDictionary[threat]);
+			}
 			MoveDictionary["TopThreats"] = Combine(toCombine);
 			toCombine.Clear();
 
-			foreach (string threat in MidThreats)
+			for (int i = 0; i < MidThreats.Length; i++)
+			{
+				string threat = MidThreats[i];
 				toCombine.Add(MoveDictionary[threat]);
+			}
 			MoveDictionary["MidThreats"] = Combine(toCombine);
 			toCombine.Clear();
-
-			foreach (string threat in BotThreats)
+			for (int i = 0; i < BotThreats.Length; i++)
+			{
+				string threat = BotThreats[i];
 				toCombine.Add(MoveDictionary[threat]);
+			}
 			MoveDictionary["BotThreats"] = Combine(toCombine);
 		}
 

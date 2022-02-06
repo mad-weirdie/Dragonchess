@@ -19,9 +19,9 @@ namespace Dragonchess
         // Start is called before the first frame update
         void Start()
         {
-            Board UpperBoard = GameController.state.upperBoard;
-            Board MiddleBoard = GameController.state.middleBoard;
-            Board LowerBoard = GameController.state.lowerBoard;
+            Board UpperBoard = GameController.state.boards[3];
+            Board MiddleBoard = GameController.state.boards[2];
+            Board LowerBoard = GameController.state.boards[1];
 
             RectTransform upperR = Upper.GetComponent<RectTransform>();
             float xCoord, yCoord;

@@ -30,7 +30,7 @@ namespace Dragonchess
 		}
 
         // Check if a particular square is blocked from moving there
-        public static bool IsBlocked(Gamestate state, Square current, int dir, int rShift, int cShift, int b, Color c)
+        public static bool IsBlocked(Game state, Square current, int dir, int rShift, int cShift, int b, Color c)
         {
             Board board = GetBoard(state, b);
             int new_row = current.row + rShift*dir;
@@ -45,17 +45,12 @@ namespace Dragonchess
         }
 
         // Get the board of a particular index/layer value
-        public static Board GetBoard(Gamestate state, int board)
+        public static Board GetBoard(Game state, int board)
         {
-            if (board == 3)
-                return state.upperBoard;
-            else if (board == 2)
-                return state.middleBoard;
-            else
-                return state.lowerBoard;
+			return state.boards[board];
         }
 
-		public static void AddMoves(Gamestate state, List<(int,int,int)> possibleMoves, List<Move> moves, Square current, MoveType type)
+		public static void AddMoves(Game state, List<(int,int,int)> possibleMoves, List<Move> moves, Square current, MoveType type)
 		{
 			if(type == MoveType.MoveOrCapture)
 			{
@@ -64,7 +59,9 @@ namespace Dragonchess
 				return;
 			}
 
-			foreach ((int b, int r, int c) in possibleMoves) {
+			for (int i = 0; i < possibleMoves.Count; i++)
+			{
+				(int b, int r, int c) = possibleMoves[i];
 				Board newBoard = GetBoard(state, b);
 				Square end = newBoard.squares[r, c];
 				Move next_move = new Move(current.piece, current, end, type);
@@ -79,19 +76,19 @@ namespace Dragonchess
 			}
 		}
 
-		public static List<(int,int,int)> GetBlocked(Gamestate state, List<(int,int,int)> moves, List<string> slideTypes, Square current)
+		public static List<(int,int,int)> GetBlocked(Game state, List<(int,int,int)> moves, List<string> slideTypes, Square current)
 		{
 			List<(int, int, int)> illegal = new List<(int, int, int)>();
-
-			foreach (string t in slideTypes)
+			for (int i = 0; i < slideTypes.Count; i++)
 			{
+				string t = slideTypes[i];
 				bool blocked = false;
-				foreach (var x in MoveDictionary[t][current.board, current.row, current.col])
+				List <(int, int, int)> dictMoves = MoveDictionary[t][current.board, current.row, current.col];
+				for (int m = 0; m < dictMoves.Count; m++)
 				{
+					var x = dictMoves[m];
 					if (blocked)
-					{
 						illegal.Add(x);
-					}
 					else
 					{
 						int b = x.Item1;
@@ -99,59 +96,59 @@ namespace Dragonchess
 						int c = x.Item3;
 						Board board = GetBoard(state, b);
 						if (board.squares[r, c].occupied)
-						{
 							blocked = true;
-						}
 					}
 				}
 			}
 			return illegal;
 		}
 
-		public static List<(int, int, int)> GetBlocked(SimpleState state, List<(int, int, int)> moves, List<string> slideTypes, int board, int row, int col)
+		public static List<(int, int, int)> GetBlocked(Gamestate state, List<(int, int, int)> moves, List<string> slideTypes, int board, int row, int col)
 		{
 			List<(int, int, int)> illegal = new List<(int, int, int)>();
-
-			foreach (string t in slideTypes)
+			for (int i = 0; i < slideTypes.Count; i++)
 			{
+				string t = slideTypes[i];
 				bool blocked = false;
-				foreach (var x in MoveDictionary[t][board, row, col])
+				List<(int, int, int)> dictMoves = MoveDictionary[t][board, row, col];
+				for (int m = 0; m < dictMoves.Count; m++)
 				{
+					var x = dictMoves[m];
 					if (blocked)
-					{
 						illegal.Add(x);
-					}
 					else
 					{
 						int b = x.Item1;
 						int r = x.Item2;
 						int c = x.Item3;
-						if (state.boards[board][r*12+c] != 0)
-						{
+						if (state.boards[board][r * 12 + c] != 0)
 							blocked = true;
-						}
 					}
 				}
 			}
 			return illegal;
 		}
 
-		public static void RemoveBlocked(Gamestate state, List<(int,int,int)> blocked, List<Move> moves)
+		public static void RemoveBlocked(Game state, List<(int,int,int)> blocked, List<Move> moves)
 		{
 			List<Move> toRemove = new List<Move>();
-			foreach(Move move in moves)
-			{
+			for (int i = 0; i < moves.Count; i++)
+			{ 
+				Move move = moves[i];
 				var tup = (move.end.board, move.end.row, move.end.col);
 				if (blocked.Contains(tup))
 					toRemove.Add(move);
 			}
-			foreach (Move illegal in toRemove)
+			for (int i = 0; i < toRemove.Count; i++)
+			{
+				Move illegal = toRemove[i];
 				moves.Remove(illegal);
+			}
 		}
 
 		// Check whether or not we can move to a particular square.
 		// If so, add the move to the argument "moves" passed in.
-		public static void moveAttempt(Gamestate state, List<Move> moves, Square current,
+		public static void moveAttempt(Game state, List<Move> moves, Square current,
         int dir, int rowShift, int colShift, int board, MoveType type)
         {
             if (type == MoveType.MoveOrCapture)
@@ -214,11 +211,11 @@ namespace Dragonchess
 
         public string MoveToString()
 		{
-            string ret = piece.color + " " + (piece.type).ToString() + ": " + start.SquareName() + "-> " + end.SquareName();
+            string ret = (piece.type).ToString() + ": " + start.SquareName() + "-> " + end.SquareName();
 
             if (type == MoveType.Capture || type == MoveType.Swoop)
 			{
-                ret += " , captured: " + captured.color + " " + (captured.type).ToString();
+                ret += " , captured: " + (captured.type).ToString();
 			}
 
             return ret;
@@ -246,24 +243,10 @@ namespace Dragonchess
 			return moveText;
 		}
 
-		public static Move ConvertMove(Gamestate state, Move move)
+		public static Move ConvertMove(Game state, Move move)
 		{
-			Board startBoard;
-			Board endBoard;
-
-			if (move.start.board == 3)
-				startBoard = state.upperBoard;
-			else if (move.start.board == 2)
-				startBoard = state.middleBoard;
-			else
-				startBoard = state.lowerBoard;
-
-			if (move.end.board == 3)
-				endBoard = state.upperBoard;
-			else if (move.end.board == 2)
-				endBoard = state.middleBoard;
-			else
-				endBoard = state.lowerBoard;
+			Board startBoard = state.boards[move.start.board];
+			Board endBoard = state.boards[move.end.board];
 
 			Square start = startBoard.squares[move.start.row, move.start.col];
 			Square end = endBoard.squares[move.end.row, move.end.col];
@@ -273,15 +256,7 @@ namespace Dragonchess
 
 			if (move.captured != null)
 			{
-				Board capturedBoard;
-
-				if (move.end.board == 3)
-					capturedBoard = state.upperBoard;
-				else if (move.end.board == 2)
-					capturedBoard = state.middleBoard;
-				else
-					capturedBoard = state.lowerBoard;
-
+				Board capturedBoard = state.boards[move.end.board];
 				Piece cap = capturedBoard.squares[move.end.row, move.end.col].piece;
 				converted.captured = cap;
 			}

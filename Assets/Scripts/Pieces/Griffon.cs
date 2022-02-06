@@ -19,7 +19,7 @@ namespace Dragonchess
 	public class Griffon : Piece
     {
         public Griffon() : base(PieceType.Griffon) { nameChar = "G"; value = 20; }
-        public override List<Move> GetMoves(Gamestate state)
+        public override List<Move> GetMoves(Game state)
         {
 			List<Move> moves = new List<Move>();
 			List<(int, int, int)> dictMoves;

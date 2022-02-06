@@ -6,13 +6,16 @@ namespace Dragonchess
 {
 	using static Move;
 	using static MoveDict;
-	using static SimpleState;
+	using static Gamestate;
+	using static BitPiece;
+	using static BitMove;
+	using static BitMoveController;
 
 	/* ----------- Dragon ------------*/
 	public class Dragon : Piece
     {
         public Dragon() : base(PieceType.Dragon) { nameChar = "R"; value = 80; }
-        public override List<Move> GetMoves(Gamestate state)
+        public override List<Move> GetMoves(Game state)
         {
             List<Move> moves = new List<Move>();
             Square current = this.pos;
@@ -28,11 +31,7 @@ namespace Dragonchess
 			possibleMoves = MoveDictionary["SwoopDragon"][current.board, current.row, current.col];
 			AddMoves(state, possibleMoves, moves, current, swoop);
 
-			SimpleState sState = new SimpleState(state);
-			foreach (Move move in moves)
-			{
-				//MonoBehaviour.print(move.MoveToString());
-			}
+			Gamestate sState = new Gamestate(state);
 
 			int index = current.row * 12 + current.col;
 			List<int> dMoves = DragonBitMoves(sState, (int)this.color, current.board, index);

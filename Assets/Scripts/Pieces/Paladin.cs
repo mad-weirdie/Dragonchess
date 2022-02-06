@@ -13,7 +13,7 @@ namespace Dragonchess
 	public class Paladin : Piece
     {
         public Paladin() : base(PieceType.Paladin) { nameChar = "P"; value = 50; }
-        public override List<Move> GetMoves(Gamestate state)
+        public override List<Move> GetMoves(Game state)
         {
 			List<Move> moves = new List<Move>();
 			List<(int, int, int)> dictMoves;

@@ -20,7 +20,7 @@ namespace Dragonchess
     {
         public Sylph() : base(PieceType.Sylph) { nameChar = "S"; value = 1; }
 
-        public override List<Move> GetMoves(Gamestate state)
+        public override List<Move> GetMoves(Game state)
         {
 			List<Move> moves = new List<Move>();
 			List<(int, int, int)> dictMoves;

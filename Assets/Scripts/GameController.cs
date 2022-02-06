@@ -9,38 +9,46 @@ using UnityEngine.SceneManagement;
 
 namespace Dragonchess
 {
-	using static Gamestate;
+	using static Game;
 	using static GameUI;
 	using static Piece;
+	using static BitPiece;
 	using static MoveController;
-	using static SimpleState;
+	using static Gamestate;
+	using static BitMoveController;
 	public class GameController : MonoBehaviour
 	{
-		public delegate void OnClickDelegate(Gamestate state);
+		public delegate void OnClickDelegate(Game state);
 		public static OnClickDelegate clickDelegate;
 
-		public PlayerType P1_type;
-		public AIDifficulty AI_1;
-		public PlayerType P2_type;
-		public AIDifficulty AI_2;
+		public static PlayerType P1_type;
+		public static AIDifficulty AI_1;
+		public static PlayerType P2_type;
+		public static AIDifficulty AI_2;
 
 		public TextAsset board_init;
 		public MoveController MC;
 		public AI AIController;
 
 		static public List<(Move, bool)> moveLog;
-		public bool GameFromFileEnabled;
+		public static bool GameFromFileEnabled = true;
+		public static bool TestsEnabled = false;
 		public GameFromFile GFF;
-		static int moveNum;
+		public static int moveNum;
 
 		public static int layerMask;
-		public static Gamestate state;
+		public static Game state;
 		public GameUI Display;
 
+		public static bool lockTesting;
+
 		// --------------------------------------------------------------------
+		
 		// Start is called before the first frame update
 		void Start()
 		{
+			print("starting new game...");
+			lockTesting = false;
 			moveLog = new List<(Move, bool)>();
 			moveNum = 0;
 			layerMask = ~0;
@@ -50,20 +58,20 @@ namespace Dragonchess
 
 		void OnPrintSState()
 		{
-			SimpleState sState = new SimpleState(state);
-			SimpleState.PrintState(sState, 22);
+			Gamestate sState = new Gamestate(state);
+			Gamestate.PrintState(sState, 1);
 		}
 
 		// Initialize new game
-		void NewGame()
+		public void NewGame()
 		{
-			state = new Gamestate(GameFromFileEnabled, P1_type, AI_1, P2_type, AI_2);
+			state = new Game(GameFromFileEnabled, P1_type, AI_1, P2_type, AI_2);
 
 			// Read in starting board state from the board_init text file
 			string[] lines = File.ReadAllLines("Assets/Files/board_init.txt");
-
-			foreach (string line in lines)
+			for (int i = 0; i < lines.Length; i++)
 			{
+				string line = lines[i];
 				string[] vals = line.Split(' ');
 				int level = int.Parse(vals[0]);
 				int piece_type = int.Parse(vals[1]);
@@ -84,28 +92,34 @@ namespace Dragonchess
 		}
 
 		// Completely reloads the scene
-		void ResetGame()
+		public static void ResetGame()
 		{
 			OnApplicationQuit();
 			SceneManager.LoadScene("Game", LoadSceneMode.Single);
 		}
 
+		public void ResetBoard()
+		{
+			Display.ClearUI();
+			NewGame();
+		}
+
 		void OnClick()
 		{
-			state.ActivePlayer.OnClick(state);
-
-			if (state.gameOver)
-				ResetGame();
+			if (!state.gameOver)
+				state.ActivePlayer.OnClick(state);
 		}
 
 		// User hits right arrow key
 		void OnNext()
 		{
-			if (GameFromFileEnabled)
-				GFF.DoNext(state);
-			else
-				state.ActivePlayer.GetMove(state);
-			//SimpleState s = new SimpleState(state);
+			if (!lockTesting)
+			{
+				if (GameFromFileEnabled)
+					GFF.GetNext(state);
+				else
+					state.ActivePlayer.GetMove(state);
+			}
 		}
 
 		// User hits left arrow key: undo move
@@ -113,7 +127,7 @@ namespace Dragonchess
 		{
 			if (GameFromFileEnabled)
 				GFF.UndoPrev(state);
-			else if (moveNum > 0)
+			if (moveNum > 0)
 			{
 				(Move prev, bool b) = moveLog[moveLog.Count-1];
 				print("Undoing move: " + prev.MoveToString());
@@ -123,25 +137,52 @@ namespace Dragonchess
 			}
 		}
 
-		public static void OnMoveReceived(Gamestate state, Player player, Move move)
+		// Unlock the arrow key controls (ENTER key)
+		void OnUnlock()
 		{
-			if (state.ActivePlayer != player)
-			{
-				print("ERROR: INCORRECT PLAYER TRYING TO MAKE A MOVE.");
-				return;
-			}
-			else
-			{
-				DoMove(state, move, true);
-				player.prevMove = move;
-				List<Piece> threats = ThreatsInRange(state, state.EnemyPlayer);
-				LogMove(player, IsCheck(state, state.EnemyPlayer, threats));
+			print("UNLOCKING CONTROLS");
+			lockTesting = false;
+		}
 
-				SwitchTurn(state);
-				if (state.ActivePlayer.type == PlayerType.AI &&
-					state.EnemyPlayer.type == PlayerType.Human)
-					state.ActivePlayer.GetMove(state);
+		void OnLoadState()
+		{
+			state = new Game(GameFromFileEnabled, P1_type, AI_1, P2_type, AI_2);
+			LoadState.NewStateFromFile(this);
+		}
+
+		public static void OnMoveReceived(Game state, Player player, Move move)
+		{
+			
+			DoMove(state, move, !TestsEnabled);
+			player.prevMove = move;
+			Gamestate sState = new Gamestate(state);
+			LogMove(player, IsCheck(sState, state.EnemyPlayer.color == Color.White));
+
+			SwitchTurn(state);
+			sState = new Gamestate(state);
+			if (GetGameStatus(sState) == Status.Checkmate)
+			{
+				print("GAMEOVER.");
+				GameUI.ShowGameOverMenu(GetGameStatus(sState), sState.WhiteToMove);
 			}
+			if (state.ActivePlayer.type == PlayerType.AI &&
+				state.EnemyPlayer.type == PlayerType.Human)
+				state.ActivePlayer.GetMove(state);
+		}
+
+		public static void MainMenu()
+		{
+			SceneManager.LoadScene("Menu", LoadSceneMode.Single);
+		}
+
+		public static void Quit()
+		{
+			Application.Quit();
+		}
+
+		public void ReturnToBoard()
+		{
+			Display.DisableGameOverMenu();
 		}
 
 		public static void LogMove(Player player, bool isCheck)
@@ -159,28 +200,22 @@ namespace Dragonchess
 			moveNum--;
 		}
 
-		public static void SwitchTurn(Gamestate state)
+		public static void SwitchTurn(Game state)
 		{
 			state.ActivePlayer = state.EnemyPlayer;
 			state.EnemyPlayer = GetEnemy(state, state.ActivePlayer);
 			GameUI.SetActiveText(state.ActivePlayer);
 
-			SimpleState sState = new SimpleState(state);
-			Piece k;
-			int[] king = new int[3];
-			k = GetKing(state, state.P2);
-			king[0] = k.pos.board;
-			king[1] = k.pos.row;
-			king[2] = k.pos.col;
+			Gamestate sState = new Gamestate(state);
 
 			// See if P1's move put P2 in check
-			if (IsSSCheck(sState, 1))
+			// NOTE: "false" denotes the king being black/white
+			if (IsCheck(sState, false))
 			{
-				print("PLAYER 2'S KING IN CHECK.");
-				state.P2.inCheck = true;
 				ShowKingInCheck(state.P2);
-
-				if (IsCheckmate(state, state.P2))
+				lockTesting = true;		// stops me from missing the checks
+				// Now, see whether the check is also checkmate
+				if (IsCheckmate(sState, false))
 				{
 					print("GAME OVER: CHECKMATE. PLAYER 1 WINS.");
 					state.gameOver = true;
@@ -189,23 +224,16 @@ namespace Dragonchess
 			}
 			else
 			{
-				state.P2.inCheck = false;
 				ResetSquareColor(GetKing(state, state.P2).pos);
 			}
-			
-			k = GetKing(state, state.P1);
-			king[0] = k.pos.board;
-			king[1] = k.pos.row;
-			king[2] = k.pos.col;
-
 			// See if P2's move put P1 in check
-			if (IsSSCheck(sState, 0))
+			// NOTE: "true" denotes the king being black/white
+			if (IsCheck(sState, true))
 			{
-				state.P1.inCheck = true;
-				ShowKingInCheck(state.P1);
-
-				print("PLAYER 1'S KING IN CHECK.");
-				if (IsCheckmate(state, state.P1))
+				ShowKingInCheck(state.P1);	// just highlights the king red
+				lockTesting = true;     // stops me from missing the checks
+				// Now, see whether the check is also checkmate
+				if (IsCheckmate(sState, true))
 				{
 					print("GAME OVER: CHECKMATE. PLAYER 2 WINS.");
 					state.gameOver = true;
@@ -214,13 +242,12 @@ namespace Dragonchess
 			}
 			else
 			{
-				state.P1.inCheck = false;
 				ResetSquareColor(GetKing(state, state.P1).pos);
 			}
 		}
 
 		// Saves the game's move data to a file
-		void OnApplicationQuit()
+		static void OnApplicationQuit()
 		{
 			string path = "Assets/Resources/game_out.txt";
 			StreamWriter w = new StreamWriter(path);

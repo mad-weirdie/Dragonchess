@@ -12,7 +12,7 @@ namespace Dragonchess
 	public class King : Piece
     {
         public King() : base(PieceType.King) { nameChar = "K"; value = 900; }
-        public override List<Move> GetMoves(Gamestate state)
+        public override List<Move> GetMoves(Game state)
         {
 			List<Move> moves = new List<Move>();
 			List<(int, int, int)> dictMoves;

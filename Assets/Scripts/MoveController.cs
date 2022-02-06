@@ -7,9 +7,12 @@ using UnityEngine.EventSystems;
 namespace Dragonchess
 {
 	using GC = GameController;
-	using static Gamestate;
+	using static Game;
 	using static GameController;
 	using static GameUI;
+	using static Gamestate;
+	using static BitMoveController;
+	using static BitMove;
 	using static Piece;
 
 	public class MoveController : MonoBehaviour
@@ -25,7 +28,7 @@ namespace Dragonchess
 			highlightedSquares = new List<(Square, MoveType)>();
 		}
 
-		public static void PromoteWarrior(Gamestate state, Square s, Piece piece, bool updateUI = false)
+		public static void PromoteWarrior(Game state, Square s, Piece piece, bool updateUI = false)
 		{
 			bool promote = false;
 			if (piece.color == Color.White && s.row == 7)
@@ -49,29 +52,36 @@ namespace Dragonchess
 			}
 		}
 
-		public static void RemoveIllegal(Gamestate state, Player p, ref List<Move> moves)
+		public static void RemoveIllegal(Game state, Player p, ref List<Move> moves)
 		{
 			List<Move> illegal = new List<Move>();
-			List<Piece> threats;
-
-			foreach (Move m in moves)
+			List<int> threats;
+			for (int i = 0; i < moves.Count; i++)
 			{
-				Gamestate copy = CopyGamestate(state);
-				DoMove(copy, m, false);
-				threats = ThreatsInRange(copy, p);
+				Move m = moves[i];
+				Gamestate sState = new Gamestate(state);
+				int move = MoveToBitMove(state, m);
+				int start = GetStartPiece(sState, move);
+				int end = GetEndPiece(sState, move);
+
+				DoBitMove(ref sState, move);
+
+				threats = ThreatsInRange(sState, (p.color == Color.White));
 				if (threats.Count != 0)
 				{
-					if (IsCheck(copy, p, threats))
+					if (IsCheck(sState, (p.color == Color.White)))
 						illegal.Add(m);
 				}
-				UndoMove(copy, m, false);
+				UndoBitMove(ref sState, move, start, end);
 			}
-
-			foreach (Move illegal_move in illegal)
+			for (int i = 0; i < illegal.Count; i++)
+			{
+				Move illegal_move = illegal[i];
 				moves.Remove(illegal_move);
+			}
 		}
 
-		public static void DoMove(Gamestate state, Move move, bool updateUI)
+		public static void DoMove(Game state, Move move, bool updateUI)
 		{
 			Piece p = move.piece;
 			Piece captured = move.captured;
@@ -79,7 +89,7 @@ namespace Dragonchess
 			// Swoop move: capture enemy piece but stay in place
 			if (move.IsType(MoveType.Swoop))
 			{
-				p.RemoteCapture(state, captured);
+				p.RemoteCapture(state, move.end.piece);
 			}
 			// Capture move: capture and replace enemy piece
 			else if (move.IsType(MoveType.Capture))
@@ -102,7 +112,7 @@ namespace Dragonchess
 				PromoteWarrior(state, move.end, p, updateUI);
 		}
 
-		public static void UndoMove(Gamestate state, Move m, bool updateUI = false)
+		public static void UndoMove(Game state, Move m, bool updateUI = false)
 		{
 			Piece p = m.piece;
 
@@ -110,8 +120,9 @@ namespace Dragonchess
 			{
 				// Add the captured piece back to the enemy player's list of pieces
 				Piece cap = m.captured;
-				cap.player.pieces.Add(cap);
-
+				if (!cap.player.pieces.Contains(cap))
+					cap.player.pieces.Add(cap);
+	
 				// Move the capturing piece back
 				if (!m.IsType(MoveType.Swoop))
 				{

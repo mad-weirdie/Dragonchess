@@ -12,10 +12,13 @@ namespace Dragonchess
 	using M = MonoBehaviour;
     using static GameUI;
     using static MoveController;
-    using static Gamestate;
-	using static SimpleState;
+    using static Game;
+	using static Gamestate;
+	using static BitPiece;
+	using static BitMove;
+	using static BitMoveController;
 
-    public class Human : Player
+	public class Human : Player
     {
         public static Move nextMove;
 
@@ -25,12 +28,12 @@ namespace Dragonchess
             nextMove = null;
         }
 
-        override public void GetMove(Gamestate state)
+        override public void GetMove(Game state)
         {
             nextMove = null;
         }
 
-        override public void OnClick(Gamestate state)
+        override public void OnClick(Game state)
 		{
             if (this == state.ActivePlayer)
             {
@@ -50,7 +53,7 @@ namespace Dragonchess
             }
         }
 
-        public void MoveSelect(Gamestate state, GameObject clickedObj)
+        public void MoveSelect(Game state, GameObject clickedObj)
         {
             Piece piece = null;
 
@@ -70,12 +73,13 @@ namespace Dragonchess
 				byte[] bytes = { type, board, row, col };
 
 				int bPiece = BitConverter.ToInt32(bytes, 0);
-				SimpleState sState = new SimpleState(state);
+				Gamestate sState = new Gamestate(state);
 				List<int> possibleMoves = GetBitMoves(sState, bPiece);
 				List<Move> moves = new List<Move>();
 
-				foreach (int m in possibleMoves)
+				for (int i = 0; i < possibleMoves.Count; i++)
 				{
+					int m = possibleMoves[i];
 					Move move = BitMoveToMove(state, m);
 					moves.Add(move);
 				}
@@ -88,10 +92,10 @@ namespace Dragonchess
 				if (IsAvailableMove(clickedObj, ref move))
                 {
                     DeselectAll();
-					//PrintState(new SimpleState(state), 99);
+					//PrintState(new Gamestate(state), 99);
 					M.print("Move received: " + move.MoveToString());
 					GameController.OnMoveReceived(state, state.ActivePlayer, move);
-					//PrintState(new SimpleState(state), 99);
+					//PrintState(new Gamestate(state), 99);
                 }
                 else
                     DeselectAll();

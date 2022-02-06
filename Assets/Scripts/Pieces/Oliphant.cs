@@ -12,7 +12,7 @@ namespace Dragonchess
 	public class Oliphant : Piece
     {
         public Oliphant() : base(PieceType.Oliphant) { nameChar = "O"; value = 15; }
-		public override List<Move> GetMoves(Gamestate state)
+		public override List<Move> GetMoves(Game state)
 		{
 			List<Move> moves = new List<Move>();
 			List<(int, int, int)> dictMoves;

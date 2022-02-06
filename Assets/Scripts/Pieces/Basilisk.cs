@@ -14,7 +14,7 @@ namespace Dragonchess
         public Material frozen_mat;
         Material original_mat;
 
-		public static bool HasFrozen(Gamestate state, Piece basilisk, Square s)
+		public static bool HasFrozen(Game state, Piece basilisk, Square s)
 		{
 			if (basilisk == null)
 				return false;
@@ -27,7 +27,7 @@ namespace Dragonchess
 			return false;
 		}
 
-        public override List<Move> GetMoves(Gamestate state)
+        public override List<Move> GetMoves(Game state)
         {
 			List<Move> moves = new List<Move>();
 			List<(int, int, int)> dictMoves;

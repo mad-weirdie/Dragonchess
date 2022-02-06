@@ -143,14 +143,16 @@ namespace Dragonchess {
 			ThreatsToWhiteKing = new Dictionary<(int,int,int), List<(int, int, int, int)>>();
 			ThreatsToBlackKing = new Dictionary<(int,int,int), List<(int, int, int, int)>>();
 
-			foreach ((int b, int r, int c) in positions)
+			for (int p = 0; p < positions.Length; p++)
 			{
+				(int b, int r, int c) = positions[p];
 				ThreatsToWhiteKing[(b,r,c)] = new List<(int, int, int, int)>();
 				ThreatsToBlackKing[(b,r,c)] = new List<(int, int, int, int)>();
 			}
 
-			foreach ((int b, int r, int c) in positions)
+			for (int p = 0; p < positions.Length; p++)
 			{
+				(int b, int r, int c) = positions[p];
 				string[] threatsToW;
 				string[] threatsToB;
 				if (b == 3)
@@ -169,27 +171,36 @@ namespace Dragonchess {
 					threatsToB = BotThreatsToBlack;
 				}
 
-				foreach (string threat in threatsToW)
+				for (int w = 0; w < threatsToW.Length; w++)
 				{
+					string threat = threatsToW[w];
 					int t = MoveTypes[threat];
 					List<(int, int, int)> threatList = MoveDictionary[threat][b, r, c];
-					foreach (var x in threatList)
-						if (!ThreatsToWhiteKing[x].Contains((t,b,r,c)))
+					for (int j = 0; j < threatList.Count; j++)
+					{
+						var x = threatList[j];
+						if (!ThreatsToWhiteKing[x].Contains((t, b, r, c)))
 							ThreatsToWhiteKing[x].Add((t, b, r, c));
+					}	
 				}
 
-				foreach (string threat in threatsToB)
+				for (int i = 0; i < threatsToB.Length; i++)
 				{
+					string threat = threatsToW[i];
 					int t = MoveTypes[threat];
 					List<(int, int, int)> threatList = MoveDictionary[threat][b, r, c];
-					foreach (var x in threatList)
+					for (int j = 0; j < threatList.Count; j++)
+					{
+						var x = threatList[j];
 						if (!ThreatsToBlackKing[x].Contains((t, b, r, c)))
 							ThreatsToBlackKing[x].Add((t, b, r, c));
+					}
 				}
 			}
 
-			foreach (var pos in positions)
+			for (int p = 0; p < positions.Length; p++)
 			{
+				var pos = positions[p];
 				ThreatsToWhiteKing[pos].Sort();
 				ThreatsToBlackKing[pos].Sort();
 			}

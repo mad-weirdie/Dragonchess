@@ -9,7 +9,6 @@ namespace Dragonchess
         Color m_color;
         PlayerType m_type;
         public List<Piece> pieces;
-        public bool inCheck = false;
         public Move prevMove;
 
         // Initialize player with color c
@@ -20,22 +19,24 @@ namespace Dragonchess
             m_type = t;
         }
 
-        virtual public void GetMove(Gamestate state) { return; }
+        virtual public void GetMove(Game state) { return; }
 
-        virtual public void OnClick(Gamestate state) { }
+        virtual public void OnClick(Game state) { }
 
-        public List<Move> GetPossibleMoves(Gamestate state)
+        public List<Move> GetPossibleMoves(Game state)
 		{
             List<Move> moves = new List<Move>();
-            foreach (Piece p in pieces)
+			for (int i = 0; i < pieces.Count; i++)
 			{
-                foreach (Move m in p.GetMoves(state))
+				Piece p = pieces[i];
+				List<Move> pieceMoves = p.GetMoves(state);
+				for (int j = 0; j < pieceMoves.Count; j++)
 				{
-                    m.piece = p;
-                    moves.Add(m);
+					Move m = pieceMoves[j];
+					m.piece = p;
+					moves.Add(m);
 				}
 			}
-			//MoveController.RemoveIllegal(state, this, ref moves);
 			return moves;
 		}
 

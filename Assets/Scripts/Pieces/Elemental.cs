@@ -21,7 +21,7 @@ namespace Dragonchess
 	public class Elemental : Piece
     {
         public Elemental() : base(PieceType.Elemental) { nameChar = "E"; value = 4; }
-        public override List<Move> GetMoves(Gamestate state)
+        public override List<Move> GetMoves(Game state)
         {
 			List<Move> moves = new List<Move>();
 			List<(int, int, int)> dictMoves;
@@ -42,7 +42,7 @@ namespace Dragonchess
 			else if (current.board == 2)
 			{
 				dictMoves = MoveDictionary["MidElemental"][current.board, current.row, current.col];
-				if (!state.lowerBoard.squares[current.row, current.col].occupied)
+				if (!state.boards[1].squares[current.row, current.col].occupied)
 					AddMoves(state, dictMoves, moves, current, move_cap);
 			}
 

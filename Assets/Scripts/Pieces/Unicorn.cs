@@ -13,14 +13,14 @@ namespace Dragonchess
     {
         public Unicorn() : base(PieceType.Unicorn) { nameChar = "U"; value = 3; }
 
-        public override List<Move> GetMoves(Gamestate state)
+        public override List<Move> GetMoves(Game state)
         {
 			List<Move> moves = new List<Move>();
 			List<(int, int, int)> dictMoves;
 			Square current = this.pos;
 
 			dictMoves = MoveDictionary["Unicorn"][current.board, current.row, current.col];
-			AddMoves(state, dictMoves, moves, current, regular);
+			AddMoves(state, dictMoves, moves, current, move_cap);
 
 			return moves;
 		}

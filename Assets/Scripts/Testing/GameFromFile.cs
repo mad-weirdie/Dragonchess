@@ -8,9 +8,13 @@ using UnityEditor;
 namespace Dragonchess
 {
     using GC = GameController;
-    using static Gamestate;
+	using static Gamestate;
+	using static BitMoveController;
+	using static BitMove;
+	using static Game;
     using static GameController;
     using static MoveController;
+	using static BitPiece;
 
     public class GameFromFile : MonoBehaviour
     {
@@ -32,10 +36,11 @@ namespace Dragonchess
             moveLog = new List<Move>();
             isWhitesTurn = true;
             // Read in starting board state from the board_init text file
-            lines = File.ReadAllLines("Assets/Resources/game_example_1.txt");
-        }
+            //lines = File.ReadAllLines("Assets/Resources/game_example_1.txt");
+			lines = File.ReadAllLines("Assets/Resources/fast_checkmate_game.txt");
+		}
 
-        static Move ReadLine(Gamestate state)
+		static Move ReadLine(Game state)
         {
             string line = lines[linesRead];
 
@@ -47,12 +52,12 @@ namespace Dragonchess
             Move m;
 
             if (isWhitesTurn) {
-                m = ParseMove(state, P1_move, state.P1, state.P2);
+                m = ParseMove(state, P1_move, true);
                 isWhitesTurn = false;
             }
             else
             {
-                m = ParseMove(state, P2_move, state.P2, state.P1);
+                m = ParseMove(state, P2_move, false);
                 isWhitesTurn = true;
                 linesRead++;
             }
@@ -61,26 +66,33 @@ namespace Dragonchess
             return m;
         }
 
-        static public Move ParseMove(Gamestate state, string line, Player P1, Player P2)
+        static public Move ParseMove(Game g, string line, bool whiteToMove)
 		{
-            Square start = null;
-            Square end = null;
-            Piece piece = null;
-            MoveType moveType = MoveType.NULL;
+			Gamestate state = new Gamestate(g);
+			int color = 0;
+			if (!whiteToMove)
+				color = 1;
 
+			int piece = -1;
+			int sBoard = -1;
+			int sIndex = -1;
+			int eBoard = -1;
+			int eIndex = -1;
+
+            MoveType moveType = MoveType.NULL;
             // Remove the checkmate indicator
             if (line.Contains("+"))
-            {
                 line = line.Replace("+", "");
-            }
 
             // Get piece type from the first character of the move
-            PieceType t1 = CharToType(P1, line[0].ToString());
+            List<int> potentialPieces = new List<int>();
+			List<int> playerPieces = GetPieces(state, whiteToMove);
+            PieceType pieceType = CharToType(playerPieces, whiteToMove, line[0].ToString());
 
-            List<Piece> potentialPieces = new List<Piece>();
-            foreach (Piece p in P1.pieces)
+			for (int i = 0; i < playerPieces.Count; i++)
 			{
-                if (p.type == t1)
+				int p = playerPieces[i];
+				if ((PieceType)PieceType(p) == pieceType)
                     potentialPieces.Add(p);
 			}
 
@@ -89,33 +101,38 @@ namespace Dragonchess
 			{
                 moveType = MoveType.Capture;
                 string[] moveInfo = line.Split('x');
-                PieceType attacker_type = CharToType(P1, moveInfo[0].ToString());
-                PieceType captured_type = CharToType(P2, moveInfo[1].ToString());
+                PieceType attacker_type = CharToType(playerPieces, whiteToMove, moveInfo[0].ToString());
+				PieceType captured_type = CharToType(playerPieces, whiteToMove, moveInfo[1].ToString());
 
-                if (moveInfo[0].Length > 1)
+				if (moveInfo[0].Length > 1)
                 {
-                    start = StringToSquare(state, moveInfo[0].Substring(1));
-                    piece = start.piece;
-                    // Case 1: We are given disambiguated pos for both pieces
+					// Case 1: We are given disambiguated pos for both pieces
+					(sBoard, sIndex) = StringToIndex(state, moveInfo[0].Substring(0));
+					piece = NewBitPiece(color, (int)pieceType, sBoard, sIndex / 12, sIndex % 12);
                     if (moveInfo[1].Length > 1)
-                    {
-                        end = StringToSquare(state, moveInfo[1].Substring(1));                    
-                    }
-                    // Case 2: We are given a disambiguated pos for the attacking
+                        (eBoard, eIndex) = StringToIndex(state, moveInfo[1].Substring(0));
+						
+					// Case 2: We are given a disambiguated pos for the attacking
 					// piece but not for the captured piece
                     else
                     {
-                        foreach (Move m in piece.GetMoves(state))
+						List<int> moves = GetBitMoves(state, piece, true);
+						for (int i = 0; i < moves.Count; i++)
                         {
-                            if (m.type == MoveType.Capture && m.end.piece.type == captured_type)
+							int m = moves[i];
+							MoveType MT = (MoveType)BitMoveType(m);
+							PieceType CT = (PieceType)PieceType(GetEndPiece(state, m));
+							if (MT == MoveType.Capture && CT == captured_type)
                             {
-                                end = m.end;
+								eBoard = EndBoard(m);
+								eIndex = EndIndex(m);
                                 break;
                             }
-                            else if (m.type == MoveType.Swoop && m.end.piece.type == captured_type)
+                            else if (MT == MoveType.Swoop && CT == captured_type)
                             {
                                 moveType = MoveType.Swoop;
-                                end = m.end;
+								eBoard = EndBoard(m);
+								eIndex = EndIndex(m);
                                 break;
                             }
                         }
@@ -127,37 +144,51 @@ namespace Dragonchess
                     // piece but not for the attacking piece
                     if (moveInfo[1].Length > 1)
                     {
-                        end = StringToSquare(state, moveInfo[1].Substring(1));
-                        foreach (Piece p in potentialPieces)
+                        (eBoard, eIndex) = StringToIndex(state, moveInfo[1].Substring(1));
+						for (int i = 0; i < potentialPieces.Count; i++)
 						{
-                            foreach (Move m in p.GetMoves(state))
+							int p = potentialPieces[i];
+							List<int> moves = GetBitMoves(state, p);
+							for (int j = 0; j < moves.Count; j++)
 							{
-                                if (m.end == end) {
-                                    start = m.start;
-                                    piece = p;
+								int m = moves[j];
+                                if (EndBoard(m) == eBoard && EndIndex(m) == eIndex) {
+                                    sBoard = StartBoard(m);
+                                    sIndex = StartIndex(m);
+									piece = p;
+									break;
                                 }
 							}
 						}
-                    }
+					}
                     // Case 4: we are not given information about the pos of either piece
                     else
 					{
-                        foreach (Piece p in potentialPieces)
+						for (int i = 0; i < potentialPieces.Count; i++)
 						{
-                            foreach (Move m in p.GetMoves(state))
+							int p = potentialPieces[i];
+							List<int> moves = GetBitMoves(state, p);
+							for (int j = 0; j < moves.Count; j++)
 							{
-                                if (m.type == MoveType.Capture && m.end.piece.type == captured_type)
+								int m = moves[j];
+								MoveType MT = (MoveType)BitMoveType(m);
+								PieceType CT = (PieceType)PieceType(GetEndPiece(state, m));
+								if (MT == MoveType.Capture && CT == captured_type)
 								{
-                                    start = m.start;
-                                    end = m.end;
+									sIndex = StartBoard(m);
+									sIndex = StartIndex(m);
+                                    eBoard = EndBoard(m);
+									eIndex = EndIndex(m);
                                     piece = p;
 								}
-                                else if (m.type == MoveType.Swoop && m.end.piece.type == captured_type)
+                                else if (MT == MoveType.Swoop && CT == captured_type)
                                 {
                                     moveType = MoveType.Swoop;
-                                    start = m.start;
-                                    end = m.end;
-                                    piece = p;
+									sIndex = StartBoard(m);
+									sIndex = StartIndex(m);
+									eBoard = EndBoard(m);
+									eIndex = EndIndex(m);
+									piece = p;
                                 }
 							}
 						}
@@ -167,26 +198,28 @@ namespace Dragonchess
             else
 			{
                 moveType = MoveType.Regular;
-
                 // If a character was included to differentiate an ambiguous move
                 if (line.Contains("-"))
                 {
                     string[] pos = line.Substring(1).Split('-');
-                    start = StringToSquare(state, pos[0]);
-                    end = StringToSquare(state, pos[1]);
-                    piece = start.piece;
+                    (sBoard, sIndex) = StringToIndex(state, pos[0]);
+                    (eBoard, eIndex) = StringToIndex(state, pos[1]);
                 }
                 // If we're only given the piece's letter followed by where it moves to
                 else
 				{
-                    end = StringToSquare(state, line.Substring(1));
-                    foreach (Piece p in potentialPieces)
-                    {
-                        foreach (Move m in p.GetMoves(state))
-                        {
-                            if (m.end == end)
+                    (eBoard, eIndex) = StringToIndex(state, line.Substring(1));
+					for (int i = 0; i < potentialPieces.Count; i++)
+					{
+						int p = potentialPieces[i];
+						List<int> moves = GetBitMoves(state, p);
+						for (int j = 0; j < moves.Count; j++)
+						{
+							int m = moves[j];
+							if (EndIndex(m) == eIndex)
 							{
-                                start = m.start;
+								sBoard = StartBoard(m);
+                                sIndex = StartIndex(m);
                                 piece = p;
                                 break;
 							}
@@ -194,60 +227,67 @@ namespace Dragonchess
                     }
                 }
 			}
-            
-            return (new Move(piece, start, end, moveType));
-        }
 
-        static public Square StringToSquare(Gamestate state, string s)
+			if (sBoard == -1)
+				print("Error: sBoard not found");
+			if (sIndex == -1)
+				print("Error: sIndex not found");
+			if (eBoard == -1)
+				print("Error: eBoard not found");
+			if(eIndex == -1)
+				print("Error: eIndex not found");
+
+			int bitMove = CreateBitMove((int)moveType, sBoard, sIndex, eBoard, eIndex, 0);
+			Move newMove = BitMoveToMove(g, bitMove);
+			if (newMove.type == MoveType.Capture || newMove.type == MoveType.Swoop)
+			{
+				if (newMove.end.piece == null)
+					print("ERROR: END PIECE NULL");
+				newMove.captured = newMove.end.piece;
+			}
+			return newMove;
+		}
+
+        static public (int,int) StringToIndex(Gamestate state, string s)
 		{
             int b = (int)char.GetNumericValue(s[0]);
             int c = Array.FindIndex(Square.Letters, l => l == (s[1]).ToString());
             int r = (int)char.GetNumericValue(s[2]) - 1;
-
-            Board board;
-
-            if (b == 1)
-                board = state.upperBoard;
-            else if (b == 2)
-                board = state.middleBoard;
-            else
-                board = state.lowerBoard;
-
-            return board.squares[r, c];
+			return (b, r * 12 + c);
 		}
 
-        static public PieceType CharToType(Player player, string c)
+        static public PieceType CharToType(List<int> pieces, bool whiteToMove, string c)
 		{
             PieceType t = PieceType.EMPTY;
 
-            foreach (Piece p in player.pieces)
-            {
-                if (p.nameChar == c)
+			for (int i = 0; i < pieces.Count; i++)
+			{
+				int p = pieces[i];
+				int pType = PieceType(p);
+				if (Char.ToUpper(pieceCodes[pType+1]) == c[0])
                 {
-                    t = p.type;
+                    t = (PieceType)(PieceType(p));
                     break;
                 }
             }
             return t;
         }
 
-        public void DoNext(Gamestate state)
+        public void GetNext(Game state)
 		{
             if (moveIndex >= movesParsed)
 			{
                 Move m = ReadLine(state);
-
-                DoMove(state, m, true);
+				OnMoveReceived(state, state.ActivePlayer, m);
             }
             else
 			{
-                DoMove(state, moveLog[moveIndex], true);
+				OnMoveReceived(state, state.ActivePlayer, moveLog[moveIndex]);
 			}
-            moveLog[moveIndex].piece.player.prevMove = moveLog[moveIndex];
             moveIndex++;
         }
 
-        public void UndoPrev(Gamestate state)
+        public void UndoPrev(Game state)
         {
             if (moveIndex == 0)
 			{
@@ -256,32 +296,6 @@ namespace Dragonchess
 			}
 
             moveIndex--;
-            Move prev = moveLog[moveIndex];
-            prev.piece.player.prevMove = prev;
-
-            if (prev.type == MoveType.Capture ||
-                prev.type == MoveType.Swoop)
-			{
-                // Add the captured piece back
-                Piece cap = prev.captured;
-                cap.player.pieces.Add(cap);
-
-                // Move the captured piece back
-                Move undoCap = new Move(cap, prev.end, prev.end, MoveType.Regular);
-                DoMove(state, undoCap, true);
-
-                // Move the capturing piece back
-                Move undoMove = new Move(prev.piece, prev.start, prev.start, MoveType.Regular);
-                DoMove(state, undoMove, true);
-            }
-            else
-			{
-                prev.start.piece = prev.piece;
-                prev.start.occupied = true;
-                prev.end.occupied = false;
-                prev.piece.pos = prev.start;
-                prev.piece.MoveTo(state, prev.start);
-            }
         }
     }
 }

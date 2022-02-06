@@ -1,7 +1,5 @@
-1)	D1g2	G3h6
-2)	D1e2	G3k4
-3)	H2l3	G3i1
-4)	H1k2	G3e5
-5)	C1e1	RxS3a2
-6)	H1d2	R#2a2
-7)	C1d1	R#2b2
+1)	RxS3a7	RxS3a2
+2)	H1k2	D1e7
+3)	W2k3	S3d6
+4)	R3d4	D1f6
+5)	RxS3g7+

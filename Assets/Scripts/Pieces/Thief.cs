@@ -13,7 +13,7 @@ namespace Dragonchess
     {
         public Thief() : base(PieceType.Thief) { nameChar = "T"; value = 5; }
 
-        public override List<Move> GetMoves(Gamestate state)
+        public override List<Move> GetMoves(Game state)
         {
 			List<Move> moves = new List<Move>();
 			List<(int, int, int)> dictMoves;

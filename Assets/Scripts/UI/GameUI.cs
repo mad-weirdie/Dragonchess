@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Dragonchess
 {
-	using static Gamestate;
+	using static Game;
 	public class GameUI : MonoBehaviour
 	{
 		static string[] Letters = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L" };
@@ -26,6 +26,9 @@ namespace Dragonchess
 		public static Material frozenMat;
 		public static Material white_pieces;
 		public static Material black_pieces;
+
+		public static Material threatsToW;
+		public static Material threatsToB;
 
 		public static List<Material> boardMaterials;
 
@@ -57,7 +60,17 @@ namespace Dragonchess
 		public GameObject log_parent_object;
 		public static GameObject content;
 
-		// Start is called before the first frame update
+		public GameObject GameOver;
+		public GameObject whiteWinText;
+		public GameObject blackWinText;
+		public GameObject drawText;
+
+		public static GameObject GO;
+		public static GameObject WWT;
+		public static GameObject BWT;
+		public static GameObject DT;
+
+		// Load in the materials into static-accessible variables
 		void Start()
 		{
 			highlightedMoves = new List<Move>();
@@ -72,41 +85,49 @@ namespace Dragonchess
 			black_pieces = materials[11];
 			frozenMat = materials[13];
 
+			threatsToW = materials[14];
+			threatsToB = materials[15];
+
 			b_text = black_text;
 			w_text = white_text;
 
 			for (int i = 0; i < 6; i++)
 				boardMaterials.Add(materials[i]);
-
-			foreach (GameObject piece in piecePrefabs)
-				pieceObjectPrefabs.Add(piece);
+			for (int i = 0; i < piecePrefabs.Count; i++)
+				pieceObjectPrefabs.Add(piecePrefabs[i]);
 
 			upperBoard = boardObj[0];
 			middleBoard = boardObj[1];
 			lowerBoard = boardObj[2];
 			movelog = log_prefab;
 			content = log_parent_object;
+
+			GO = GameOver;
+			WWT = whiteWinText;
+			BWT = blackWinText;
+			DT = drawText;
 		}
 
-		public void GameUIInit(Gamestate state)
+		// Initializes a new GameUI to reflect the passed-in state
+		public void GameUIInit(Game state)
 		{
 			upperSquares = new SquareObject[8, 12];
 			middleSquares = new SquareObject[8, 12];
 			lowerSquares = new SquareObject[8, 12];
 
-			NewBoardUI(state.upperBoard);
-			NewBoardUI(state.middleBoard);
-			NewBoardUI(state.lowerBoard);
+			NewBoardUI(state.boards[1]);
+			NewBoardUI(state.boards[2]);
+			NewBoardUI(state.boards[3]);
 
 			P1_Pieces = new List<PieceObject>();
 			P2_Pieces = new List<PieceObject>();
-
-			foreach (Piece p in state.P1.pieces)
-				AddPieceUI(p);
-			foreach (Piece p in state.P2.pieces)
-				AddPieceUI(p);
+			for (int i = 0; i < state.P1.pieces.Count; i++)
+				AddPieceUI(state.P1.pieces[i]);
+			for (int i = 0; i < state.P2.pieces.Count; i++)
+				AddPieceUI(state.P2.pieces[i]);
 		}
 
+		// Creates a new board UI, instantiating square GameObject elements
 		public void NewBoardUI(Board board)
 		{
 			int level = board.layer_int_val;
@@ -143,6 +164,34 @@ namespace Dragonchess
 				}
 			}
 		}
+
+		// Completely clears out current UI
+		public void ClearUI()
+		{
+			for (int i = 0; i < P1_Pieces.Count; i++)
+				Destroy(P1_Pieces[i].gameObject);
+			for (int i = 0; i < P2_Pieces.Count; i++)
+				Destroy(P2_Pieces[i].gameObject);
+
+			for (int i = 3; i > 0; i--)
+			{
+				SquareObject[,] temp = GetSquares(i);
+				for (int r = 0; r < temp.GetLength(0); r++)
+				{
+					for (int c = 0; c < temp.GetLength(1); c++)
+						temp[r, c].piece = null;
+				}
+			}
+
+			for (int i = GameController.moveNum-1; i >= 0; i--)
+			{
+				MovelistRemove(i);
+			}
+			GameController.moveNum = 0;
+			GameController.moveLog.Clear();
+		}
+
+		//====================================================================================
 
 		public static void AddSquareAt(int board, Material mat, Material inv, int r, int c)
 		{
@@ -183,8 +232,11 @@ namespace Dragonchess
 			// Set correct layer for camera rendering
 			int renderLayer = 3 + squareObject.gameObject.layer;
 			pieceGameObject.layer = renderLayer;
-			foreach (Transform child in pieceGameObject.transform)
+			for (int i = 0; i < pieceGameObject.transform.childCount; i++)
+			{
+				Transform child = pieceGameObject.transform.GetChild(i);
 				child.gameObject.layer = pieceGameObject.layer = renderLayer;
+			}
 
 			// Instantiate the gameobject with correct scale and pos translation
 			Vector3 v = new Vector3(0.7f * square_scale, 0.7f * square_scale, 0.7f * square_scale);
@@ -226,6 +278,8 @@ namespace Dragonchess
 			square.dot = newDot;
 		}
 
+		//====================================================================================
+
 		public static GameObject GetBoardObject(int board)
 		{
 			if (board == 3)
@@ -252,7 +306,9 @@ namespace Dragonchess
 			return squares[r, c];
 		}
 
-		public static void OnMoveUpdateUI(Gamestate state, Move move)
+		//====================================================================================
+
+		public static void OnMoveUpdateUI(Game state, Move move)
 		{
 			// Get the associated squares and pieces involved in the move
 			Square start = move.start;
@@ -299,8 +355,11 @@ namespace Dragonchess
 
 				// Set proper rendering layer (for the overhead cameras)
 				pieceObject.gameObject.layer = endSquare.gameObject.layer + 3;
-				foreach (Transform child in pieceObject.transform)
+				for (int i = 0; i < pieceObject.transform.childCount; i++)
+				{
+					Transform child = pieceObject.transform.GetChild(i);
 					child.gameObject.layer = endSquare.gameObject.layer + 3;
+				}
 
 				// Reassign references for the associated PieceObject
 				endSquare.piece = pieceObject;
@@ -344,6 +403,99 @@ namespace Dragonchess
 			}
 		}
 
+		public static void HighlightMoves(Piece piece, List<Move> moves)
+		{
+			SquareObject square = GetSquareAt(piece.pos.board, piece.pos.row, piece.pos.col);
+			square.dot.GetComponent<Renderer>().material = highlight_1;
+			selectedPiece = piece;
+
+			// Highlight all the possible moves generated for a piece
+			for (int i = 0; i < moves.Count; i++)
+			{
+				Move move = moves[i];
+				int board = move.end.board;
+				int r = move.end.row;
+				int c = move.end.col;
+
+				GameObject dot = GetSquares(board)[r, c].dot;
+				highlightedMoves.Add(move);
+
+				if (move.type == MoveType.Regular)
+					dot.GetComponent<Renderer>().material = highlight_2;
+				else if (move.type == MoveType.Capture)
+					dot.GetComponent<Renderer>().material = highlight_3;
+				else
+					dot.GetComponent<Renderer>().material = highlight_3;
+			}
+		}
+
+		public static void HighlightThreats(List<Piece> pieces, bool isWhite)
+		{
+			Material threatmat;
+			if (isWhite) threatmat = threatsToW; else threatmat = threatsToB;
+			for (int i = 0; i < pieces.Count; i++)
+			{
+				Piece piece = pieces[i];
+				SquareObject square = GetSquareAt(piece.pos.board, piece.pos.row, piece.pos.col);
+				square.dot.GetComponent<Renderer>().material = threatmat;
+			}
+		}
+
+		public static void ShowKingInCheck(Player player)
+		{
+			Game state = GameController.state;
+			Piece king = GetKing(state, player);
+
+			SquareObject square = GetSquareAt(king.pos.board, king.pos.row, king.pos.col);
+			square.dot.GetComponent<Renderer>().material = highlight_3;
+		}
+
+		//------------------------------------------------------------------------------------
+
+		public static void UnhighlightMoves()
+		{
+			for (int i = 0; i < highlightedMoves.Count; i++)
+			{
+				Move move = highlightedMoves[i];
+				int board = move.end.board;
+				int r = move.end.row;
+				int c = move.end.col;
+
+				GameObject dot = GetSquares(board)[r, c].dot;
+				dot.GetComponent<Renderer>().material = invisible;
+			}
+			highlightedMoves.Clear();
+		}
+
+		public static void DeselectAll()
+		{
+			UnhighlightMoves();
+			if (selectedPiece != null)
+			{
+				ResetSquareColor(selectedPiece.pos);
+				selectedPiece = null;
+			}
+			EventSystem.current.SetSelectedGameObject(null);
+		}
+
+		public static void ResetSquareColor(Square s)
+		{
+			SquareObject square = GetSquares(s.board)[s.row, s.col];
+			square.dot.GetComponent<Renderer>().material = invisible;
+		}
+
+		public static void ResetPieceColor(Piece p)
+		{
+			SquareObject pos = GetSquareAt(p.pos.board, p.pos.row, p.pos.col);
+			PieceObject piece = pos.piece;
+			if (piece.piece.color == Color.White)
+				piece.GetComponent<Renderer>().material = white_pieces;
+			else
+				piece.GetComponent<Renderer>().material = black_pieces;
+		}
+
+		//====================================================================================
+
 		public static void MovelistAdd(int moveNum, string movetext)
 		{
 			if (moveNum % 2 == 0)
@@ -378,17 +530,58 @@ namespace Dragonchess
 
 		public static void MovelistRemove(int moveNum)
 		{
-			/*
-			// Update the list of moves on the screen
-			if (move.piece.player.color == Color.White)
+			if (moveNum % 2 == 0)
 			{
-
+				string logname = string.Format("{0}", moveNum / 2 + 1);
+				GameObject oldLog = content.transform.Find(logname).gameObject;
+				Destroy(oldLog);
 			}
 			else
 			{
-
+				string logname = string.Format("{0}", moveNum / 2 + 1);
+				GameObject log = content.transform.Find(logname).gameObject;
+				GameObject black_move = log.transform.Find("black_move").gameObject;
+				black_move.SetActive(false);
 			}
-			*/
+		}
+
+		public static void SetActiveText(Player player)
+		{
+			// Switch the currently active player text
+			if (player.color == Color.White)
+			{
+				w_text.SetActive(true);
+				b_text.SetActive(false);
+			}
+			else
+			{
+				b_text.SetActive(true);
+				w_text.SetActive(false);
+			}
+		}
+
+		//====================================================================================
+
+		public static bool IsAvailableMove(GameObject clickedObj, ref Move move)
+		{
+			SquareObject s = clickedObj.GetComponent<SquareObject>();
+			PieceObject p = clickedObj.GetComponent<PieceObject>();
+			if (p != null)
+				s = p.pos;
+
+			if (s == null)
+				return false;
+			for (int i = 0; i < highlightedMoves.Count; i++)
+			{
+				Move m = highlightedMoves[i];
+				Square end = m.end;
+				if (end.row == s.row && end.col == s.col && end.board == s.board)
+				{
+					move = m;
+					return true;
+				}
+			}
+			return false;
 		}
 
 		public static bool PieceSelected()
@@ -407,9 +600,9 @@ namespace Dragonchess
 				return false;
 			
 			PieceObject pieceObject = clickedObj.GetComponent<PieceObject>();
-
-			foreach (Piece p in player.pieces)
+			for (int i = 0; i < player.pieces.Count; i++)
 			{
+				Piece p = player.pieces[i];
 				if (pieceObject.piece == p)
 				{
 					piece = p;
@@ -419,124 +612,28 @@ namespace Dragonchess
 			return false;
 		}
 
-		public static void HighlightMoves(Piece piece, List<Move> moves)
-		{
-			SquareObject square = GetSquareAt(piece.pos.board, piece.pos.row, piece.pos.col);
-			square.dot.GetComponent<Renderer>().material = highlight_1;
-			selectedPiece = piece;
-
-			// Highlight all the possible moves generated for a piece
-			foreach (Move move in moves)
-			{
-				int board = move.end.board;
-				int r = move.end.row;
-				int c = move.end.col;
-
-				GameObject dot = GetSquares(board)[r,c].dot;
-				highlightedMoves.Add(move);
-
-				if (move.type == MoveType.Regular)
-					dot.GetComponent<Renderer>().material = highlight_2;
-				else if (move.type == MoveType.Capture)
-					dot.GetComponent<Renderer>().material = highlight_3;
-				else
-					dot.GetComponent<Renderer>().material = highlight_3;
-			}
-		}
-
-		public static void UnhighlightMoves()
-		{
-			foreach (Move move in highlightedMoves)
-			{
-				int board = move.end.board;
-				int r = move.end.row;
-				int c = move.end.col;
-
-				GameObject dot = GetSquares(board)[r, c].dot;
-				dot.GetComponent<Renderer>().material = invisible;
-			}
-			highlightedMoves.Clear();
-		}
-
-		public static bool IsAvailableMove(GameObject clickedObj, ref Move move)
-		{
-			SquareObject s = clickedObj.GetComponent<SquareObject>();
-			PieceObject p = clickedObj.GetComponent<PieceObject>();
-			if (p != null)
-				s = p.pos;
-
-			if (s == null)
-				return false;
-
-			foreach (Move m in highlightedMoves)
-			{
-				Square end = m.end;
-				if (end.row == s.row && end.col == s.col && end.board == s.board)
-				{
-					move = m;
-					return true;
-				}
-			}
-			return false;
-		}
-
-		public static void DeselectAll()
-		{
-			UnhighlightMoves();
-			if (selectedPiece != null)
-			{
-				ResetSquareColor(selectedPiece.pos);
-				selectedPiece = null;
-			}
-			EventSystem.current.SetSelectedGameObject(null);
-		}
-
-		public static void ShowKingInCheck(Player player)
-		{
-			Gamestate state = GameController.state;
-			Piece king = GetKing(state, player);
-
-			SquareObject square = GetSquareAt(king.pos.board, king.pos.row, king.pos.col);
-			square.dot.GetComponent<Renderer>().material = highlight_3;
-		}
-
-		public static void ResetSquareColor(Square s)
-		{
-			SquareObject square = GetSquares(s.board)[s.row, s.col];
-			square.dot.GetComponent<Renderer>().material = invisible;
-		}
-
-		public static void ResetPieceColor(Piece p)
-		{
-			SquareObject pos = GetSquareAt(p.pos.board, p.pos.row, p.pos.col);
-			PieceObject piece = pos.piece;
-			if (piece.piece.color == Color.White)
-				piece.GetComponent<Renderer>().material = white_pieces;
-			else
-				piece.GetComponent<Renderer>().material = black_pieces;
-		}
-
-		public static void SetActiveText(Player player)
-		{
-			// Switch the currently active player text
-			if (player.color == Color.White)
-			{
-				w_text.SetActive(true);
-				b_text.SetActive(false);
-			}
-			else
-			{
-				b_text.SetActive(true);
-				w_text.SetActive(false);
-			}
-		}
-
 		public List<Board> boards
 		{
 			get
 			{
 				return m_boards;
 			}
+		}
+
+		public static void ShowGameOverMenu(Status endStatus, bool whiteToMove)
+		{
+			GO.SetActive(true);
+			if (endStatus == Status.Checkmate && whiteToMove)
+				BWT.SetActive(true);
+			else if (endStatus == Status.Checkmate && !whiteToMove)
+				WWT.SetActive(true);
+			else
+				DT.SetActive(true);
+		}
+
+		public void DisableGameOverMenu()
+		{
+			GameOver.SetActive(false);
 		}
 	}
 }

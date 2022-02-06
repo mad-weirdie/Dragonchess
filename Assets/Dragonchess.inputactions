@@ -68,6 +68,30 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Unlock",
+                    "type": "Button",
+                    "id": "4c724fca-318e-40e9-9c9b-531f14d515b1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "ClearBoard",
+                    "type": "Button",
+                    "id": "3dbd2200-24b2-44a7-93f2-aed79f0264fa",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "LoadState",
+                    "type": "Button",
+                    "id": "ce1f575b-cf69-4b9f-a046-55e54698fad0",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -343,6 +367,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "PrintSState",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "264ab068-4233-4cba-abc2-6303a917318c",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Unlock",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "49216e33-1b6b-4954-a4dc-696b0a14e5cf",
+                    "path": "<Keyboard>/#(C)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ClearBoard",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e9803666-a90f-4720-9700-36faad0951d7",
+                    "path": "<Keyboard>/#(L)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LoadState",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -12,7 +12,7 @@ namespace Dragonchess
 	public class Cleric : Piece
     {
         public Cleric() : base(PieceType.Cleric) { nameChar = "C"; value = 30; }
-        public override List<Move> GetMoves(Gamestate state)
+        public override List<Move> GetMoves(Game state)
         {
 			List<Move> moves = new List<Move>();
 			List<(int, int, int)> dictMoves;

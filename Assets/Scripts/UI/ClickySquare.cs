@@ -15,21 +15,14 @@ namespace Dragonchess
 
         public void ClickSquare()
         {
-            Gamestate state = GameController.state;
-            if (GC.GameFromFileEnabled)
+            Game state = GameController.state;
+            if (GameController.GameFromFileEnabled)
                 return;
 
             if (state.ActivePlayer.type == PlayerType.Human)
             {
                 GameObject selected = square.gameObject;
-				Board board;
-				if (square.board == 3)
-					board = state.upperBoard;
-				else if (square.board == 2)
-					board = state.middleBoard;
-				else
-					board = state.lowerBoard;
-
+				Board board = state.boards[square.board];
                 if (board.squares[square.row, square.col].occupied)
                 {
                     selected = square.piece.gameObject;
