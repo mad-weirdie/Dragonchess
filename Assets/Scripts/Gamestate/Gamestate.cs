@@ -151,14 +151,13 @@ namespace Dragonchess
 
 		public static int EvaluateGamestate(Gamestate state)
 		{
-			long stateHash = GetStateHash(state);
-			int ret = 0;
-
+			long stateHash = GetStateHash(state, state.WhiteToMove);
 			if (stateEvals.ContainsKey(stateHash))
 				return stateEvals[stateHash];
 
 			List<int> p1 = GetPieces(state, true);
 			List<int> p2 = GetPieces(state, false);
+			int ret = 0;
 
 			// Evaluation based on current player 1 pieces and locations
 			for (int i = 0; i < p1.Count; i++)
@@ -222,8 +221,22 @@ namespace Dragonchess
 		// Evaluates and returns whether or not Player p's king is in check
 		public static bool IsCheck(Gamestate state, bool whiteKing)
 		{
+			long stateHash = GetStateHash(state, whiteKing);
+			bool prevExisted = false;
+			bool prev;
+			if (isCheckDict.ContainsKey(stateHash))
+			{
+				prevExisted = true;
+				prev = isCheckDict[stateHash];
+			}
+
 			int king = GetKing(state, whiteKing);
-			if (king == -1) return true;
+			if (king == -1)
+			{
+				isCheckDict[stateHash] = true;
+				return true;
+			}
+
 			List<int> possibleThreats = ThreatsInRange(state, whiteKing);
 			(int b, int i) = (GetBoard(king), GetIndex(king));
 
@@ -247,11 +260,27 @@ namespace Dragonchess
 						if ((moveType == MoveType.Capture || moveType == MoveType.Swoop) &&
 							(endBoard == b && endInd == i))
 						{
+							if (prevExisted)
+							{
+								if (isCheckDict[stateHash] != true)
+								{
+									M.print("ERROR: stateHash clash: FALSE NEGATIVE!!!");
+									SaveState(state, m*t);
+								}
+							}
+								
+							isCheckDict[stateHash] = true;
 							return true;
 						}
 					}
 				}
 			}
+			if (prevExisted && isCheckDict[stateHash] != false)
+			{
+				M.print("ERROR: stateHash clash: FALSE POSITIVE!!!");
+				SaveState(state, 11111);
+			}
+			isCheckDict[stateHash] = false;
 			return false;
 		}
 
@@ -297,14 +326,9 @@ namespace Dragonchess
 			return -1;
 		}
 
-		// Print out a string representation of the current board state
-		public static void PrintState(Gamestate state, int fileNum)
+		private static string StateToString(Gamestate state)
 		{
-			string filename = "Assets/Out/Gamestate" + fileNum + ".txt";
-			StreamWriter file = new StreamWriter(filename);
-
-			string toPrint = "";
-
+			string ret = "";
 			for (int b = 3; b > 0; b--)
 			{
 				int[] board = state.boards[b];
@@ -322,15 +346,26 @@ namespace Dragonchess
 							row += pieceCodes[board[ind]];
 						row += String.Format(" ");
 					}
-					file.WriteLine(row);
-					toPrint += row;
-					toPrint += "\n";
+					ret += row + "\n";
 				}
-				file.WriteLine("");
-				toPrint += ("");
+				ret += ("");
 			}
+			return ret;
+		}
+
+		public static void SaveState(Gamestate state, int fileNum)
+		{
+			string filename = "Assets/Out/Gamestate" + fileNum + ".txt";
+			StreamWriter file = new StreamWriter(filename);
+			string sString = StateToString(state);
+			file.Write(sString);
 			file.Close();
-			M.print(toPrint);
+		}
+
+		// Print out a string representation of the current board state
+		public static void PrintState(Gamestate state)
+		{
+			M.print(StateToString(state));
 		}
 	}
 }

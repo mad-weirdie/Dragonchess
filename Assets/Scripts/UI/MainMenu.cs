@@ -15,7 +15,7 @@ namespace Dragonchess
 		{
 			int p1 = P1.value;
 			int p2 = P2.value;
-
+			/*
 			if (p1 == 0)
 				GameController.P1_type = PlayerType.Human;
 			else {
@@ -29,7 +29,7 @@ namespace Dragonchess
 			{
 				GameController.P2_type = PlayerType.AI;
 				GameController.AI_2 = (AIDifficulty)(p2 - 1);
-			}
+			}*/
 
 			GameController.TestsEnabled = false;
 			GameController.GameFromFileEnabled = false;

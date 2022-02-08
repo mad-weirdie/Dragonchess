@@ -54,7 +54,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "ShowState",
+                    "name": "SaveStateToFile",
                     "type": "Button",
                     "id": "016442c3-d9bf-4a6e-b49a-76d0b81f2225",
                     "expectedControlType": "Button",
@@ -355,7 +355,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ShowState",
+                    "action": "SaveStateToFile",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

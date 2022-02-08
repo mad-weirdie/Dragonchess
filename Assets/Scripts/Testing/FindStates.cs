@@ -49,7 +49,7 @@ namespace Dragonchess
 						int move = moves[Random.Range(0, moves.Count)];
 						DoBitMove(ref state, move);
 						UpdateGameStatus(state);
-						long stateHash = Zobrist.GetStateHash(state);
+						long stateHash = Zobrist.GetStateHash(state, state.WhiteToMove);
 						stateEvals[stateHash] = EvaluateGamestate(state);
 						numMoves++;
 					}

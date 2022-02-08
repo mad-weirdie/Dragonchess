@@ -15,14 +15,14 @@ namespace Dragonchess
 	{
 		public static long[] keys;
 		public static Dictionary<int, long> pieceZobristVals;
-		public static long whiteToMove = 6148914691236517205;
-		public static long blackToMove = 1229782938247303441;
+		public static long whiteToMove = 0x101001000111001;
+		public static long blackToMove = 0x800880808808088;
 
 		static Zobrist()
 		{
 			pieceZobristVals = new Dictionary<int, long>();
 
-			int from = 1111111;
+			int from = 0;
 			int to = Int32.MaxValue;
 
 			var random = new System.Random();
@@ -34,7 +34,7 @@ namespace Dragonchess
 				int left = random.Next(from, to);
 				int right = random.Next(from, to);
 				long key = left << 32 | right;
-				if (key != 6148914691236517205 && key != 1229782938247303441)
+				if (key != 0x101001000111001 && key != 0x800880808808088)
 					magicHashKeys.Add(key);
 			}
 
@@ -60,7 +60,7 @@ namespace Dragonchess
 			}
 		}
 
-		public static long GetStateHash(Gamestate state)
+		public static long GetStateHash(Gamestate state, bool isWhite)
 		{
 			List<int> p1 = GetPieces(state, true);
 			List<int> p2 = GetPieces(state, false);
@@ -79,7 +79,7 @@ namespace Dragonchess
 				hashval = hashval ^ pieceHash;
 			}
 
-			if (state.WhiteToMove)
+			if (isWhite)
 				hashval = hashval ^ whiteToMove;
 			else
 				hashval = hashval ^ blackToMove;

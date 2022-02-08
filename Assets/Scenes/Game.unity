@@ -4353,9 +4353,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cee9ac3a19142014d9d2e7edeebbb464, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  P1_type: 1
+  AI_1: 2
+  P2_type: 1
+  AI_2: 2
   board_init: {fileID: 4900000, guid: 002777df588e11b4e9930b96c3fbae74, type: 3}
   MC: {fileID: 1337925267}
-  GameFromFileEnabled: 1
   GFF: {fileID: 1337925269}
   Display: {fileID: 1569259730}
 --- !u!114 &1337925267

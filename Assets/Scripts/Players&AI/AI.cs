@@ -10,7 +10,7 @@ namespace Dragonchess
 	using M = MonoBehaviour;
 	using static Game;
     using static MoveController;
-	using static MiniMax;
+	using static NegaMax;
 	using static Gamestate;
 	using static BitPiece;
 	using static BitMove;
@@ -30,14 +30,14 @@ namespace Dragonchess
 			List<int> moves = BitMoveController.GetPossibleMoves(sState, this.color == Color.White);
 			Move next;
 
-			int minmaxdepth = 2;
+			int minmaxdepth = 3;
 
 			if (this.difficulty == AIDifficulty.Trivial)
 				next = DumbRandom(state, moves);
 			else if (this.difficulty == AIDifficulty.Easy)
 				next = SimpleEval(state, (int)this.color, moves);
 			else if (this.difficulty == AIDifficulty.Medium)
-				next = MinMaxEval(state, minmaxdepth, moves);
+				next = NegamaxEval(state, minmaxdepth);
 			else
 				next = DumbRandom(state, moves);
 
@@ -45,6 +45,7 @@ namespace Dragonchess
 				MonoBehaviour.print("P1(AI-" + this.difficulty + ") has chosen: " + next.MoveToString());
 			if (this.color == Color.Black)
 				MonoBehaviour.print("P2(AI-" + this.difficulty + ") has chosen: " + next.MoveToString());
+
 			GameController.OnMoveReceived(state, state.ActivePlayer, next);
 		}
 
@@ -117,12 +118,11 @@ namespace Dragonchess
         }
 
         // ---------------------------- PART 3 ----------------------------
-        // MinMax Board Evaluation to depth d\
-        
-        public Move MinMaxEval(Game state, int d, List<int> possibleMoves)
+        // MinMax Board Evaluation to depth d
+        public Move NegamaxEval(Game state, int d)
         {
 			Gamestate sState = new Gamestate(state);
-			int move = GetMiniMaxMove(sState, d, possibleMoves);
+			int move = GetNegaMaxMove(sState, d);
 			Move m = BitMoveToMove(state, move);
 			return m;
         }

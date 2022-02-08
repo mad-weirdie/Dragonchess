@@ -21,17 +21,17 @@ namespace Dragonchess
 		public delegate void OnClickDelegate(Game state);
 		public static OnClickDelegate clickDelegate;
 
-		public static PlayerType P1_type;
-		public static AIDifficulty AI_1;
-		public static PlayerType P2_type;
-		public static AIDifficulty AI_2;
+		public PlayerType P1_type;
+		public AIDifficulty AI_1;
+		public PlayerType P2_type;
+		public AIDifficulty AI_2;
 
 		public TextAsset board_init;
 		public MoveController MC;
 		public AI AIController;
 
 		static public List<(Move, bool)> moveLog;
-		public static bool GameFromFileEnabled = true;
+		public static bool GameFromFileEnabled = false;
 		public static bool TestsEnabled = false;
 		public GameFromFile GFF;
 		public static int moveNum;
@@ -59,7 +59,14 @@ namespace Dragonchess
 		void OnPrintSState()
 		{
 			Gamestate sState = new Gamestate(state);
-			Gamestate.PrintState(sState, 1);
+			Gamestate.PrintState(sState);
+		}
+
+		void OnSaveStateToFile()
+		{
+			print("Saving current board state to file #1...");
+			Gamestate sState = new Gamestate(state);
+			Gamestate.SaveState(sState, 1);
 		}
 
 		// Initialize new game
@@ -125,15 +132,18 @@ namespace Dragonchess
 		// User hits left arrow key: undo move
 		void OnPrev()
 		{
-			if (GameFromFileEnabled)
-				GFF.UndoPrev(state);
-			if (moveNum > 0)
+			if (!lockTesting)
 			{
-				(Move prev, bool b) = moveLog[moveLog.Count-1];
-				print("Undoing move: " + prev.MoveToString());
-				UndoMove(state, prev, true);
-				UnlogMove(prev.piece.player);
-				SwitchTurn(state);
+				if (GameFromFileEnabled)
+					GFF.UndoPrev(state);
+				if (moveNum > 0)
+				{
+					(Move prev, bool b) = moveLog[moveLog.Count - 1];
+					print("Undoing move: " + prev.MoveToString());
+					UndoMove(state, prev, true);
+					UnlogMove(prev.piece.player);
+					SwitchTurn(state);
+				}
 			}
 		}
 
@@ -152,7 +162,6 @@ namespace Dragonchess
 
 		public static void OnMoveReceived(Game state, Player player, Move move)
 		{
-			
 			DoMove(state, move, !TestsEnabled);
 			player.prevMove = move;
 			Gamestate sState = new Gamestate(state);
@@ -212,6 +221,9 @@ namespace Dragonchess
 			// NOTE: "false" denotes the king being black/white
 			if (IsCheck(sState, false))
 			{
+				print("Player 2[black]'s king is in check!");
+				print("	NOTE: FREEZING CONTROLS FOR DEBUGGING.");
+				print("	PRESS ENTER TO CONTINUE...");
 				ShowKingInCheck(state.P2);
 				lockTesting = true;		// stops me from missing the checks
 				// Now, see whether the check is also checkmate
@@ -230,6 +242,9 @@ namespace Dragonchess
 			// NOTE: "true" denotes the king being black/white
 			if (IsCheck(sState, true))
 			{
+				print("Player 1[white]'s king is in check!");
+				print("	NOTE: FREEZING CONTROLS FOR DEBUGGING.");
+				print("	PRESS ENTER TO CONTINUE...");
 				ShowKingInCheck(state.P1);	// just highlights the king red
 				lockTesting = true;     // stops me from missing the checks
 				// Now, see whether the check is also checkmate
