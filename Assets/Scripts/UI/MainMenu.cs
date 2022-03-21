@@ -31,8 +31,8 @@ namespace Dragonchess
 				GameController.AI_2 = (AIDifficulty)(p2 - 1);
 			}*/
 
-			GameController.TestsEnabled = false;
-			GameController.GameFromFileEnabled = false;
+			//GameController.TestsEnabled = false;
+			//GameController.GameFromFileEnabled = false;
 			SceneManager.LoadScene("Game", LoadSceneMode.Single);
 		}
 	}

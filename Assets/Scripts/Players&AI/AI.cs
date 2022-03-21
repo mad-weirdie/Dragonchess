@@ -10,8 +10,8 @@ namespace Dragonchess
 	using M = MonoBehaviour;
 	using static Game;
     using static MoveController;
-	using static NegaMax;
 	using static Gamestate;
+	using static MiniMax;
 	using static BitPiece;
 	using static BitMove;
 	using static BitMoveController;
@@ -30,7 +30,7 @@ namespace Dragonchess
 			List<int> moves = BitMoveController.GetPossibleMoves(sState, this.color == Color.White);
 			Move next;
 
-			int minmaxdepth = 3;
+			int minmaxdepth = 2;
 
 			if (this.difficulty == AIDifficulty.Trivial)
 				next = DumbRandom(state, moves);
@@ -122,7 +122,7 @@ namespace Dragonchess
         public Move NegamaxEval(Game state, int d)
         {
 			Gamestate sState = new Gamestate(state);
-			int move = GetNegaMaxMove(sState, d);
+			int move = GetMiniMaxMove(sState, d);
 			Move m = BitMoveToMove(state, move);
 			return m;
         }
